@@ -1,9 +1,20 @@
 {
   "meta": {
     "siteTitle": "Nicolás Mastromarino — Consultor de CRM y Automatización",
-    "siteDescription": "Implementación, gestión y automatización de CRM para empresas de servicios a domicilio, agencias y coaches. Especializado en GoHighLevel, adaptable a cualquier plataforma."
+    "siteDescription": "Implementación, gestión y automatización de CRM para empresas de servicios a domicilio, agencias y coaches. Especializado en GoHighLevel, adaptable a cualquier plataforma.",
+    "servicesTitle": "Servicios de CRM y Automatización — Nicolás Mastromarino",
+    "servicesDescription": "Configuración de CRM en GoHighLevel, migración y automatización con Zapier para servicios a domicilio, agencias y coaches. Sin vueltas con precios.",
+    "aboutTitle": "Sobre mí — Nicolás Mastromarino, Consultor de CRM y Automatización",
+    "aboutDescription": "Diez años en operaciones de marketing y automatización. Experiencia práctica operando sistemas de CRM en negocios reales, no solo implementándolos.",
+    "caseStudiesTitle": "Casos de Éxito de CRM y Automatización — Nicolás Mastromarino",
+    "caseStudiesDescription": "Ejemplos reales y anonimizados de configuración de CRM, sistemas de tickets y automatización con Zapier para empresas de servicios y agencias.",
+    "blogTitle": "Blog de CRM y Automatización — Nicolás Mastromarino",
+    "blogDescription": "Artículos prácticos sobre GoHighLevel, flujos de Zapier y cómo mantener un CRM que no se desarma a los seis meses de lanzado.",
+    "contactTitle": "Contacto — Nicolás Mastromarino, Consultor de CRM y Automatización",
+    "contactDescription": "Escribime sobre configuración, migración o automatización de tu CRM. Contame qué está roto y te digo con honestidad qué necesita."
   },
   "nav": {
+    "home": "Inicio",
     "services": "Servicios",
     "caseStudies": "Casos de éxito",
     "about": "Sobre mí",

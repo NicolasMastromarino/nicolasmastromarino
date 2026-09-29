@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeInit } from "@/components/theme-init";
+import { PersonSchema } from "@/components/json-ld";
 import "../globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -44,15 +45,6 @@ export async function generateMetadata({
     metadataBase: new URL(base),
     title: t("siteTitle"),
     description: t("siteDescription"),
-    alternates: {
-      languages: { en: "/", es: "/es" },
-    },
-    openGraph: {
-      title: t("siteTitle"),
-      description: t("siteDescription"),
-      locale,
-      type: "website",
-    },
   };
 }
 
@@ -77,6 +69,7 @@ export default async function LocaleLayout({
     >
       <head>
         <ThemeInit />
+        <PersonSchema />
       </head>
       <body className="min-h-full flex flex-col bg-bg text-ink">
         <NextIntlClientProvider>

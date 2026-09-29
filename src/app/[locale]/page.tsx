@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { CtaLink } from "@/components/cta-link";
@@ -6,6 +7,22 @@ import { IntegrationDiagram, IntegrationDiagramCompact } from "@/components/inte
 import { ToolsMarquee } from "@/components/tools-marquee";
 import { TeaserCard } from "@/components/teaser-card";
 import { CapCard } from "@/components/cap-card";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+  return pageMetadata({
+    locale,
+    path: "",
+    title: t("siteTitle"),
+    description: t("siteDescription"),
+  });
+}
 
 export default async function HomePage({
   params,

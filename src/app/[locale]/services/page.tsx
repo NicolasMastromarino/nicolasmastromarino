@@ -1,8 +1,26 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CtaLink } from "@/components/cta-link";
 import { CapCard } from "@/components/cap-card";
 import { LabelDot } from "@/components/label-dot";
 import { ProcessRail } from "@/components/process-rail";
+import { pageMetadata } from "@/lib/seo";
+import { BreadcrumbSchema } from "@/components/json-ld";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+  return pageMetadata({
+    locale,
+    path: "/services",
+    title: t("servicesTitle"),
+    description: t("servicesDescription"),
+  });
+}
 
 export default async function ServicesPage({
   params,
@@ -12,6 +30,7 @@ export default async function ServicesPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("services");
+  const tNav = await getTranslations("nav");
 
   const track1Items = t.raw("track1Items") as { title: string; desc: string }[];
   const track2Items = t.raw("track2Items") as { title: string; desc: string }[];
@@ -19,6 +38,13 @@ export default async function ServicesPage({
 
   return (
     <>
+      <BreadcrumbSchema
+        locale={locale}
+        items={[
+          { name: tNav("home"), path: "/" },
+          { name: tNav("services"), path: "/services" },
+        ]}
+      />
       <section className="mx-auto max-w-3xl px-5 pb-4 pt-14 sm:px-8 sm:pt-16">
         <h1 className="text-[2.1rem] leading-tight sm:text-[2.8rem]">{t("heroTitle")}</h1>
         <p className="mt-4 max-w-[60ch] text-[1.06rem] leading-relaxed text-ink-soft">

@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CtaLink } from "@/components/cta-link";
 import { CaseStudyDiagram } from "@/components/case-study-diagram";
+import { pageMetadata } from "@/lib/seo";
+import { BreadcrumbSchema } from "@/components/json-ld";
 
 type CaseStudy = {
   id: string;
@@ -11,6 +14,21 @@ type CaseStudy = {
   outcome: string;
 };
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+  return pageMetadata({
+    locale,
+    path: "/case-studies",
+    title: t("caseStudiesTitle"),
+    description: t("caseStudiesDescription"),
+  });
+}
+
 export default async function CaseStudiesPage({
   params,
 }: {
@@ -19,10 +37,18 @@ export default async function CaseStudiesPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("caseStudies");
+  const tNav = await getTranslations("nav");
   const items = t.raw("items") as CaseStudy[];
 
   return (
     <>
+      <BreadcrumbSchema
+        locale={locale}
+        items={[
+          { name: tNav("home"), path: "/" },
+          { name: tNav("caseStudies"), path: "/case-studies" },
+        ]}
+      />
       <section className="mx-auto max-w-3xl px-5 pb-4 pt-14 sm:px-8 sm:pt-16">
         <h1 className="text-[2.1rem] leading-tight sm:text-[2.8rem]">{t("heroTitle")}</h1>
         <p className="mt-4 max-w-[60ch] text-[1.06rem] leading-relaxed text-ink-soft">

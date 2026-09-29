@@ -4,6 +4,8 @@ import { marked } from "marked";
 import { Link } from "@/i18n/navigation";
 import { getPost } from "@/lib/posts";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/json-ld";
 
 function formatDate(dateStr: string, locale: string) {
   return new Intl.DateTimeFormat(locale === "es" ? "es-AR" : "en-US", {
@@ -21,10 +23,12 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const post = await getPost(locale, slug);
   if (!post) return {};
-  return {
+  return pageMetadata({
+    locale,
+    path: `/blog/${slug}`,
     title: post.meta_title ?? post.title,
     description: post.meta_description ?? post.excerpt,
-  };
+  });
 }
 
 export default async function BlogPostPage({
@@ -35,6 +39,7 @@ export default async function BlogPostPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("blog");
+  const tNav = await getTranslations("nav");
   const post = await getPost(locale, slug);
 
   if (!post) {
@@ -45,6 +50,20 @@ export default async function BlogPostPage({
 
   return (
     <article>
+      <BreadcrumbSchema
+        locale={locale}
+        items={[
+          { name: tNav("home"), path: "/" },
+          { name: tNav("blog"), path: "/blog" },
+          { name: post.title, path: `/blog/${slug}` },
+        ]}
+      />
+      <ArticleSchema
+        title={post.title}
+        description={post.meta_description ?? post.excerpt}
+        datePublished={post.published_at}
+        path={locale === "es" ? `/es/blog/${slug}` : `/blog/${slug}`}
+      />
       <div className="mx-auto max-w-2xl px-5 py-14 sm:px-8 sm:py-16">
         <Link
           href="/blog"

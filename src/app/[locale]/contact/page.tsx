@@ -1,5 +1,23 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ContactForm } from "@/components/contact-form";
+import { pageMetadata } from "@/lib/seo";
+import { BreadcrumbSchema } from "@/components/json-ld";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+  return pageMetadata({
+    locale,
+    path: "/contact",
+    title: t("contactTitle"),
+    description: t("contactDescription"),
+  });
+}
 
 export default async function ContactPage({
   params,
@@ -9,10 +27,18 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("contact");
+  const tNav = await getTranslations("nav");
   const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL;
 
   return (
     <section className="mx-auto max-w-5xl px-5 py-14 sm:px-8 sm:py-16">
+      <BreadcrumbSchema
+        locale={locale}
+        items={[
+          { name: tNav("home"), path: "/" },
+          { name: tNav("contact"), path: "/contact" },
+        ]}
+      />
       <h1 className="text-[2.1rem] leading-tight sm:text-[2.8rem]">{t("heroTitle")}</h1>
       <p className="mt-4 max-w-[60ch] text-[1.06rem] leading-relaxed text-ink-soft">
         {t("heroSub")}

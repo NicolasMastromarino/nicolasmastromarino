@@ -1,7 +1,25 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CtaLink } from "@/components/cta-link";
 import { ToolsMarquee } from "@/components/tools-marquee";
+import { pageMetadata } from "@/lib/seo";
+import { BreadcrumbSchema } from "@/components/json-ld";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+  return pageMetadata({
+    locale,
+    path: "/about",
+    title: t("aboutTitle"),
+    description: t("aboutDescription"),
+  });
+}
 
 export default async function AboutPage({
   params,
@@ -18,6 +36,13 @@ export default async function AboutPage({
 
   return (
     <>
+      <BreadcrumbSchema
+        locale={locale}
+        items={[
+          { name: tNav("home"), path: "/" },
+          { name: tNav("about"), path: "/about" },
+        ]}
+      />
       <section className="mx-auto max-w-3xl px-5 pb-4 pt-14 sm:px-8 sm:pt-16">
         <div className="flex flex-col-reverse gap-8 sm:flex-row sm:items-start">
           <div>
