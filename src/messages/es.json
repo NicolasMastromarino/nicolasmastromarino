@@ -1,0 +1,237 @@
+{
+  "meta": {
+    "siteTitle": "Nicolás Mastromarino — Consultor de CRM y Automatización",
+    "siteDescription": "Implementación, gestión y automatización de CRM para empresas de servicios a domicilio, agencias y coaches. Especializado en GoHighLevel, adaptable a cualquier plataforma."
+  },
+  "nav": {
+    "services": "Servicios",
+    "caseStudies": "Casos de éxito",
+    "about": "Sobre mí",
+    "blog": "Blog",
+    "contact": "Contacto",
+    "bookCall": "Agendar llamada",
+    "getInTouch": "Escribime"
+  },
+  "home": {
+    "eyebrow": "Consultor de CRM y Automatización",
+    "h1": "Tus herramientas deberían hablarse entre sí. Yo me aseguro de que lo hagan.",
+    "sub": "Diez años en operaciones de marketing, sistemas y automatización. Conecto el CRM, la facturación y los reportes que tu negocio ya usa en un solo sistema que funciona, especializado en GoHighLevel, adaptable a cualquier plataforma.",
+    "ctaPrimary": "Agendar llamada",
+    "ctaSecondary": "Ver cómo funciona",
+    "diagramTitle": "Seis herramientas conectadas en un solo sistema",
+    "diagramAriaLabel": "Diagrama que muestra GoHighLevel, Kickserv, Airtable, Stripe, Google Sheets y Zapier conectándose en un solo sistema, generando menos tareas manuales.",
+    "diagramOne": "UN",
+    "diagramSystem": "SISTEMA",
+    "diagramOutcome1": "Menos tareas",
+    "diagramOutcome2": "manuales",
+    "stats": [
+      { "value": "10+ años", "label": "OPERACIONES DE MARKETING" },
+      { "value": "2", "label": "SISTEMAS QUE OPERO A DIARIO" },
+      { "value": "6+", "label": "PLATAFORMAS CONECTADAS" }
+    ],
+    "tracksTitle": "Dos formas de trabajar juntos",
+    "tracksSub": "La automatización es el foco principal. Es lo que vengo construyendo desde hace una década.",
+    "track1Label": "Línea 01",
+    "track1Title": "Implementación y gestión de CRM",
+    "track1Desc": "Configuro tu CRM bien desde el principio, migro tus datos sin perder nada y, si querés, lo sigo operando cada mes para que no vuelva al caos.",
+    "track2Label": "Línea 02",
+    "track2Title": "Automatización de marketing y operaciones",
+    "track2Desc": "Flujos de Zapier, automatización de email y reportes que conectan las herramientas que ya usás, para que leads, trabajos y facturas avancen solos.",
+    "tracksCta": "Ver todos los servicios",
+    "proofTitle": "Construido desde adentro, no desde afuera",
+    "proofSub": "Pasé años siendo la persona que realmente opera estos sistemas día a día, no solo el consultor que los instala y se va.",
+    "proofItems": [
+      {
+        "title": "Sistemas de despacho reales",
+        "desc": "Construí y operé la infraestructura de tickets de soporte y despacho conectando GoHighLevel, Kickserv, Airtable y Stripe para una empresa de servicios de campo."
+      },
+      {
+        "title": "Reportes de ventas e ingresos",
+        "desc": "Construí dashboards de KPIs que muestran el rendimiento de cada vendedor y las tendencias de ventas a varios años, usados a diario por la dirección."
+      },
+      {
+        "title": "Automatización a gran escala",
+        "desc": "Diseñé y mantuve decenas de flujos de Zapier que automatizan facturación, asignación de leads y procesamiento de pedidos entre distintas áreas."
+      }
+    ],
+    "caseStudiesCta": "Ver los casos de éxito",
+    "processLabel": "Cómo funciona",
+    "processTitle": "De herramientas sueltas a un solo sistema",
+    "finalTitle": "Arreglemos tus sistemas.",
+    "finalSub": "Contame qué está roto o qué querés construir. Sin vueltas con precios, solo una respuesta directa sobre el alcance y si soy la persona indicada.",
+    "finalCta": "Escribime"
+  },
+  "services": {
+    "heroTitle": "Dos líneas de trabajo. Sin vueltas con precios.",
+    "heroSub": "Cada proyecto se define según lo que realmente necesitás. No hay precios publicados porque no hay dos CRMs con el mismo desorden. Cada servicio termina en una conversación real, no en una pared de pago.",
+    "track1Label": "Foco principal",
+    "track1Title": "Implementación y gestión de CRM",
+    "track1Desc": "Para empresas que necesitan un CRM bien construido, o alguien que realmente lo mantenga funcionando.",
+    "track1Items": [
+      {
+        "title": "Configuración y migración de CRM",
+        "desc": "Configuración completa de GoHighLevel u otro CRM, con tus datos migrados sin perder nada: sin registros huérfanos, sin pipelines rotos y sin arrancar de cero el primer día."
+      },
+      {
+        "title": "Gestión continua del CRM",
+        "desc": "Un abono mensual donde trabajo dentro de tu operación: arreglando lo que se rompe, actualizando automatizaciones a medida que tu negocio cambia y evitando que todo vuelva a las planillas."
+      },
+      {
+        "title": "Integración de sistemas",
+        "desc": "Flujos de Zapier que mantienen tu CRM, despacho, facturación y planillas sincronizados en tiempo real, para que nada se tipee dos veces."
+      },
+      {
+        "title": "Infraestructura de tickets de soporte",
+        "desc": "Un sistema de tickets construido sobre webhooks a medida y automatizaciones del CRM, con enrutamiento y notificaciones al equipo desde el primer día."
+      }
+    ],
+    "track2Label": "También disponible",
+    "track2Title": "Automatización de marketing y operaciones",
+    "track2Desc": "Para empresas cuyas herramientas todavía no se hablan entre sí.",
+    "track2Items": [
+      {
+        "title": "Automatización de flujos y Zapier",
+        "desc": "Automatizaciones a medida que conectan tu CRM, facturación, agenda y planillas, para que un lead, un trabajo o un pedido avance sin que nadie lo tipee de nuevo."
+      },
+      {
+        "title": "Email marketing y automatización",
+        "desc": "Campañas, secuencias de nutrición y flujos testeados con A/B que mantienen tu lista activa sin que la toques cada semana."
+      },
+      {
+        "title": "Reportes y dashboards",
+        "desc": "Seguimiento de KPIs, tendencias de ventas y dashboards de ingresos diarios por vendedor, construidos una vez y actualizándose solos después."
+      },
+      {
+        "title": "Asignación de leads y habilitación de ventas",
+        "desc": "Registros de contacto limpios y sin duplicados, con reglas de enrutamiento para que el vendedor correcto vea el lead correcto apenas entra."
+      }
+    ],
+    "processLabel": "Cómo funciona",
+    "processTitle": "De herramientas sueltas a un solo sistema",
+    "processSub": "El mismo proceso de cinco pasos, ya sea que esté ordenando tu CRM o construyendo la capa de automatización detrás de él.",
+    "processSteps": [
+      {
+        "title": "Diagnóstico",
+        "desc": "Mapeo cada herramienta, planilla y paso manual que se usa hoy: por dónde entran los leads, cómo se registran y dónde suelen romperse o perderse."
+      },
+      {
+        "title": "Diseño del sistema",
+        "desc": "A partir de ese mapa, diseño las automatizaciones e integraciones que reemplazan el trabajo manual: qué se conecta con qué, qué dispara qué y qué debería seguir revisando una persona."
+      },
+      {
+        "title": "Construcción y conexión",
+        "desc": "Lo conecto todo: GoHighLevel, Zapier, Airtable, Kickserv, Stripe, webhooks a medida, lo que pida el stack, probado con datos reales antes de tocar tu operación en vivo."
+      },
+      {
+        "title": "Lanzamiento y capacitación",
+        "desc": "El sistema sale en vivo con documentación que tu equipo puede seguir de verdad, más una capacitación práctica para que todos sepan qué cambió y por qué."
+      },
+      {
+        "title": "Soporte y optimización",
+        "desc": "Los sistemas se desactualizan a medida que un negocio crece. Sigo monitoreando lo que construí, arreglo lo que se rompe y busco el próximo paso manual que valga la pena automatizar."
+      }
+    ],
+    "ctaTitle": "¿No estás seguro de qué línea te sirve?",
+    "ctaSub": "La mayoría de los proyectos tocan ambas. Contame qué está pasando y te digo con honestidad qué necesita.",
+    "cta": "Pedir presupuesto"
+  },
+  "about": {
+    "heroTitle": "Operé los sistemas, no solo los instalé.",
+    "intro": "Soy Nicolás Mastromarino, arquitecto de automatización trabajando con sistemas de CRM y operaciones de marketing desde 2016: primero como analista SEO, después gestionando email marketing y automatización para clientes de agencia, y en los últimos años como la persona que realmente opera los sistemas de CRM y despacho dentro de una empresa de servicios de campo en crecimiento.",
+    "body1Title": "A qué me dedico en el día a día",
+    "body1": "La mayor parte de mi trabajo no es glamoroso: es asegurarme de que un lead que entra un martes aparezca correctamente en el CRM, se asigne al vendedor correcto, dispare el seguimiento adecuado y termine convirtiéndose en una factura y un reporte en el que alguien pueda confiar. Construyo eso en GoHighLevel, lo conecto con herramientas como Kickserv, Airtable, Stripe y Google Sheets usando Zapier y, esto es lo que la mayoría de los consultores se salta, lo sigo manteniendo mientras el negocio cambia.",
+    "body2Title": "Por qué adaptable a cualquier plataforma",
+    "body2": "GoHighLevel es donde tengo la experiencia más profunda, pero la habilidad real es la misma sin importar la plataforma: entender cómo funciona un negocio de verdad y construir el CRM y las automatizaciones alrededor de esa realidad, en vez de forzar al negocio a adaptarse a un software genérico.",
+    "body3Title": "Con quién trabajo mejor",
+    "body3": "Empresas de servicios a domicilio y de campo que manejan despacho, facturación y un equipo de ventas; agencias que necesitan un especialista práctico a quien subcontratar CRM y automatización; y coaches, creadores de cursos y marcas personales que manejan todo a través de funnels y secuencias de email.",
+    "factsTitle": "Trayectoria",
+    "facts": [
+      { "title": "Automatización y sistemas", "dates": "2016 – Presente", "desc": "Trabajo en automatización y sistemas desde 2016, operación práctica de CRM y despacho desde 2020." },
+      { "title": "GoHighLevel", "dates": "Experiencia profunda", "desc": "Experiencia profunda en GoHighLevel, también cómodo en otros CRMs y stacks de automatización." },
+      { "title": "SEO y contenido", "dates": "2016 – 2020", "desc": "Empecé en SEO y contenido. Todavía influye en cómo pienso los reportes y el crecimiento." },
+      { "title": "Ubicación", "dates": "Argentina", "desc": "Con base en Argentina, trabajando con clientes de forma global y remota, en inglés o español." }
+    ],
+    "toolsTitle": "Plataformas y herramientas",
+    "ctaTitle": "¿Querés los detalles?",
+    "cta": "Agendar llamada"
+  },
+  "caseStudies": {
+    "heroTitle": "Trabajo representativo, anonimizado",
+    "heroSub": "Estos describen problemas reales que resolví, sin los datos que identifican al cliente. Los testimonios y referencias con nombre están en camino. Por ahora, esta es una mirada honesta al tipo de trabajo que hago.",
+    "ctaTitle": "¿Te suena parecido tu CRM?",
+    "ctaSub": "Este es el tipo de problema que resuelvo cada semana. Contame qué está pasando y te digo con honestidad qué necesita.",
+    "cta": "Escribime",
+    "items": [
+      {
+        "id": "dispatch-integration",
+        "ticket": "PROYECTO 01",
+        "title": "Despacho, facturación y CRM, por fin sincronizados",
+        "context": "Una empresa de servicios de campo con cuadrillas de instalación y reparación tenía las ventas en una herramienta, el despacho en otra y la facturación en una tercera, con alguien re-tipeando información entre todas ellas cada día.",
+        "work": "Reconstruí el CRM en GoHighLevel como única fuente de verdad, y lo conecté con la plataforma de despacho, Airtable, Stripe y Google Sheets usando Zapier, para que un trabajo avance de lead a factura sin que nadie toque un teclado en el medio.",
+        "outcome": "Lo que antes era un bloque diario de carga manual de datos ahora ocurre solo. El equipo usa ese tiempo con los clientes en vez de volver a tipear el mismo trabajo tres veces."
+      },
+      {
+        "id": "support-ticket-system",
+        "ticket": "PROYECTO 02",
+        "title": "Un sistema de tickets de soporte construido desde cero",
+        "context": "Los pedidos de soporte llegaban por teléfono, mensaje de texto y email sin un lugar central donde registrarlos, así que se perdían pedidos y nadie tenía visibilidad de los tiempos de respuesta.",
+        "work": "Diseñé y lancé un sistema completo de tickets usando webhooks a medida, Zapier y automatizaciones del CRM. Cada pedido crea un ticket, notifica a la persona correcta y queda registrado hasta que se cierra.",
+        "outcome": "Los pedidos de soporte dejaron de perderse, y la dirección tuvo, por primera vez, una imagen real del volumen de tickets y los tiempos de respuesta."
+      },
+      {
+        "id": "revenue-reporting",
+        "ticket": "PROYECTO 03",
+        "title": "Reportes de ventas en los que la dirección podía confiar",
+        "context": "Los números de ventas e ingresos vivían en planillas desconectadas que se actualizaban de forma inconsistente, así que la dirección no podía saber con certeza cómo venía un vendedor, o el negocio en general.",
+        "work": "Construí reportes conectados directamente al CRM: ingresos diarios por vendedor, tendencias de ventas a varios años y dashboards de KPIs que la dirección podía abrir cualquier mañana sin pedirle a nadie que los armara.",
+        "outcome": "Los reportes pasaron de ser una carrera mensual a algo que la dirección revisa como un dashboard: preciso, actualizado y ya no dependiente de la planilla de una sola persona."
+      },
+      {
+        "id": "agency-automation",
+        "ticket": "PROYECTO 04",
+        "title": "Automatización de email y CRM para la cartera de clientes de una agencia",
+        "context": "Una agencia necesitaba gestión de leads y email marketing que pudiera escalar entre muchas cuentas de clientes sin reconstruir la conexión desde cero cada vez.",
+        "work": "Construí flujos de Zapier reutilizables que conectan el CRM con la automatización de email marketing, junto con secuencias de nutrición testeadas con A/B y los reportes para mostrar qué campañas realmente funcionaban.",
+        "outcome": "Las nuevas cuentas de clientes pudieron incorporarse sobre automatización ya probada en vez de trabajo a medida cada vez, y el rendimiento de las campañas se convirtió en algo que la agencia podía mostrarle a sus clientes con números reales."
+      }
+    ]
+  },
+  "blog": {
+    "heroTitle": "Notas sobre CRM y automatización",
+    "heroSub": "Escritos prácticos sobre GoHighLevel, flujos de Zapier y cómo mantener un CRM que no se desarma seis meses después de lanzarlo.",
+    "empty": "Nuevos artículos en camino. Volvé pronto.",
+    "emptyCta": "¿Tenés una duda sobre tu CRM? Preguntame directamente",
+    "readMore": "Leer artículo",
+    "backToBlog": "Volver al blog",
+    "publishedOn": "Publicado"
+  },
+  "contact": {
+    "heroTitle": "Hablemos de qué está roto",
+    "heroSub": "Agendá una llamada directamente, o mandame un mensaje abajo contando en qué estás trabajando. Leo todos personalmente.",
+    "bookingTitle": "Agendar llamada",
+    "bookingDesc": "Elegí un horario que te quede cómodo y hablamos de qué necesita realmente tu CRM o tu automatización.",
+    "bookingCta": "Abrir calendario",
+    "bookingUnset": "El link para agendar llega pronto. Mientras tanto, usá el formulario de abajo.",
+    "formTitle": "Enviar un mensaje",
+    "formName": "Nombre",
+    "formEmail": "Email",
+    "formCompany": "Empresa",
+    "formCompanyOptional": "(opcional)",
+    "formMessage": "¿Qué estás tratando de resolver?",
+    "formSubmit": "Enviar mensaje",
+    "formSubmitting": "Enviando…",
+    "formSuccess": "Mensaje enviado. Te respondo en un par de días.",
+    "formErrorRequired": "Completá tu nombre, email y mensaje.",
+    "formErrorEmail": "Ingresá un email válido.",
+    "formErrorServer": "Algo salió mal al enviar tu mensaje. Probá escribirme directamente por email.",
+    "formErrorConfig": "El formulario todavía no está completamente conectado. Escribime directamente por ahora.",
+    "otherTitle": "Otras formas de contactarme",
+    "emailLabel": "Email",
+    "linkedinLabel": "LinkedIn"
+  },
+  "footer": {
+    "tagline": "Implementación, gestión y automatización de CRM.",
+    "rights": "Todos los derechos reservados.",
+    "madeWith": "Con base en Argentina, trabajando globalmente."
+  }
+}

@@ -1,26 +1,200 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f5f6f1;
+  --surface: #ffffff;
+  --surface-2: #eff1e9;
+  --ink: #12141c;
+  --ink-soft: #525662;
+  --ink-faint: #686c79;
+  --accent: #c42e0a;
+  --accent-hover: #a32409;
+  --accent-text: #c92a0a;
+  --accent-ink: #ffffff;
+  --accent-2: #3654ff;
+  --accent-3: #74ad2a;
+  /* --ink is dark here, so bg-ink panels stay dark: use the bright,
+     dark-surface-tuned green so text reads on them. */
+  --accent-3-on-ink: #a9e24a;
+  --line: rgba(18, 20, 28, 0.12);
+  --line-strong: rgba(18, 20, 28, 0.22);
+  --shadow: 0 24px 60px -30px rgba(18, 20, 28, 0.35);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 10px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root[data-theme="dark"] {
+  --bg: #0d0f14;
+  --surface: #161922;
+  --surface-2: #1d212c;
+  --ink: #f2f1ea;
+  --ink-soft: #acb0be;
+  --ink-faint: #888c9b;
+  --accent: #ff5b3d;
+  --accent-hover: #ff7154;
+  --accent-text: #ff9179;
+  --accent-ink: #140906;
+  --accent-2: #8393ff;
+  --accent-3: #a9e24a;
+  --accent-3-on-ink: #74ad2a;
+  --line: rgba(242, 241, 234, 0.14);
+  --line-strong: rgba(242, 241, 234, 0.26);
+  --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.6);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --bg: #0d0f14;
+    --surface: #161922;
+    --surface-2: #1d212c;
+    --ink: #f2f1ea;
+    --ink-soft: #acb0be;
+    --ink-faint: #888c9b;
+    --accent: #ff5b3d;
+    --accent-hover: #ff7154;
+    --accent-text: #ff9179;
+    --accent-ink: #140906;
+    --accent-2: #8393ff;
+    --accent-3: #a9e24a;
+    /* --ink flips light here, so bg-ink panels flip light too: use the
+       darker, light-surface-tuned green so text stays readable on them. */
+    --accent-3-on-ink: #74ad2a;
+    --line: rgba(242, 241, 234, 0.14);
+    --line-strong: rgba(242, 241, 234, 0.26);
+    --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.6);
   }
 }
 
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-text: var(--accent-text);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+  --color-accent-3-on-ink: var(--accent-3-on-ink);
+
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.font-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.theme-thumb {
+  transform: translateX(0);
+  background: var(--ink);
+}
+:root[data-theme="dark"] .theme-thumb {
+  transform: translateX(24px);
+  background: var(--accent);
+}
+
+.flow-line {
+  stroke: var(--line-strong);
+  stroke-width: 1.6;
+  fill: none;
+}
+.flow-line.active {
+  stroke: var(--accent-2);
+  stroke-dasharray: 5 7;
+  animation: dash 3.4s linear infinite;
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: -120;
+  }
+}
+
+.tools-track {
+  animation: scroll-marquee 32s linear infinite;
+}
+@keyframes scroll-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise-in {
+  animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-rise-in,
+  .flow-line.active,
+  .tools-track {
+    animation: none;
+  }
 }

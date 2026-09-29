@@ -1,0 +1,237 @@
+{
+  "meta": {
+    "siteTitle": "Nicolás Mastromarino — CRM & Automation Consultant",
+    "siteDescription": "Hands-on CRM implementation, management, and marketing automation for home services, agencies, and coaches. GoHighLevel-led, platform-agnostic."
+  },
+  "nav": {
+    "services": "Services",
+    "caseStudies": "Case studies",
+    "about": "About",
+    "blog": "Blog",
+    "contact": "Contact",
+    "bookCall": "Book a call",
+    "getInTouch": "Get in touch"
+  },
+  "home": {
+    "eyebrow": "CRM & Automation Consultant",
+    "h1": "Your tools should talk to each other. I make sure they do.",
+    "sub": "Ten years in marketing ops, systems, and automation. I connect the CRM, invoicing, and reporting tools your business already runs on into one system that just works, GoHighLevel-led, platform-agnostic.",
+    "ctaPrimary": "Book a call",
+    "ctaSecondary": "See how it works",
+    "diagramTitle": "Six tools wired into one system",
+    "diagramAriaLabel": "Diagram showing GoHighLevel, Kickserv, Airtable, Stripe, Google Sheets, and Zapier all connecting into one system, producing fewer manual tasks.",
+    "diagramOne": "ONE",
+    "diagramSystem": "SYSTEM",
+    "diagramOutcome1": "Fewer manual",
+    "diagramOutcome2": "tasks",
+    "stats": [
+      { "value": "10+ yrs", "label": "MARKETING OPS" },
+      { "value": "2", "label": "SYSTEMS I RUN DAILY" },
+      { "value": "6+", "label": "PLATFORMS WIRED UP" }
+    ],
+    "tracksTitle": "Two ways to work together",
+    "tracksSub": "Automation is the main focus. It's what I've spent the last decade building.",
+    "track1Label": "Track 01",
+    "track1Title": "CRM implementation & management",
+    "track1Desc": "I set up your CRM the right way the first time, migrate your data cleanly, and, if you want, keep running it every month so it never drifts back into chaos.",
+    "track2Label": "Track 02",
+    "track2Title": "Marketing automation & growth ops",
+    "track2Desc": "Zapier workflows, email automation, and reporting that connect the tools you already use, so leads, jobs, and invoices move without anyone chasing them by hand.",
+    "tracksCta": "See all services",
+    "proofTitle": "Built from the inside, not the outside",
+    "proofSub": "I've spent years as the person actually running these systems day to day, not just the consultant who sets them up and leaves.",
+    "proofItems": [
+      {
+        "title": "Real dispatch systems",
+        "desc": "Built and ran the support-ticket and dispatch infrastructure connecting GoHighLevel, Kickserv, Airtable, and Stripe for a field-service business."
+      },
+      {
+        "title": "Sales & revenue reporting",
+        "desc": "Built KPI dashboards tracking sales-rep performance and multi-year revenue trends, used daily by leadership."
+      },
+      {
+        "title": "Automation at scale",
+        "desc": "Designed and maintained dozens of Zapier workflows automating invoicing, lead assignment, and order processing across departments."
+      }
+    ],
+    "caseStudiesCta": "Read the case studies",
+    "processLabel": "How it works",
+    "processTitle": "From tangled tools to one system",
+    "finalTitle": "Let's fix your systems.",
+    "finalSub": "Tell me what's broken or what you're trying to build. No pricing games, just a straight answer on scope and whether I'm the right fit.",
+    "finalCta": "Get in touch"
+  },
+  "services": {
+    "heroTitle": "Two tracks. No pricing games.",
+    "heroSub": "Every engagement is scoped to what you actually need. There's no published pricing because no two CRMs are in the same mess. Every service below ends with a real conversation, not a paywall.",
+    "track1Label": "Primary focus",
+    "track1Title": "CRM implementation & management",
+    "track1Desc": "For businesses that need their CRM built right, or need someone to actually keep it running.",
+    "track1Items": [
+      {
+        "title": "CRM setup & migration",
+        "desc": "Full setup of GoHighLevel or another CRM, with your data migrated in clean: no orphaned records, no broken pipelines, no starting from zero on day one."
+      },
+      {
+        "title": "Ongoing CRM management",
+        "desc": "A monthly retainer where I sit inside your operations, fixing what breaks, keeping automations current as your business changes, and stopping the slow drift back into spreadsheets."
+      },
+      {
+        "title": "Systems integration",
+        "desc": "Zapier workflows that keep your CRM, dispatch, invoicing, and spreadsheets in sync in real time, so nothing has to be re-typed twice."
+      },
+      {
+        "title": "Support ticket infrastructure",
+        "desc": "A ticketing system built on custom webhooks and CRM automations, with routing and team notifications built in from the start."
+      }
+    ],
+    "track2Label": "Also available",
+    "track2Title": "Marketing automation & growth ops",
+    "track2Desc": "For businesses whose tools don't talk to each other yet.",
+    "track2Items": [
+      {
+        "title": "Workflow & Zapier automation",
+        "desc": "Custom automations connecting your CRM, invoicing, scheduling, and spreadsheets, so a lead, a job, or an order moves through your business without anyone re-typing it."
+      },
+      {
+        "title": "Email marketing & automation",
+        "desc": "Campaigns, nurture sequences, and A/B-tested flows that keep your list engaged without you touching it every week."
+      },
+      {
+        "title": "Reporting & dashboards",
+        "desc": "KPI tracking, sales-trend reports, and daily revenue-by-rep dashboards, built once and updating themselves after that."
+      },
+      {
+        "title": "Lead assignment & sales enablement",
+        "desc": "Clean, deduplicated contact records and lead-routing rules so the right rep sees the right lead the moment it comes in."
+      }
+    ],
+    "processLabel": "How it works",
+    "processTitle": "From tangled tools to one system",
+    "processSub": "The same five-step process whether I'm untangling your CRM or building the automation layer behind it.",
+    "processSteps": [
+      {
+        "title": "Audit",
+        "desc": "I map every tool, spreadsheet, and manual step currently in use: where leads come in, how they're tracked, and where things tend to break or get missed."
+      },
+      {
+        "title": "Design the system",
+        "desc": "From that map, I design the automations and integrations that replace the manual work: what connects to what, what triggers what, and what a human should still review by hand."
+      },
+      {
+        "title": "Build & connect",
+        "desc": "I wire it together, GoHighLevel, Zapier, Airtable, Kickserv, Stripe, custom webhooks, whatever the stack calls for, tested against real data before it touches your live pipeline."
+      },
+      {
+        "title": "Launch & train",
+        "desc": "The system goes live with documentation your team can actually follow, plus hands-on onboarding so everyone knows what changed and why."
+      },
+      {
+        "title": "Support & optimize",
+        "desc": "Systems drift as a business grows. I keep monitoring what I built, fix what breaks, and look for the next manual step worth automating."
+      }
+    ],
+    "ctaTitle": "Not sure which track fits?",
+    "ctaSub": "Most projects touch both. Tell me what's going on and I'll tell you honestly what it needs.",
+    "cta": "Request a quote"
+  },
+  "about": {
+    "heroTitle": "I've run the systems, not just installed them.",
+    "intro": "I'm Nicolás Mastromarino, an automation architect working with CRM and marketing-operations systems since 2016: first as an SEO analyst, then running email marketing and automation for agency clients, and for the past several years as the person actually operating CRM and dispatch systems inside a growing field-service business.",
+    "body1Title": "What I actually do all day",
+    "body1": "Most of my work isn't glamorous: it's making sure a lead that comes in on a Tuesday shows up correctly in the CRM, gets assigned to the right rep, triggers the right follow-up, and eventually turns into an invoice and a report someone can trust. I build that in GoHighLevel, connect it to tools like Kickserv, Airtable, Stripe, and Google Sheets with Zapier, and then (this is the part most consultants skip) I keep it running as the business changes.",
+    "body2Title": "Why platform-agnostic",
+    "body2": "GoHighLevel is where I have the deepest hands-on experience, but the actual skill is the same regardless of platform: mapping how a business really runs, then building the CRM and automations around that reality instead of forcing the business to adapt to generic software.",
+    "body3Title": "Who I work best with",
+    "body3": "Home-services and field-service businesses juggling dispatch, invoicing, and a sales team; agencies who need a hands-on specialist to subcontract CRM and automation work to; and coaches, course creators, and personal brands running everything through funnels and email sequences.",
+    "factsTitle": "Background",
+    "facts": [
+      { "title": "Automation & systems", "dates": "2016 – Present", "desc": "Automation and systems work since 2016, hands-on CRM and dispatch operations since 2020." },
+      { "title": "GoHighLevel", "dates": "Deep experience", "desc": "Deep experience in GoHighLevel, also comfortable in other CRM and automation stacks." },
+      { "title": "SEO & content", "dates": "2016 – 2020", "desc": "Started in SEO and content. Still shapes how I think about reporting and growth." },
+      { "title": "Location", "dates": "Argentina", "desc": "Based in Argentina, working with clients globally and remotely, in English or Spanish." }
+    ],
+    "toolsTitle": "Platforms & tools",
+    "ctaTitle": "Want the details?",
+    "cta": "Book a call"
+  },
+  "caseStudies": {
+    "heroTitle": "Representative work, sanitized",
+    "heroSub": "These describe real problems I've solved, with identifying client details removed. Testimonials and named references are on the way. For now, this is an honest look at the kind of work I do.",
+    "ctaTitle": "Sound like your CRM?",
+    "ctaSub": "These are the kinds of problems I solve every week. Tell me what's going on and I'll tell you honestly what it needs.",
+    "cta": "Get in touch",
+    "items": [
+      {
+        "id": "dispatch-integration",
+        "ticket": "PROJECT 01",
+        "title": "Dispatch, invoicing, and CRM, finally in sync",
+        "context": "A field-service business running install and repair crews had sales in one tool, dispatch in another, and invoicing in a third, with someone manually re-typing information between all of them every day.",
+        "work": "Rebuilt the CRM in GoHighLevel as the single source of truth, then wired it to the dispatch platform, Airtable, Stripe, and Google Sheets with Zapier so a job moves from lead to invoice without anyone touching a keyboard in between.",
+        "outcome": "What used to be a daily block of manual data entry now happens automatically. The team spends that time on customers instead of re-typing the same job three times."
+      },
+      {
+        "id": "support-ticket-system",
+        "ticket": "PROJECT 02",
+        "title": "A support-ticket system built from nothing",
+        "context": "Customer support requests were arriving by phone, text, and email with no central place to track them, so requests got lost and nobody had visibility into response times.",
+        "work": "Designed and launched a full ticketing system using custom webhooks, Zapier, and CRM automations. Every request creates a ticket, notifies the right person, and gets tracked until it's closed.",
+        "outcome": "Support requests stopped falling through the cracks, and leadership got, for the first time, a real picture of ticket volume and response time."
+      },
+      {
+        "id": "revenue-reporting",
+        "ticket": "PROJECT 03",
+        "title": "Sales reporting leadership could actually trust",
+        "context": "Sales and revenue numbers lived in disconnected spreadsheets that were updated inconsistently, so leadership couldn't get a straight answer on how a rep, or the business, was actually trending.",
+        "work": "Built connected reporting pulling directly from the CRM: daily revenue by rep, multi-year sales trends, and KPI dashboards leadership could open any morning without asking anyone to compile it.",
+        "outcome": "Reporting turned from a monthly scramble into something leadership checks like a dashboard: accurate, current, and no longer dependent on one person's spreadsheet."
+      },
+      {
+        "id": "agency-automation",
+        "ticket": "PROJECT 04",
+        "title": "Email automation and CRM for an agency's client base",
+        "context": "An agency needed lead management and email marketing that could scale across many client accounts without rebuilding the wiring from scratch every time.",
+        "work": "Built reusable Zapier workflows connecting the CRM to email marketing automation, along with A/B-tested nurture sequences and the reporting to show which campaigns actually moved the needle.",
+        "outcome": "New client accounts could be onboarded onto proven automation instead of custom work every time, and campaign performance became something the agency could show clients with real numbers."
+      }
+    ]
+  },
+  "blog": {
+    "heroTitle": "Notes on CRM and automation",
+    "heroSub": "Practical writing on GoHighLevel, Zapier workflows, and running a CRM that doesn't fall apart six months after launch.",
+    "empty": "New posts are on the way. Check back soon.",
+    "emptyCta": "Have a CRM question? Ask me directly",
+    "readMore": "Read post",
+    "backToBlog": "Back to blog",
+    "publishedOn": "Published"
+  },
+  "contact": {
+    "heroTitle": "Let's talk about what's broken",
+    "heroSub": "Book a call directly, or send a message below with what you're working on. I read every one myself.",
+    "bookingTitle": "Book a call",
+    "bookingDesc": "Pick a time that works for you and we'll talk through what your CRM or automation setup actually needs.",
+    "bookingCta": "Open calendar",
+    "bookingUnset": "Booking link coming soon. Use the form below in the meantime.",
+    "formTitle": "Send a message",
+    "formName": "Name",
+    "formEmail": "Email",
+    "formCompany": "Company",
+    "formCompanyOptional": "(optional)",
+    "formMessage": "What are you trying to solve?",
+    "formSubmit": "Send message",
+    "formSubmitting": "Sending…",
+    "formSuccess": "Message sent. I'll get back to you within a couple of days.",
+    "formErrorRequired": "Fill in your name, email, and message.",
+    "formErrorEmail": "Enter a valid email address.",
+    "formErrorServer": "Something went wrong sending your message. Try emailing me directly instead.",
+    "formErrorConfig": "The contact form isn't fully connected yet. Email me directly for now.",
+    "otherTitle": "Other ways to reach me",
+    "emailLabel": "Email",
+    "linkedinLabel": "LinkedIn"
+  },
+  "footer": {
+    "tagline": "CRM implementation, management, and marketing automation.",
+    "rights": "All rights reserved.",
+    "madeWith": "Based in Argentina, working globally."
+  }
+}
