@@ -51,8 +51,8 @@ export default async function AboutPage({
           </div>
           <div className="relative h-56 w-44 flex-none self-center overflow-hidden rounded-[var(--radius-lg)] border border-line shadow-[var(--shadow)] sm:self-start">
             <Image
-              src="/nicolas.jpg"
-              alt="Nicolás Mastromarino"
+              src="/nicolas-mastromarino-crm-automation-consultant.jpg"
+              alt={t("photoAlt")}
               fill
               sizes="176px"
               className="object-cover"

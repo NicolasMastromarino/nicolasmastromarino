@@ -15,6 +15,7 @@ export function ContactForm() {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot, left empty by real users
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -39,7 +40,7 @@ export function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, company, message, locale }),
+        body: JSON.stringify({ name, email, company, message, locale, website }),
       });
 
       if (res.status === 503) {
@@ -84,6 +85,22 @@ export function ContactForm() {
       noValidate
       className="rounded-[var(--radius-md)] border border-bg/16 bg-bg/6 p-6 sm:p-7"
     >
+      <div
+        aria-hidden="true"
+        style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}
+      >
+        <label htmlFor="website">Leave this field empty</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
+
       <div className="grid gap-3.5 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="name" className="font-mono text-[11px] uppercase tracking-[0.06em] text-bg/60">

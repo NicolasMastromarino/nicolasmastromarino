@@ -8,6 +8,7 @@ export function PersonSchema() {
     url: SITE_URL,
     email: "mailto:nicolas.mastromarino@gmail.com",
     jobTitle: "CRM & Automation Consultant",
+    image: `${SITE_URL}/nicolas-mastromarino-crm-automation-consultant.jpg`,
     description:
       "Hands-on CRM implementation, management, and marketing automation for home services, agencies, and coaches. GoHighLevel-led, platform-agnostic.",
     sameAs: ["https://ar.linkedin.com/in/nicolasmastromarino"],
@@ -44,12 +45,15 @@ export function BreadcrumbSchema({
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((item, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      name: item.name,
-      item: new URL(`${prefix}${item.path}`, SITE_URL).toString(),
-    })),
+    itemListElement: items.map((item, i) => {
+      const localizedPath = item.path === "/" ? prefix || "/" : `${prefix}${item.path}`;
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        name: item.name,
+        item: new URL(localizedPath, SITE_URL).toString(),
+      };
+    }),
   };
 
   return (
@@ -71,13 +75,16 @@ export function ArticleSchema({
   datePublished: string;
   path: string;
 }) {
+  const url = new URL(path, SITE_URL).toString();
   const data = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: title,
     description,
     datePublished,
-    url: new URL(path, SITE_URL).toString(),
+    url,
+    mainEntityOfPage: url,
+    image: `${SITE_URL}/api/og?title=${encodeURIComponent(title)}`,
     author: {
       "@type": "Person",
       name: "Nicolás Mastromarino",

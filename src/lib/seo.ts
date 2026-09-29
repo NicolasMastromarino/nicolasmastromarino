@@ -24,7 +24,7 @@ export function pageMetadata({
     description,
     alternates: {
       canonical: canonicalUrl,
-      languages: { en: enPath, es: esPath },
+      languages: { en: enPath, es: esPath, "x-default": enPath },
     },
     openGraph: {
       title,
