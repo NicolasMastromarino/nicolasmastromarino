@@ -17,6 +17,8 @@ type CaseStudy = {
 const PDF_BY_ID: Record<string, string> = {
   "dispatch-integration": "/crm-automation-case-study-gohighlevel-zapier.pdf",
   "agency-automation": "/marketing-automation-case-study-agency.pdf",
+  "bookkeeply-saas": "/bookkeeply-case-study.pdf",
+  "jbz-beats-store": "/jbzbeats-case-study.pdf",
 };
 
 export async function generateMetadata({

@@ -1,4 +1,10 @@
-type Variant = "dispatch-integration" | "support-ticket-system" | "revenue-reporting" | "agency-automation";
+type Variant =
+  | "dispatch-integration"
+  | "support-ticket-system"
+  | "revenue-reporting"
+  | "agency-automation"
+  | "bookkeeply-saas"
+  | "jbz-beats-store";
 
 function Node({ x, y, w, label, accent }: { x: number; y: number; w: number; label: string; accent?: boolean }) {
   return (
@@ -98,11 +104,45 @@ function AgencyAutomation() {
   );
 }
 
+function BookkeeplySaas() {
+  return (
+    <svg viewBox="0 0 420 110" role="presentation" aria-hidden="true" className="block h-auto w-full">
+      <Node x={4} y={40} w={90} label="ADD ENTRY" />
+      <path className="flow-line active" d="M94,55 H150" />
+      <Node x={150} y={40} w={90} label="LEDGER" accent />
+      <path className="flow-line active" d="M240,55 V25 H280" />
+      <path className="flow-line active" d="M240,55 H280" />
+      <path className="flow-line active" d="M240,55 V85 H280" />
+      <Node x={280} y={10} w={136} label="DASHBOARD" />
+      <Node x={280} y={40} w={136} label="TAX PLANNER" />
+      <Node x={280} y={70} w={136} label="RECONCILE" />
+    </svg>
+  );
+}
+
+function JbzBeatsStore() {
+  return (
+    <svg viewBox="0 0 420 110" role="presentation" aria-hidden="true" className="block h-auto w-full">
+      <Node x={4} y={40} w={90} label="CATALOG" />
+      <path className="flow-line active" d="M94,55 H150" />
+      <Node x={150} y={40} w={90} label="CHECKOUT" accent />
+      <path className="flow-line active" d="M240,55 V25 H280" />
+      <path className="flow-line active" d="M240,55 H280" />
+      <path className="flow-line active" d="M240,55 V85 H280" />
+      <Node x={280} y={10} w={136} label="DELIVERY" />
+      <Node x={280} y={40} w={136} label="EMAIL" />
+      <Node x={280} y={70} w={136} label="ORDER LOG" />
+    </svg>
+  );
+}
+
 const VARIANTS: Record<Variant, () => React.JSX.Element> = {
   "dispatch-integration": DispatchIntegration,
   "support-ticket-system": SupportTicketSystem,
   "revenue-reporting": RevenueReporting,
   "agency-automation": AgencyAutomation,
+  "bookkeeply-saas": BookkeeplySaas,
+  "jbz-beats-store": JbzBeatsStore,
 };
 
 export function CaseStudyDiagram({ variant }: { variant: string }) {

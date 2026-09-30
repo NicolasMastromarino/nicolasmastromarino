@@ -206,6 +206,22 @@
         "context": "Una agencia necesitaba gestión de leads y email marketing que pudiera escalar entre muchas cuentas de clientes sin reconstruir la conexión desde cero cada vez.",
         "work": "Construí flujos de Zapier reutilizables que conectan el CRM con la automatización de email marketing, junto con secuencias de nutrición testeadas con A/B y los reportes para mostrar qué campañas realmente funcionaban.",
         "outcome": "Las nuevas cuentas de clientes pudieron incorporarse sobre automatización ya probada en vez de trabajo a medida cada vez, y el rendimiento de las campañas se convirtió en algo que la agencia podía mostrarle a sus clientes con números reales."
+      },
+      {
+        "id": "bookkeeply-saas",
+        "ticket": "PROYECTO 05",
+        "title": "Reemplazar una planilla de contabilidad por un producto real",
+        "context": "Una planilla de contabilidad para negocios de servicios había quedado chica para Excel: doce pestañas mensuales para mantener sincronizadas a mano, macros manuales de transferencia y estimaciones de impuestos basadas en suposiciones en vez de matemática real del IRS. Este es un producto propio, que diseñé y lancé de punta a punta.",
+        "work": "Diseñé y construí una aplicación web desde cero con Next.js y Postgres: un único libro mayor de transacciones, conciliación bancaria, reportes de ganancias y pérdidas, y un planificador de impuestos con cálculos reales de impuesto por cuenta propia, la deducción QBI y pagos trimestrales de resguardo seguro, verificados línea por línea contra fuentes del IRS.",
+        "outcome": "La planilla de doce pestañas se convirtió en un solo sistema con validación real, y una revisión posterior de precisión fiscal detectó un umbral QBI desactualizado y un cambio de ley faltante antes de que llegaran a un usuario."
+      },
+      {
+        "id": "jbz-beats-store",
+        "ticket": "PROYECTO 06",
+        "title": "Convertir una tienda de beats de una página en una que funciona sola",
+        "context": "El sitio en WordPress de un productor musical independiente podía mostrar sus beats, pero no tenía una forma estructurada de venderlos bajo distintas licencias, ni entrega automatizada, ni prácticamente tráfico orgánico de búsqueda.",
+        "work": "Construí la tienda en WordPress y Elementor con licencias escalonadas y lógica automática de descuento por volumen, conecté el cumplimiento automatizado de pedidos para que las compras entreguen archivos y confirmaciones sin trabajo manual, y me encargué del SEO on-page para atraer tráfico orgánico.",
+        "outcome": "Las licencias, el checkout y la entrega ahora funcionan solos, y el sitio atrae tráfico de búsqueda real en vez de depender por completo de las redes sociales."
       }
     ]
   },

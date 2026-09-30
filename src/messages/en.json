@@ -206,6 +206,22 @@
         "context": "An agency needed lead management and email marketing that could scale across many client accounts without rebuilding the wiring from scratch every time.",
         "work": "Built reusable Zapier workflows connecting the CRM to email marketing automation, along with A/B-tested nurture sequences and the reporting to show which campaigns actually moved the needle.",
         "outcome": "New client accounts could be onboarded onto proven automation instead of custom work every time, and campaign performance became something the agency could show clients with real numbers."
+      },
+      {
+        "id": "bookkeeply-saas",
+        "ticket": "PROJECT 05",
+        "title": "Replacing a bookkeeping spreadsheet with a real product",
+        "context": "A service-business bookkeeping workbook had outgrown Excel: twelve monthly tabs kept in sync by hand, manual transfer macros, and tax estimates based on guesswork instead of real IRS math. This one is my own product, built and shipped end to end.",
+        "work": "Designed and built a Next.js and Postgres web app from scratch: a single transactions ledger, bank reconciliation, P&L reporting, and a Tax Planner with real self-employment tax, QBI deduction, and safe-harbor quarterly payment calculations, verified line by line against IRS sources.",
+        "outcome": "The twelve-tab spreadsheet became one system with real validation, and a later tax-accuracy pass caught a stale QBI threshold and a missing law change before either reached a user."
+      },
+      {
+        "id": "jbz-beats-store",
+        "ticket": "PROJECT 06",
+        "title": "Turning a one-page beat store into one that runs itself",
+        "context": "An independent music producer's WordPress site could showcase beats but had no structured way to sell them under different license tiers, no automated delivery, and almost no organic search traffic.",
+        "work": "Built out the storefront in WordPress and Elementor with tiered licensing and automatic bulk-discount logic, wired up automated order fulfillment so purchases deliver files and confirmations without manual work, and handled the on-page SEO to bring in organic traffic.",
+        "outcome": "Licensing, checkout, and delivery now run without anyone touching them, and the site brings in real search traffic instead of depending entirely on social media."
       }
     ]
   },
