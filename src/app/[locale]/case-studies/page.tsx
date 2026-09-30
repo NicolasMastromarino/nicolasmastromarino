@@ -14,6 +14,11 @@ type CaseStudy = {
   outcome: string;
 };
 
+const PDF_BY_ID: Record<string, string> = {
+  "dispatch-integration": "/crm-automation-case-study-gohighlevel-zapier.pdf",
+  "agency-automation": "/marketing-automation-case-study-agency.pdf",
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -101,6 +106,17 @@ export default async function CaseStudiesPage({
                   </dd>
                 </div>
               </dl>
+
+              {PDF_BY_ID[item.id] && (
+                <a
+                  href={PDF_BY_ID[item.id]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent no-underline hover:text-accent-hover"
+                >
+                  {t("downloadPdf")} ↓
+                </a>
+              )}
             </article>
           ))}
         </div>
