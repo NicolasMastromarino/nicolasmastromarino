@@ -11,6 +11,8 @@ const TOOLS = [
   "Search Console",
   "SEMrush",
   "WordPress",
+  "Paperform",
+  "Twilio",
 ];
 
 export function ToolsMarquee() {
