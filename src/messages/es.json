@@ -54,7 +54,7 @@
     "proofItems": [
       {
         "title": "Sistemas de despacho reales",
-        "desc": "Construí y operé la infraestructura de tickets de soporte y despacho conectando GoHighLevel, Kickserv, Airtable y Stripe para una empresa de servicios de campo."
+        "desc": "Construí y operé la infraestructura de tickets de soporte y despacho conectando GoHighLevel, Kickserv, Airtable y Stripe para una empresa de servicios de campo, procesando más de 130.000 envíos."
       },
       {
         "title": "Reportes de ventas e ingresos",
@@ -62,7 +62,7 @@
       },
       {
         "title": "Automatización a gran escala",
-        "desc": "Diseñé y mantuve decenas de flujos de Zapier que automatizan facturación, asignación de leads y procesamiento de pedidos entre distintas áreas."
+        "desc": "Diseñé y mantuve decenas de flujos de Zapier que automatizan facturación, asignación de leads y procesamiento de pedidos, incluyendo secuencias de email que enviaron más de 440.000 correos."
       }
     ],
     "caseStudiesCta": "Ver los casos de éxito",

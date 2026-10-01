@@ -54,7 +54,7 @@
     "proofItems": [
       {
         "title": "Real dispatch systems",
-        "desc": "Built and ran the support-ticket and dispatch infrastructure connecting GoHighLevel, Kickserv, Airtable, and Stripe for a field-service business."
+        "desc": "Built and ran the support-ticket and dispatch infrastructure connecting GoHighLevel, Kickserv, Airtable, and Stripe for a field-service business, processing more than 130,000 submissions."
       },
       {
         "title": "Sales & revenue reporting",
@@ -62,7 +62,7 @@
       },
       {
         "title": "Automation at scale",
-        "desc": "Designed and maintained dozens of Zapier workflows automating invoicing, lead assignment, and order processing across departments."
+        "desc": "Designed and maintained dozens of Zapier workflows automating invoicing, lead assignment, and order processing, including email sequences that have sent more than 440,000 emails."
       }
     ],
     "caseStudiesCta": "Read the case studies",
