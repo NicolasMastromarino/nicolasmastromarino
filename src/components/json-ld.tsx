@@ -6,7 +6,7 @@ export function PersonSchema() {
     "@type": "Person",
     name: "Nicolás Mastromarino",
     url: SITE_URL,
-    email: "mailto:me@nicolasmastromarino.com",
+    email: "mailto:nico@nicolasmastromarino.com",
     jobTitle: "CRM & Automation Consultant",
     image: `${SITE_URL}/nicolas-mastromarino-crm-automation-consultant.jpg`,
     description:
