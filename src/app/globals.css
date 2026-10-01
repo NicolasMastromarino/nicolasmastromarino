@@ -165,12 +165,9 @@ h3 {
   }
 }
 
-.tools-track {
-  animation: scroll-marquee 32s linear infinite;
-}
-@keyframes scroll-marquee {
+@keyframes tools-scroll {
   to {
-    transform: translateX(-50%);
+    transform: translateX(var(--marquee-distance, -50%));
   }
 }
 
@@ -193,8 +190,7 @@ h3 {
     scroll-behavior: auto;
   }
   .animate-rise-in,
-  .flow-line.active,
-  .tools-track {
+  .flow-line.active {
     animation: none;
   }
 }
