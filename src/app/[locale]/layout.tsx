@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -79,6 +80,16 @@ export default async function LocaleLayout({
         <PersonSchema />
       </head>
       <body className="min-h-full flex flex-col bg-bg text-ink">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-GM5KEPCE27"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-gtag" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-GM5KEPCE27');`}
+        </Script>
         <NextIntlClientProvider>
           <SiteHeader />
           <main className="flex-1">{children}</main>
