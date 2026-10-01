@@ -49,14 +49,14 @@ export default async function AboutPage({
             <h1 className="text-[2.1rem] leading-tight sm:text-[2.8rem]">{t("heroTitle")}</h1>
             <p className="mt-5 text-[1.1rem] leading-relaxed text-ink-soft">{t("intro")}</p>
           </div>
-          <div className="relative h-56 w-44 flex-none self-center overflow-hidden rounded-[var(--radius-lg)] border border-line shadow-[var(--shadow)] sm:self-start">
+          <div className="relative h-72 w-56 flex-none self-center overflow-hidden rounded-[var(--radius-lg)] border border-line shadow-[var(--shadow)] sm:h-96 sm:w-80 sm:self-start">
             <Image
               src="/nicolas-mastromarino-crm-automation-consultant.jpg"
               alt={t("photoAlt")}
               fill
-              sizes="176px"
-              className="object-cover"
-              style={{ objectPosition: "50% 22%" }}
+              sizes="(min-width: 640px) 320px, 224px"
+              className="scale-125 object-cover"
+              style={{ objectPosition: "50% 18%" }}
               priority
             />
           </div>
