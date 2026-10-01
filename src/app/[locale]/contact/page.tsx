@@ -65,10 +65,10 @@ export default async function ContactPage({
 
           <div className="mt-7 flex flex-col gap-2.5 border-t border-bg/18 pt-7">
             <a
-              href="mailto:nicolas.mastromarino@gmail.com"
+              href="mailto:me@nicolasmastromarino.com"
               className="w-fit border-b border-bg/30 pb-0.5 text-[0.94rem] text-bg no-underline hover:border-accent"
             >
-              nicolas.mastromarino@gmail.com
+              me@nicolasmastromarino.com
             </a>
             <a
               href="https://ar.linkedin.com/in/nicolasmastromarino"
