@@ -6,7 +6,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import type { CityEngine, CityLabels, CityRoute, HoverInfo } from "./city-engine";
 import { INDUSTRIES, type IndustryId } from "./industries";
-import { IndustryPanel } from "./industry-panel";
+import { IndustryChooser, IndustryPanel } from "./industry-panel";
+import { cityBus } from "./city-bus";
 
 const COPY = {
   en: {
@@ -23,7 +24,9 @@ const COPY = {
     industriesBtn: "Industries",
     loading: "Booting the city",
     explore: "Explore the city",
+    exploreShort: "Explore",
     exit: "Back to the site",
+    exitShort: "Exit",
     rainOn: "Turn the rain off",
     rainOff: "Turn the rain on",
     toDay: "Switch to day",
@@ -44,7 +47,9 @@ const COPY = {
     industriesBtn: "Industrias",
     loading: "Encendiendo la ciudad",
     explore: "Explorar la ciudad",
+    exploreShort: "Explorar",
     exit: "Volver al sitio",
+    exitShort: "Salir",
     rainOn: "Apagar la lluvia",
     rainOff: "Prender la lluvia",
     toDay: "Pasar a día",
@@ -84,6 +89,10 @@ export function CityCanvas() {
   const weatherRef = useRef({ rain: false, day: false });
   const [industry, setIndustry] = useState<IndustryId | null>(null);
   const industryRef = useRef<IndustryId | null>(null);
+  const [chooser, setChooser] = useState(false);
+  const chooserRef = useRef(false);
+  const previewTimer = useRef<number | undefined>(undefined);
+  const lastTrigger = useRef<HTMLElement | null>(null);
 
   const setIndustryUrl = (id: IndustryId | null) => {
     const u = new URL(window.location.href);
@@ -92,6 +101,9 @@ export function CityCanvas() {
     window.history.replaceState(window.history.state, "", u);
   };
   const openIndustry = (id: IndustryId) => {
+    window.clearTimeout(previewTimer.current);
+    chooserRef.current = false;
+    setChooser(false);
     industryRef.current = id;
     setIndustry(id);
     setShowHint(false);
@@ -100,15 +112,49 @@ export function CityCanvas() {
     setIndustryUrl(id);
   };
   const closeIndustry = () => {
-    if (!industryRef.current) return;
+    window.clearTimeout(previewTimer.current);
+    if (!industryRef.current && !chooserRef.current) return;
     industryRef.current = null;
+    chooserRef.current = false;
     setIndustry(null);
+    setChooser(false);
+    const back = lastTrigger.current;
+    lastTrigger.current = null;
+    if (back) window.requestAnimationFrame(() => back.isConnected && back.focus({ preventScroll: true }));
     engineRef.current?.setFocus(null);
     delete document.documentElement.dataset.industry;
     setIndustryUrl(null);
   };
   const openIndustryRef = useRef(openIndustry);
-  openIndustryRef.current = openIndustry;
+
+  // the chooser: four trades before any card opens
+  const openChooser = () => {
+    if (routeRef.current !== "home") return;
+    if (!industryRef.current && !chooserRef.current && document.activeElement instanceof HTMLElement && document.activeElement !== document.body) {
+      lastTrigger.current = document.activeElement;
+    }
+    chooserRef.current = true;
+    setChooser(true);
+    setShowHint(false);
+    document.documentElement.dataset.industry = "1";
+  };
+  const openChooserRef = useRef(openChooser);
+  // the refs always hold the latest versions, for the engine and the hero, which outlive a render
+  useEffect(() => {
+    openIndustryRef.current = openIndustry;
+    openChooserRef.current = openChooser;
+  });
+  // pointing at a trade shows its building; leaving the list lets the camera come back
+  const previewIndustry = (id: IndustryId | null) => {
+    window.clearTimeout(previewTimer.current);
+    previewTimer.current = window.setTimeout(
+      () => {
+        if (industryRef.current || !chooserRef.current) return;
+        engineRef.current?.setFocus(id ? "ind-" + id : null);
+      },
+      id ? 200 : 350,
+    );
+  };
 
   const toggleRain = () => {
     const v = !rain;
@@ -133,15 +179,31 @@ export function CityCanvas() {
     if (q && INDUSTRIES.some((i) => i.id === q) && routeRef.current === "home") openIndustryRef.current(q as IndustryId);
   }, [ready]);
 
+  // while a card is open the faded page behind it cannot take focus
   useEffect(() => {
-    if (!industry) return;
+    const on = Boolean(industry) || chooser;
+    const parts = [document.querySelector("main"), document.querySelector("footer")];
+    parts.forEach((el) => el?.toggleAttribute("inert", on));
+    return () => parts.forEach((el) => el?.removeAttribute("inert"));
+  }, [industry, chooser]);
+
+  // page content (the hero) can ask the city for the chooser
+  useEffect(() => {
+    cityBus.openIndustries = () => openChooserRef.current();
+    return () => {
+      cityBus.openIndustries = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!industry && !chooser) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeIndustry();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [industry]);
+  }, [industry, chooser]);
 
   // a ring pulses around the day/night switch once the evening has fallen, until it is used
   useEffect(() => {
@@ -162,9 +224,12 @@ export function CityCanvas() {
   useEffect(() => {
     const r = routeFor(pathname);
     routeRef.current = r;
-    if (industryRef.current) {
+    if (industryRef.current || chooserRef.current) {
+      window.clearTimeout(previewTimer.current);
       industryRef.current = null;
+      chooserRef.current = false;
       setIndustry(null);
+      setChooser(false);
       engineRef.current?.setFocus(null);
       delete document.documentElement.dataset.industry;
     }
@@ -282,13 +347,17 @@ export function CityCanvas() {
       {ready && !failed && (
         <motion.div
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
-          className={`fixed bottom-5 right-5 z-[66] flex items-center gap-2 transition-opacity duration-200 ${industry ? "pointer-events-none opacity-0" : ""}`}
+          animate={{ opacity: industry || chooser ? 0 : 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4, ease: [0.23, 1, 0.32, 1], opacity: { duration: 0.2, delay: industry || chooser ? 0 : 0.4 } }}
+          className="pointer-events-none fixed inset-x-0 bottom-0 z-[66] sm:inset-x-auto sm:bottom-5 sm:right-5"
         >
+          <div aria-hidden="true" className="dock-scrim absolute inset-0 sm:hidden" />
+          <div
+            className={`relative flex items-center justify-between gap-2 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:justify-start sm:p-0 ${industry || chooser ? "pointer-events-none" : "pointer-events-auto"}`}
+          >
           <button
             type="button"
-            onClick={() => openIndustry(industry ?? INDUSTRIES[0].id)}
+            onClick={openChooser}
             aria-label={copy.industriesBtn}
             title={copy.industriesBtn}
             className="press inline-flex h-11 items-center gap-2 rounded-full border border-line-strong bg-surface/90 px-3.5 text-[13.5px] font-semibold text-ink backdrop-blur-md hover:bg-surface"
@@ -296,15 +365,16 @@ export function CityCanvas() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="text-accent-text">
               <path d="M4 21V9l6-3v15M10 21V4l10 4v13M2.5 21h19M7 12h0M7 16h0M14 12h2M14 16h2" />
             </svg>
-            <span className="hidden sm:inline">{copy.industriesBtn}</span>
+            <span>{copy.industriesBtn}</span>
           </button>
+          <div className="flex items-center sm:gap-2 max-sm:rounded-full max-sm:border max-sm:border-line-strong max-sm:bg-surface/90 max-sm:backdrop-blur-md">
           <button
             type="button"
             onClick={toggleRain}
             aria-pressed={rain}
             aria-label={rain ? copy.rainOn : copy.rainOff}
             title={rain ? copy.rainOn : copy.rainOff}
-            className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong bg-surface/90 text-ink backdrop-blur-md hover:bg-surface"
+            className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong bg-surface/90 text-ink backdrop-blur-md hover:bg-surface max-sm:border-0 max-sm:bg-transparent max-sm:backdrop-blur-none"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={rain ? "text-accent-2" : "opacity-60"}>
               <path d="M7 15a4 4 0 0 1-.4-7.98A5.5 5.5 0 0 1 17.2 8 3.5 3.5 0 0 1 17 15H7Z" />
@@ -324,7 +394,7 @@ export function CityCanvas() {
             aria-pressed={day}
             aria-label={day ? copy.toNight : copy.toDay}
             title={day ? copy.toNight : copy.toDay}
-            className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong bg-surface/90 text-ink backdrop-blur-md hover:bg-surface"
+            className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong bg-surface/90 text-ink backdrop-blur-md hover:bg-surface max-sm:border-0 max-sm:bg-transparent max-sm:backdrop-blur-none"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="text-accent-text">
               {day ? (
@@ -338,14 +408,17 @@ export function CityCanvas() {
             </svg>
           </button>
           </span>
+          </div>
           <button
             type="button"
             onClick={() => setExplore(!exploring)}
             className="press inline-flex items-center gap-2.5 rounded-full border border-line-strong bg-surface/90 px-5 py-3 text-[13.5px] font-semibold text-ink backdrop-blur-md hover:bg-surface"
           >
             <span aria-hidden="true" className="text-accent-text">{exploring ? "✕" : "⌖"}</span>
-            {exploring ? copy.exit : copy.explore}
+            <span className="sm:hidden">{exploring ? copy.exitShort : copy.exploreShort}</span>
+            <span className="hidden sm:inline">{exploring ? copy.exit : copy.explore}</span>
           </button>
+          </div>
         </motion.div>
       )}
 
@@ -396,6 +469,7 @@ export function CityCanvas() {
         )}
       </AnimatePresence>
 
+      <IndustryChooser open={chooser} locale={locale} onClose={closeIndustry} onSelect={openIndustry} onPreview={previewIndustry} />
       <IndustryPanel industryId={industry} locale={locale} onClose={closeIndustry} onSelect={openIndustry} />
 
       <AnimatePresence>

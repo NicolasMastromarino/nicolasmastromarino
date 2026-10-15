@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { EASE_OUT } from "@/components/motion-primitives";
 import { withBase } from "@/lib/base-path";
+import { INDUSTRIES } from "@/components/city/industries";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -26,6 +27,16 @@ export function ContactForm() {
   const [website, setWebsite] = useState(""); // honeypot, left empty by real users
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // arriving from an industry card: start the message with a line about that trade, never over what was typed
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("industry");
+    if (!id || !INDUSTRIES.some((i) => i.id === id)) return;
+    // reads the address bar, which only exists in the browser, so it cannot be the initial state
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMessage((current) => current || t(`starters.${id as "hvac" | "roofing" | "plumbing" | "outdoor"}`));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

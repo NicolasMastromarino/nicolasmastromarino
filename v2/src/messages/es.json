@@ -29,6 +29,8 @@
     "h1": "Tus herramientas deberían hablarse entre sí. Yo me aseguro de que lo hagan.",
     "sub": "Diez años en operaciones de marketing, sistemas y automatización. Conecto el CRM, la facturación y los reportes que tu negocio ya usa en un solo sistema que funciona, especializado en GoHighLevel, adaptable a cualquier plataforma.",
     "ctaPrimary": "Agendar llamada",
+    "industriesCta": "Encontrá tu rubro",
+    "industriesTrades": "HVAC, techos, plomería, paisajismo",
     "ctaSecondary": "Ver cómo funciona",
     "diagramTitle": "Seis herramientas conectadas en un solo sistema",
     "diagramAriaLabel": "Diagrama que muestra GoHighLevel, Kickserv, Airtable, Stripe, Google Sheets y Zapier conectándose en un solo sistema, generando menos tareas manuales.",
@@ -270,6 +272,12 @@
     "bookingDesc": "Elegí un horario que te quede cómodo y hablamos de qué necesita realmente tu CRM o tu automatización.",
     "bookingCta": "Abrir calendario",
     "bookingUnset": "El link para agendar llega pronto. Mientras tanto, usá el formulario de abajo.",
+    "starters": {
+      "hvac": "Hola, tengo una empresa de HVAC y me gustaría hablar sobre mis sistemas.",
+      "roofing": "Hola, tengo una empresa de techos y me gustaría hablar sobre mis sistemas.",
+      "plumbing": "Hola, tengo una empresa de plomería o electricidad y me gustaría hablar sobre mis sistemas.",
+      "outdoor": "Hola, tengo una empresa de paisajismo o limpieza y me gustaría hablar sobre mis sistemas."
+    },
     "formTitle": "Enviar un mensaje",
     "formName": "Nombre",
     "formEmail": "Email",

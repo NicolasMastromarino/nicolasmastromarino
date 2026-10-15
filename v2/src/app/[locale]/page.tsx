@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CtaLink } from "@/components/cta-link";
+import { IndustriesPrompt } from "@/components/industries-prompt";
 import { StatRow } from "@/components/stat-row";
 import { ToolsMarquee } from "@/components/tools-marquee";
 import { SpotLink, SpotCard } from "@/components/spotlight";
@@ -75,6 +76,11 @@ export default async function HomePage({
                 <CtaLink href="/services" variant="ghost">
                   {t("ctaSecondary")}
                 </CtaLink>
+              </div>
+            </Reveal>
+            <Reveal delay={0.74} immediate>
+              <div className="mt-5">
+                <IndustriesPrompt />
               </div>
             </Reveal>
             <StatRow stats={stats} />

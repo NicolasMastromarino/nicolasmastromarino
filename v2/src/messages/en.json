@@ -29,6 +29,8 @@
     "h1": "Your tools should talk to each other. I make sure they do.",
     "sub": "Ten years in marketing ops, systems, and automation. I connect the CRM, invoicing, and reporting tools your business already runs on into one system that just works, GoHighLevel-led, platform-agnostic.",
     "ctaPrimary": "Book a call",
+    "industriesCta": "Find your industry",
+    "industriesTrades": "HVAC, roofing, plumbing, landscaping",
     "ctaSecondary": "See how it works",
     "diagramTitle": "Six tools wired into one system",
     "diagramAriaLabel": "Diagram showing GoHighLevel, Kickserv, Airtable, Stripe, Google Sheets, and Zapier all connecting into one system, producing fewer manual tasks.",
@@ -270,6 +272,12 @@
     "bookingDesc": "Pick a time that works for you and we'll talk through what your CRM or automation setup actually needs.",
     "bookingCta": "Open calendar",
     "bookingUnset": "Booking link coming soon. Use the form below in the meantime.",
+    "starters": {
+      "hvac": "Hi, I run an HVAC business and I would like to talk about my systems.",
+      "roofing": "Hi, I run a roofing business and I would like to talk about my systems.",
+      "plumbing": "Hi, I run a plumbing or electrical business and I would like to talk about my systems.",
+      "outdoor": "Hi, I run a landscaping or cleaning business and I would like to talk about my systems."
+    },
     "formTitle": "Send a message",
     "formName": "Name",
     "formEmail": "Email",

@@ -634,3 +634,23 @@ main,
 footer {
   transition: opacity 0.25s var(--ease-out);
 }
+
+/* phones: the control dock sits over the bottom of the page, so the page keeps room for it and fades under it */
+@media (max-width: 639px) {
+  footer {
+    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+.dock-scrim {
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-bg) 92%, transparent), color-mix(in srgb, var(--color-bg) 70%, transparent) 55%, transparent);
+}
+
+/* a row of chips that scrolls sideways: no native bar, a soft edge on the right to say there is more */
+.chip-row {
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+}
+.chip-row::-webkit-scrollbar {
+  display: none;
+}

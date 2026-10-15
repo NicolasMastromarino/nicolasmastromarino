@@ -7,6 +7,8 @@ export type IconName = "phone" | "route" | "calendar" | "star" | "refresh" | "re
 
 export type IndustryCopy = {
   name: string;
+  /** who it is for, in a few words (the industry chooser) */
+  who: string;
   tagline: string;
   /** what the owner already feels */
   pains: string[];
@@ -46,6 +48,7 @@ export const INDUSTRIES: Industry[] = [
     color: "#7fd4ff",
     en: {
       name: "HVAC",
+      who: "Heating and cooling contractors",
       tagline: "The call comes in at 7 pm in July. Nothing should slip.",
       pains: [
         "Evening and weekend calls go to voicemail, and the customer calls the next company.",
@@ -65,6 +68,7 @@ export const INDUSTRIES: Industry[] = [
     },
     es: {
       name: "HVAC (calefacción y aire)",
+      who: "Empresas de calefacción y aire",
       tagline: "La llamada entra a las 7 de la tarde en pleno julio. Nada debería perderse.",
       pains: [
         "Las llamadas de la noche y del fin de semana van al buzón, y el cliente llama a la competencia.",
@@ -93,6 +97,7 @@ export const INDUSTRIES: Industry[] = [
     color: "#ff8a6a",
     en: {
       name: "Roofers",
+      who: "Roofing and storm-repair crews",
       tagline: "A storm hits and the phone melts. Every lead still needs an answer.",
       pains: [
         "Estimates go cold a few days after the inspection.",
@@ -112,6 +117,7 @@ export const INDUSTRIES: Industry[] = [
     },
     es: {
       name: "Techistas (roofers)",
+      who: "Techistas y cuadrillas de reparación",
       tagline: "Llega una tormenta y el teléfono explota. Cada contacto necesita una respuesta.",
       pains: [
         "Los presupuestos se enfrían a los pocos días de la inspección.",
@@ -139,6 +145,7 @@ export const INDUSTRIES: Industry[] = [
     color: "#a9b6ff",
     en: {
       name: "Plumbing & electrical",
+      who: "Plumbers and electricians",
       tagline: "A burst pipe and a routine check-up should not wait in the same line.",
       pains: [
         "Emergencies and routine jobs look the same when they come in.",
@@ -158,6 +165,7 @@ export const INDUSTRIES: Industry[] = [
     },
     es: {
       name: "Plomería y electricidad",
+      who: "Plomeros y electricistas",
       tagline: "Una tubería rota y una revisión de rutina no deberían esperar en la misma fila.",
       pains: [
         "Las emergencias y los trabajos de rutina entran iguales.",
@@ -186,6 +194,7 @@ export const INDUSTRIES: Industry[] = [
     color: "#9ed98a",
     en: {
       name: "Landscaping & cleaning",
+      who: "Lawn, garden and cleaning services",
       tagline: "Recurring work runs on routine. The routine should run itself.",
       pains: [
         "Recurring clients are billed by hand every month.",
@@ -205,6 +214,7 @@ export const INDUSTRIES: Industry[] = [
     },
     es: {
       name: "Paisajismo y limpieza",
+      who: "Servicios de jardín, césped y limpieza",
       tagline: "El trabajo recurrente vive de la rutina. La rutina tendría que andar sola.",
       pains: [
         "Los clientes recurrentes se facturan a mano todos los meses.",

@@ -6,6 +6,8 @@ export const cityBus = {
   set(cue: string) {
     this.cue = cue;
   },
+  /** the city registers how to open its industry chooser, so page content (the hero) can ask for it */
+  openIndustries: null as null | (() => void),
   clear(cue: string) {
     if (this.cue === cue) this.cue = "";
   },
