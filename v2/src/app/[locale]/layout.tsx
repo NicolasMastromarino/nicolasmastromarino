@@ -1,0 +1,106 @@
+import type { Metadata } from "next";
+import Script from "next/script";
+import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { Ambient } from "@/components/ambient";
+import { MotionProvider } from "@/components/motion-provider";
+import { PersonSchema } from "@/components/json-ld";
+import { BASE_PATH, withBase } from "@/lib/base-path";
+import "../globals.css";
+
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  weight: ["600", "800"],
+});
+
+const plexSans = IBM_Plex_Sans({
+  variable: "--font-plex-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nicolasmastromarino.com";
+
+  return {
+    metadataBase: new URL(base),
+    title: t("siteTitle"),
+    description: t("siteDescription"),
+    icons: {
+      icon: [
+        { url: withBase("/icon-32.png"), sizes: "32x32", type: "image/png" },
+        { url: withBase("/icon-192.png"), sizes: "192x192", type: "image/png" },
+      ],
+      apple: [{ url: withBase("/apple-touch-icon.png"), sizes: "180x180", type: "image/png" }],
+    },
+    ...(BASE_PATH ? { robots: { index: false, follow: false } } : {}),
+  };
+}
+
+export default async function LocaleLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+  setRequestLocale(locale);
+
+  return (
+    <html
+      lang={locale}
+      data-scroll-behavior="smooth"
+      className={`${bricolage.variable} ${plexSans.variable} ${plexMono.variable} h-full antialiased`}
+    >
+      <head>
+        <PersonSchema />
+      </head>
+      <body className="flex min-h-full flex-col text-ink">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-GM5KEPCE27"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-gtag" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-GM5KEPCE27');`}
+        </Script>
+        <NextIntlClientProvider>
+          <MotionProvider>
+            <Ambient />
+            <SiteHeader />
+            <main className="flex-1 pt-24">{children}</main>
+            <SiteFooter />
+          </MotionProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}
