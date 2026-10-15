@@ -42,7 +42,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nicolasmastromarino.com";
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://nicolasmastromarino.com";
 
   return {
     metadataBase: new URL(base),

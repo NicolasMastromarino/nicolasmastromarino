@@ -24,7 +24,7 @@ function localePath(locale: string, page: string) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nicolasmastromarino.com";
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://nicolasmastromarino.com";
   const entries: MetadataRoute.Sitemap = [];
   if (BASE_PATH) return entries; // a sub-path preview is not indexed
 
