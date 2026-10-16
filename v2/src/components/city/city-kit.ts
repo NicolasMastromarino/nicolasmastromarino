@@ -1490,7 +1490,7 @@ export function buildCity(time: Uniform, mobile: boolean): City {
 /* Ground: asphalt, sidewalks, markings, puddles and lamp pools         */
 /* ------------------------------------------------------------------ */
 
-export function paintGround(plan: Plan, k: number) {
+export async function paintGround(plan: Plan, k: number, pause?: () => Promise<void>) {
   // The ground is one big rectangle: the whole city plus the beach on its south edge.
   const X0 = GROUND.x0;
   const Z0 = GROUND.z0;
@@ -1711,8 +1711,34 @@ export function paintGround(plan: Plan, k: number) {
     const v = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
     return v - Math.floor(v);
   };
+  // landL (two exp/log per call) used to run for every one of the ~6M pixels. Sample it on a coarse grid instead and only
+  // go per pixel where the shore can be: the field changes by under ~3 m per metre, so a cell whose corners are all far
+  // inland (or far out to sea) cannot hold the shore band.
+  const S = 8;
+  const nx = Math.ceil(W / S) + 1;
+  const ny = Math.ceil(H / S) + 1;
+  const coarse = new Float32Array(nx * ny);
+  for (let cj = 0; cj < ny; cj++) for (let ci = 0; ci < nx; ci++) coarse[cj * nx + ci] = landL(X0 + (ci * S) / k, Z0 + (cj * S) / k);
+  const cellMin = new Float32Array((nx - 1) * (ny - 1));
+  const cellMax = new Float32Array((nx - 1) * (ny - 1));
+  for (let cj = 0; cj < ny - 1; cj++) {
+    for (let ci = 0; ci < nx - 1; ci++) {
+      const a0 = coarse[cj * nx + ci];
+      const a1 = coarse[cj * nx + ci + 1];
+      const a2 = coarse[(cj + 1) * nx + ci];
+      const a3 = coarse[(cj + 1) * nx + ci + 1];
+      cellMin[cj * (nx - 1) + ci] = Math.min(a0, a1, a2, a3);
+      cellMax[cj * (nx - 1) + ci] = Math.max(a0, a1, a2, a3);
+    }
+  }
+  let slice = performance.now();
   for (let j = 0; j < H; j++) {
+    if (pause && j % 32 === 0 && performance.now() - slice > 8) {
+      await pause();
+      slice = performance.now();
+    }
     const z = Z0 + j / k;
+    const rowCell = Math.min(ny - 2, Math.floor(j / S)) * (nx - 1);
     for (let i = 0; i < W; i++) {
       const x = X0 + i / k;
       const idx = (j * W + i) * 4;
@@ -1720,7 +1746,8 @@ export function paintGround(plan: Plan, k: number) {
       const interior = x > -60 && x < 52 && z > -58 && z < 36;
       let shore = false;
       if (!interior) {
-        const L = landL(x, z);
+        const cell = rowCell + Math.min(nx - 2, Math.floor(i / S));
+        const L = cellMin[cell] > 18.5 ? 99 : cellMax[cell] < -3.5 ? -99 : landL(x, z);
         if (L < 16) {
           shore = true;
           const n = hsh(Math.floor(x * 4), Math.floor(z * 4));

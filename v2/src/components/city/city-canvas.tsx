@@ -153,7 +153,6 @@ export function CityCanvas() {
 
   // the chooser: four trades before any card opens
   const openChooser = () => {
-    if (routeRef.current !== "home") return;
     if (!industryRef.current && !chooserRef.current && document.activeElement instanceof HTMLElement && document.activeElement !== document.body) {
       lastTrigger.current = document.activeElement;
     }
@@ -331,6 +330,17 @@ export function CityCanvas() {
             router.push(info.href, { transitionTypes: ["nav-forward"] });
           },
         });
+        // the scene is built in slices so the page stays responsive; the text is already on screen meanwhile
+        try {
+          await engine.build();
+        } catch (e) {
+          engine.dispose();
+          throw e;
+        }
+        if (disposed) {
+          engine.dispose();
+          return;
+        }
         engine.setRoute(routeRef.current);
         engine.setRain(weatherRef.current.rain);
         engine.setDay(weatherRef.current.day);
@@ -343,7 +353,7 @@ export function CityCanvas() {
         engineRef.current = engine;
         if (process.env.NODE_ENV !== "production") (window as unknown as { __city?: CityEngine }).__city = engine;
         engine.start();
-        window.setTimeout(() => !disposed && setReady(true), reduced ? 200 : 900);
+        setReady(true);
         window.setTimeout(() => {
           if (!disposed && !hintSeen.current && routeRef.current === "home") setShowHint(true);
         }, 4200);
@@ -372,7 +382,7 @@ export function CityCanvas() {
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className={`fixed inset-0 -z-10 block h-full w-full ${failed ? "hidden" : ""}`}
+        className={`fixed inset-0 -z-10 block h-full w-full transition-opacity duration-[1400ms] ease-out ${failed ? "hidden" : ready ? "opacity-100" : "opacity-0"}`}
       />
       {failed && (
         <div
@@ -512,24 +522,6 @@ export function CityCanvas() {
       <IndustryChooser open={chooser} locale={locale} onClose={closeIndustry} onSelect={openIndustry} onPreview={previewIndustry} />
       <IndustryPanel industryId={industry} locale={locale} onClose={closeIndustry} onSelect={openIndustry} />
 
-      <AnimatePresence>
-        {!ready && (
-          <motion.div
-            key="loader"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1] }}
-            className="fixed inset-0 z-[90] flex flex-col items-center justify-center gap-6 bg-bg"
-          >
-            <span className="font-display text-[1.6rem] font-extrabold tracking-tight text-ink">
-              Nicolás<span className="text-accent">.</span>M
-            </span>
-            <span className="h-[2px] w-40 overflow-hidden rounded bg-line-strong">
-              <span className="block h-full w-full origin-left animate-[loadbar_1.1s_cubic-bezier(0.23,1,0.32,1)_forwards] bg-accent" />
-            </span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-faint">{copy.loading}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }

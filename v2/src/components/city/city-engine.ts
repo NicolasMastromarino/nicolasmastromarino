@@ -131,6 +131,9 @@ const ZOOM_FREE_STORE = 200;
 const FREE_VIEW_WIDTH = 190;
 const angDiff = (a: number, b: number) => Math.atan2(Math.sin(b - a), Math.cos(b - a));
 
+/** hands the main thread back to the browser (paint, input) before the next slice of work */
+const yieldToMain = (): Promise<void> => new Promise((r) => setTimeout(r, 0));
+
 export class CityEngine {
   private o: Opts;
   private renderer: THREE.WebGLRenderer;
@@ -170,11 +173,11 @@ export class CityEngine {
   private dragMoved = 0;
   private pinch: { dist: number; ang: number } | null = null;
   private lastDragTarget: EventTarget | null = null;
-  private boundDown: (e: PointerEvent) => void;
-  private boundUp: (e: PointerEvent) => void;
-  private boundWheel: (e: WheelEvent) => void;
-  private boundKeyDown: (e: KeyboardEvent) => void;
-  private boundKeyUp: (e: KeyboardEvent) => void;
+  private boundDown!: (e: PointerEvent) => void;
+  private boundUp!: (e: PointerEvent) => void;
+  private boundWheel!: (e: WheelEvent) => void;
+  private boundKeyDown!: (e: KeyboardEvent) => void;
+  private boundKeyUp!: (e: KeyboardEvent) => void;
   onExploreExit: (() => void) | null = null;
   private animated: ((t: number, dt: number) => void)[] = [];
   private labels: { sp: THREE.Sprite; w: number }[] = [];
@@ -182,9 +185,9 @@ export class CityEngine {
   private frameTimes: number[] = [];
   private lowQuality = false;
   private unitBox = GEO.box();
-  private boundMove: (e: PointerEvent) => void;
-  private boundClick: () => void;
-  private boundResize: () => void;
+  private boundMove!: (e: PointerEvent) => void;
+  private boundClick!: () => void;
+  private boundResize!: () => void;
   private world: World | null = null;
   private farmSpots: [number, number, number][] = [];
   private rainOn = false;
@@ -225,22 +228,53 @@ export class CityEngine {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    this.buildBackdrop();
-    this.buildLights();
-    this.buildIsland();
-    this.buildLandmarks();
-    this.buildCars();
-    this.buildMirror();
-    this.buildGulls();
-    this.buildSea();
-    this.buildLandscape();
-    this.world = buildWorld({ scene: this.scene, animated: this.animated, mobile: this.o.mobile, plan: this.plan!, time: this.time1, farms: this.farmSpots });
-    // (the sprite mist banks are gone: they were cut off in straight lines by the ground and the sea)
-    this.buildPeople();
-    this.buildRain();
-    this.setupComposer();
-    this.scene.fog = new THREE.Fog(0x232957, 380, 980);
 
+    if (opts.reduced) {
+      this.dayK = 0;
+      this.rainK = 0;
+      this.dayHold = 0;
+      this.opening = false;
+      this.introTime = 99;
+      this.viewH = 90;
+      this.az = Math.PI / 4;
+    }
+  }
+
+  private cancelled = false;
+
+  /**
+   * Builds the whole scene in slices. Everything used to run inside the constructor as one 1.5 s block (several
+   * seconds on a phone) that froze the page; now the browser gets to paint and handle input between the steps.
+   */
+  async build() {
+    const step = async (f: () => void) => {
+      if (this.cancelled) throw new Error("city build cancelled");
+      f();
+      await yieldToMain();
+    };
+    await step(() => {
+      this.buildBackdrop();
+      this.buildLights();
+    });
+    await this.buildIsland();
+    await step(() => this.buildLandmarks());
+    await step(() => {
+      this.buildCars();
+      this.buildMirror();
+      this.buildGulls();
+    });
+    await step(() => this.buildSea());
+    await step(() => this.buildLandscape());
+    await step(() => {
+      this.world = buildWorld({ scene: this.scene, animated: this.animated, mobile: this.o.mobile, plan: this.plan!, time: this.time1, farms: this.farmSpots });
+    });
+    await step(() => {
+      this.buildPeople();
+      this.buildRain();
+      this.setupComposer();
+      this.scene.fog = new THREE.Fog(0x232957, 380, 980);
+    });
+    if (this.cancelled) throw new Error("city build cancelled");
     this.boundMove = this.onPointerMove.bind(this);
     this.boundClick = this.onClick.bind(this);
     this.boundResize = this.resize.bind(this);
@@ -267,15 +301,24 @@ export class CityEngine {
     window.addEventListener("resize", this.boundResize);
     this.resize();
     this.setupDebugPins();
-
-    if (opts.reduced) {
-      this.dayK = 0;
-      this.rainK = 0;
-      this.dayHold = 0;
-      this.opening = false;
-      this.introTime = 99;
-      this.viewH = 90;
-      this.az = Math.PI / 4;
+    // compile the shaders off the main thread where the browser can, so the first frame does not stall
+    try {
+      await this.renderer.compileAsync(this.scene, this.camera);
+    } catch {
+      /* the first frame compiles them instead */
+    }
+    // upload the big textures one at a time: left to the first frame, the four ground maps alone stall it for most of a second
+    const seen = new Set<THREE.Texture>();
+    this.scene.traverse((o) => {
+      const mat = (o as THREE.Mesh).material as THREE.Material | THREE.Material[] | undefined;
+      for (const m of Array.isArray(mat) ? mat : mat ? [mat] : []) {
+        for (const v of Object.values(m)) if (v instanceof THREE.Texture && v.image) seen.add(v);
+      }
+    });
+    for (const t of seen) {
+      if (this.cancelled) throw new Error("city build cancelled");
+      this.renderer.initTexture(t);
+      await yieldToMain();
     }
   }
 
@@ -402,6 +445,7 @@ export class CityEngine {
   }
 
   dispose() {
+    this.cancelled = true;
     this.running = false;
     cancelAnimationFrame(this.raf);
     window.removeEventListener("pointerdown", this.boundDown);
@@ -522,7 +566,7 @@ export class CityEngine {
   /* The island                                                          */
   /* ------------------------------------------------------------------ */
 
-  private buildIsland() {
+  private async buildIsland() {
     const root = new THREE.Group();
     this.scene.add(root);
 
@@ -539,7 +583,8 @@ export class CityEngine {
     });
     this.buildSteam(city.plan.steam);
 
-    const tex = paintGround(city.plan, this.o.mobile ? 7 : 14);
+    await yieldToMain();
+    const tex = await paintGround(city.plan, this.o.mobile ? 7 : 14, yieldToMain);
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(GROUND.x1 - GROUND.x0, GROUND.z1 - GROUND.z0).rotateX(-Math.PI / 2),
       new THREE.MeshStandardMaterial({
