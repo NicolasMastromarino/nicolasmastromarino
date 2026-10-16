@@ -1400,10 +1400,101 @@ export class CityEngine {
         this.detail(g, hex("#4f9a5a"), 2.65, 0.3, 1.45, 1.2, Y + 0.5, 5.3);
         labelY = 10;
       }
+      this.industryFinish(g, ind.id, accent, size, T, block, Y);
       const lab = this.label(name, accent, block ? 6.4 : 7.6);
       lab.position.set(0, labelY + 3.4, 0);
       g.add(lab);
     });
+  }
+
+  private poolTex: THREE.CanvasTexture | null = null;
+
+  /** what every industry site shares: a pool of its colour on the ground, corner lamps, a lit sign, and one moving thing that says what the trade does */
+  private industryFinish(g: THREE.Group, id: string, accent: THREE.Color, size: number, T: number, block: boolean, Y: number) {
+    if (!this.poolTex) {
+      const c = document.createElement("canvas");
+      c.width = c.height = 128;
+      const x = c.getContext("2d")!;
+      const gr = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+      gr.addColorStop(0, "rgba(255,255,255,0.9)");
+      gr.addColorStop(0.45, "rgba(255,255,255,0.32)");
+      gr.addColorStop(1, "rgba(255,255,255,0)");
+      x.fillStyle = gr;
+      x.fillRect(0, 0, 128, 128);
+      this.poolTex = new THREE.CanvasTexture(c);
+    }
+    const poolMat = new THREE.MeshBasicMaterial({ map: this.poolTex, color: accent, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false });
+    const pool = new THREE.Mesh(new THREE.PlaneGeometry(size * 1.9, size * 1.9), poolMat);
+    pool.rotation.x = -Math.PI / 2;
+    pool.position.y = T + 0.04;
+    pool.renderOrder = 2;
+    g.add(pool);
+    // the pool is a night effect: by day it would only wash the plaza out
+    this.animated.push(() => (poolMat.opacity = 0.5 * (1 - this.dayK)));
+
+    // lamps at the corners of the pad (only the street-facing ones on a city block)
+    const e = size / 2 - 0.5;
+    const corners: [number, number][] = block ? [[-e, e], [e, e]] : [[-e, -e], [e, -e], [-e, e], [e, e]];
+    for (const [cx, cz] of corners) {
+      this.post(g, hex("#2c3040"), 0.07, 3.4, cx, Y, cz, 6);
+      this.detail(g, hex("#2c3040"), 0.5, 0.08, 0.12, cx, Y + 3.4, cz);
+      this.glow(g, hex("#ffe2a8"), 0.34, 0.16, 0.34, cx, Y + 3.3, cz, 0, 1.3);
+    }
+    // a lit sign board on a post at the street edge
+    const sx = block ? 2.2 : -size / 2 + 1.2;
+    const sz = block ? 2.6 : size / 2 - 0.6;
+    this.post(g, hex("#2c3040"), 0.08, 2.2, sx, Y, sz, 6);
+    this.detail(g, hex("#161a2c"), 2.4, 1.0, 0.12, sx, Y + 2.2, sz);
+    this.glow(g, accent, 2.1, 0.08, 0.06, sx, Y + 2.9, sz + 0.07, 0, 1.2);
+    this.glow(g, accent, 2.1, 0.08, 0.06, sx, Y + 2.5, sz + 0.07, 0, 1.2);
+
+    // one moving detail per trade
+    const puffs = (mat: THREE.Material, n: number, x: number, y: number, z: number, rise: number, r0: number) => {
+      const list: THREE.Mesh[] = [];
+      for (let k = 0; k < n; k++) {
+        const m = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 0), mat);
+        g.add(m);
+        list.push(m);
+      }
+      this.animated.push((t) => {
+        list.forEach((m, k) => {
+          const u = (t * 0.22 + k / n) % 1;
+          m.position.set(x + Math.sin(t * 0.7 + k) * 0.25 * u, y + u * rise, z);
+          m.scale.setScalar(r0 * (0.5 + u * 1.7));
+        });
+      });
+    };
+    if (id === "hvac") {
+      // cold vapour from the flue
+      puffs(new THREE.MeshBasicMaterial({ color: hex("#dff4ff"), transparent: true, opacity: 0.32, depthWrite: false }), 5, 3.4, Y + 11.2, -2.7, 4.2, 0.4);
+    } else if (id === "roofing") {
+      // chimney smoke and a blinking job-site beacon on the ridge
+      puffs(new THREE.MeshBasicMaterial({ color: hex("#9a9db0"), transparent: true, opacity: 0.3, depthWrite: false }), 5, 1.8, Y + 7.4, -0.6, 4.0, 0.35);
+      const beacon = this.glow(g, hex("#ff7a3a"), 0.5, 0.5, 0.5, 0, Y + 8.1, 0, 0, 1.6);
+      this.animated.push((t) => beacon.scale.setScalar(0.35 + Math.max(0, Math.sin(t * 4)) * 0.4));
+    } else if (id === "plumbing") {
+      // a stream of drops falling down the west wall from the tank
+      const dropMat = new THREE.MeshBasicMaterial({ color: hex("#9fdcff"), transparent: true, opacity: 0.8, depthWrite: false });
+      const drops: THREE.Mesh[] = [];
+      for (let k = 0; k < 7; k++) {
+        const d = new THREE.Mesh(new THREE.SphereGeometry(0.1, 6, 5), dropMat);
+        d.scale.y = 1.7;
+        g.add(d);
+        drops.push(d);
+      }
+      this.animated.push((t) => drops.forEach((d, k) => (d.position.set(-2.4, Y + 10.2 - ((t * 0.7 + k / 7) % 1) * 9.8, -0.5 + (k % 2) * 0.25))));
+    } else {
+      // fireflies drifting over the yard
+      const flies: THREE.Mesh[] = [];
+      for (let k = 0; k < 9; k++) flies.push(this.glow(g, hex("#e8ff9a"), 0.14, 0.14, 0.14, 0, Y + 1.5, 0, 0, 1.6));
+      this.animated.push((t) =>
+        flies.forEach((f, k) => {
+          const a = t * (0.25 + (k % 3) * 0.08) + k * 2.1;
+          f.position.set(Math.cos(a) * (3.4 + (k % 4)), Y + 1.2 + Math.sin(t * 1.3 + k) * 0.6 + (k % 3) * 0.5, Math.sin(a * 1.2) * (3.4 + (k % 3)));
+          f.visible = this.dayK < 0.5;
+        }),
+      );
+    }
   }
 
   private buildAntenna() {

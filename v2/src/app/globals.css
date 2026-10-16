@@ -634,6 +634,7 @@ footer,
 }
 
 /* an industry card is open: the page text steps aside so the building and its card are all there is to read */
+html[data-industry] .city-veil,
 html[data-industry] main,
 html[data-industry] footer {
   opacity: 0;
