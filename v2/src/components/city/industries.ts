@@ -138,10 +138,11 @@ export const INDUSTRIES: Industry[] = [
   },
   {
     id: "plumbing",
-    x: -24, // the one that stays downtown: it fills a single block
-    z: 32,
-    site: "block",
-    ground: 0.03,
+    x: -62, // south of the city, beside the southern avenue: it used to share a downtown block with a tower that hid it
+    z: 110,
+    site: "open",
+    ground: 0.35,
+    lane: { x: -44, z: 110 }, // east to the southern avenue
     color: "#a9b6ff",
     en: {
       name: "Plumbing & electrical",

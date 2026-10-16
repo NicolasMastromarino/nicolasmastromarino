@@ -1445,11 +1445,134 @@ export class CityEngine {
         this.detail(g, hex("#4f9a5a"), 2.65, 0.3, 1.45, 1.2, Y + 0.5, 5.3);
         labelY = 10;
       }
+      this.industryDetail(g, ind.id, accent, Y);
       this.industryFinish(g, ind.id, accent, size, T, block, Y);
       const lab = this.label(name, accent, block ? 6.4 : 7.6);
       lab.position.set(0, labelY + 3.4, 0);
       g.add(lab);
     });
+  }
+
+
+  /** a straight cable or pipe between two points of a site, in the group's own coordinates */
+  private run(g: THREE.Group, color: THREE.Color, a: [number, number, number], b: [number, number, number], r = 0.04) {
+    const m = new THREE.Mesh(this.unitBox, new THREE.MeshBasicMaterial({ color }));
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]);
+    m.scale.set(r * 2, r * 2, len);
+    m.position.set((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2);
+    g.add(m);
+    m.lookAt(g.position.x + b[0], g.position.y + b[1], g.position.z + b[2]);
+    return m;
+  }
+
+  /** a pipe lying on its side */
+  private pipe(g: THREE.Group, color: THREE.Color, x: number, y: number, z: number, len: number, r: number, alongX = true) {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 10), new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.4 }));
+    if (alongX) m.rotation.z = Math.PI / 2;
+    else m.rotation.x = Math.PI / 2;
+    m.position.set(x, y, z);
+    m.castShadow = true;
+    g.add(m);
+    return m;
+  }
+
+  /** the extra things each trade keeps on its site: what you would notice walking round the fence */
+  private industryDetail(g: THREE.Group, id: string, accent: THREE.Color, Y: number) {
+    const copper = hex("#c9804a");
+    if (id === "plumbing") {
+      // a pipe rack: lengths of copper, white and blue pipe on a frame
+      for (const px of [-6.1, -3.3]) this.post(g, hex("#6b7088"), 0.06, 1.5, px, Y, -4.6, 6);
+      for (const [py, pz, col] of [[0.45, -4.9, copper], [0.45, -4.3, hex("#e8ebf2")], [0.95, -4.6, hex("#5b9ad8")]] as const) this.pipe(g, col, -4.7, Y + py, pz, 3.4, 0.22);
+      // fittings and a length of pipe on the ground
+      for (const [fx, fz] of [[-5.9, -2.6], [-5.2, -2.2], [-5.6, -1.6]]) this.detail(g, copper, 0.5, 0.35, 0.5, fx, Y, fz, 0.4);
+      this.pipe(g, hex("#5b9ad8"), -5.5, Y + 0.12, -0.2, 2.2, 0.12, false);
+      // an open trench with the new run laid in it, fenced with orange barriers
+      this.detail(g, hex("#12141d"), 4.4, 0.1, 1.2, -4.0, Y, 3.6);
+      this.pipe(g, copper, -4.0, Y + 0.18, 3.6, 4.2, 0.13);
+      for (const [bx, bz] of [[-6.4, 2.6], [-1.6, 2.6], [-6.4, 4.6], [-1.6, 4.6]]) {
+        this.post(g, hex("#2c3040"), 0.04, 0.9, bx, Y, bz, 5);
+        this.glow(g, hex("#ff7a3a"), 0.24, 0.16, 0.24, bx, Y + 0.95, bz, 0, 1.4);
+      }
+      this.bar(g, hex("#ff7a3a"), 4.8, 0.06, 0.06, -4.0, Y + 0.8, 2.6);
+      this.bar(g, hex("#ff7a3a"), 4.8, 0.06, 0.06, -4.0, Y + 0.8, 4.6);
+      // a hydrant, a manhole, and cable drums
+      this.post(g, hex("#c83c3c"), 0.26, 0.9, 6.0, Y, 5.8, 10);
+      this.post(g, hex("#c83c3c"), 0.34, 0.12, 6.0, Y + 0.9, 5.8, 10);
+      this.post(g, hex("#3a3f52"), 0.7, 0.04, 3.2, Y, 2.8, 14);
+      for (const dz of [-1.4, 0.2]) {
+        this.post(g, hex("#8a6a44"), 0.8, 0.6, 5.6, Y, dz, 14);
+        this.post(g, copper, 0.66, 0.3, 5.6, Y + 0.6, dz, 14);
+      }
+      // the electrical side: a switchgear cabinet with a flickering spark, a pole with a transformer and a line to the roof mast
+      this.detail(g, hex("#8e93a6"), 1.4, 2.0, 0.9, 5.6, Y, 2.6);
+      this.glow(g, hex("#7fffb0"), 0.14, 0.14, 0.05, 5.1, Y + 1.7, 3.1, 0, 1.4);
+      const spark = this.glow(g, hex("#bfe0ff"), 0.3, 0.3, 0.3, 4.6, Y + 1.0, 3.2, 0, 2.2);
+      this.animated.push((t) => {
+        spark.visible = Math.sin(t * 19) + Math.sin(t * 7.3) > 1.1;
+      });
+      this.post(g, hex("#5a4538"), 0.12, 6.4, 5.7, Y, -4.8, 8);
+      this.detail(g, hex("#5a4538"), 2.6, 0.14, 0.14, 5.7, Y + 5.9, -4.8);
+      this.post(g, hex("#7a8094"), 0.42, 1.1, 5.7, Y + 4.2, -4.8, 12);
+      for (const sx of [-1.1, 0, 1.1]) this.glow(g, hex("#cfd6ff"), 0.14, 0.2, 0.14, 5.7 + sx, Y + 6.1, -4.8, 0, 1.2);
+      const dark = hex("#1c1f2e");
+      this.run(g, dark, [5.7, Y + 6.0, -4.8], [2.35, Y + 8.4, -2.35]);
+      this.run(g, dark, [4.6, Y + 6.0, -4.8], [2.35, Y + 7.3, -2.35]);
+      // the service truck, with a ladder rack
+      this.detail(g, hex("#e6b422"), 2.8, 1.5, 1.4, 1.2, Y, 5.4);
+      this.detail(g, hex("#9ec8ff"), 0.8, 0.6, 1.3, 2.3, Y + 0.7, 5.4);
+      this.detail(g, hex("#2c3040"), 2.6, 0.08, 0.08, 1.1, Y + 1.7, 5.0);
+      this.detail(g, hex("#2c3040"), 2.6, 0.08, 0.08, 1.1, Y + 1.7, 5.8);
+      this.detail(g, copper, 2.85, 0.2, 1.45, 1.2, Y + 0.5, 5.4);
+    } else if (id === "hvac") {
+      // fans that really turn, cool light along the roof edge, louvres and a loading door
+      const blades: THREE.Group[] = [];
+      for (const [cx, cz] of [[-2.8, 0.4], [-2.8, -2.0], [3.0, -0.8]]) {
+        const f = new THREE.Group();
+        f.position.set(cx, Y + 6.42, cz);
+        const blade = new THREE.Mesh(this.unitBox, new THREE.MeshStandardMaterial({ color: hex("#161a2c"), roughness: 0.6 }));
+        blade.scale.set(1.45, 0.05, 0.16);
+        f.add(blade);
+        g.add(f);
+        blades.push(f);
+      }
+      this.animated.push((t) => blades.forEach((b, k) => (b.rotation.y = t * (6 + k))));
+      this.glow(g, accent, 8.8, 0.08, 0.08, 0.6, Y + 5.2, 1.95, 0, 0.9);
+      this.glow(g, accent, 0.08, 0.08, 5.8, 5.0, Y + 5.2, -0.8, 0, 0.9);
+      for (let k = 0; k < 6; k++) this.detail(g, hex("#2c3040"), 0.06, 1.6, 0.04, 3.2 + k * 0.24, Y + 3.2, 1.96);
+      this.detail(g, hex("#c9ced9"), 1.9, 2.2, 0.1, -1.4, Y, 1.96);
+      this.glow(g, hex("#7fd4ff"), 1.5, 0.1, 0.05, -1.4, Y + 2.3, 2.04, 0, 1.2);
+    } else if (id === "roofing") {
+      // work lights on poles, a hoist rope with a bundle that rides up and down, and a lit ridge line
+      for (const [fx, fz] of [[-4.6, -3.2], [4.8, -3.0]]) {
+        this.post(g, hex("#5b6078"), 0.07, 3.6, fx, Y, fz, 6);
+        this.glow(g, hex("#fff0c8"), 0.7, 0.4, 0.3, fx, Y + 3.7, fz, 0.6, 1.6);
+      }
+      this.glow(g, accent, 3.6, 0.07, 0.07, 0, Y + 7.9, 0, 0, 0.9);
+      this.post(g, hex("#8e93a6"), 0.05, 6.8, 4.3, Y, -0.9, 6);
+      this.detail(g, hex("#8e93a6"), 0.1, 0.1, 2.6, 4.3, Y + 6.8, 0.3);
+      const bundle = this.detail(g, hex("#464b63"), 0.9, 0.4, 0.6, 4.3, Y + 3.0, 1.5);
+      const rope = this.detail(g, hex("#1c1f2e"), 0.04, 1, 0.04, 4.3, Y + 5, 1.5);
+      this.animated.push((t) => {
+        const u = (Math.sin(t * 0.5) + 1) / 2;
+        bundle.position.y = Y + 1.2 + u * 3.6;
+        const top = Y + 6.75;
+        rope.scale.y = top - bundle.position.y;
+        rope.position.y = bundle.position.y + rope.scale.y / 2;
+      });
+    } else {
+      // a pergola with string lights, stepping stones, a young tree and a bird bath
+      for (const [px, pz] of [[-6.0, 5.6], [-6.0, 3.0], [-3.4, 5.6], [-3.4, 3.0]]) this.post(g, hex("#6b4a36"), 0.08, 2.6, px, Y, pz, 6);
+      for (let k = 0; k < 5; k++) this.detail(g, hex("#6b4a36"), 2.9, 0.08, 0.12, -4.7, Y + 2.6, 2.9 + k * 0.7);
+      for (let k = 0; k < 9; k++) this.glow(g, hex("#ffe2a8"), 0.1, 0.1, 0.1, -6.0 + k * 0.32, Y + 2.35 - Math.sin((k / 8) * Math.PI) * 0.3, 3.0, 0, 1.4);
+      for (let k = 0; k < 6; k++) this.detail(g, hex("#8a8fa0"), 0.7, 0.06, 0.5, 1.2 + k * 0.9, Y, 3.6 + Math.sin(k * 1.3) * 0.2, 0.2 * k);
+      this.post(g, hex("#5a4538"), 0.12, 1.6, 6.0, Y, 1.6, 6);
+      const crown = new THREE.Mesh(new THREE.IcosahedronGeometry(1.0, 0), new THREE.MeshStandardMaterial({ color: hex("#4f9a5a"), roughness: 0.9, flatShading: true }));
+      crown.position.set(6.0, Y + 2.3, 1.6);
+      crown.castShadow = true;
+      g.add(crown);
+      this.post(g, hex("#9aa4b8"), 0.16, 0.9, 5.2, Y, -1.2, 8);
+      this.post(g, hex("#7fd4ff"), 0.46, 0.12, 5.2, Y + 0.9, -1.2, 10);
+    }
   }
 
   private poolTex: THREE.CanvasTexture | null = null;
