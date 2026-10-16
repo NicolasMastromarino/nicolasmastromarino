@@ -99,3 +99,38 @@ export function ArticleSchema({
     />
   );
 }
+
+/** the business and the site as a whole, for search engines and AI assistants that read structured data */
+export function SiteSchema() {
+  const data = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Nicolás Mastromarino",
+      url: SITE_URL,
+      inLanguage: ["en", "es"],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      name: "Nicolás Mastromarino, CRM & Automation Consultant",
+      url: SITE_URL,
+      image: `${SITE_URL}/nicolas-mastromarino-crm-automation-consultant.jpg`,
+      email: "mailto:nico@nicolasmastromarino.com",
+      description:
+        "CRM and automation for home-service businesses: HVAC, roofing, plumbing and electrical, landscaping, solar and locksmiths. GoHighLevel, Zapier and custom websites.",
+      areaServed: "Worldwide",
+      knowsLanguage: ["en", "es"],
+      serviceType: [
+        "CRM implementation",
+        "CRM management",
+        "Marketing automation",
+        "Workflow automation",
+        "Website development (GoHighLevel or custom)",
+      ],
+      provider: { "@type": "Person", name: "Nicolás Mastromarino", url: SITE_URL },
+      sameAs: ["https://ar.linkedin.com/in/nicolasmastromarino"],
+    },
+  ];
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+}

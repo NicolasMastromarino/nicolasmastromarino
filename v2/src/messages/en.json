@@ -1,7 +1,7 @@
 {
   "meta": {
     "siteTitle": "CRM & Automation Consultant — Nicolás Mastromarino",
-    "siteDescription": "Hands-on CRM implementation, management, and marketing automation for home services, agencies, and coaches. GoHighLevel-led, platform-agnostic.",
+    "siteDescription": "CRM and automation for home-service businesses (HVAC, roofing, plumbing, landscaping, solar, locksmith) with GoHighLevel, Zapier and custom websites.",
     "servicesTitle": "CRM & Automation Services — Nicolás Mastromarino",
     "servicesDescription": "GoHighLevel CRM setup, migration, and Zapier automation for home services, agencies, and coaches. No pricing games, just real conversations.",
     "aboutTitle": "CRM & Automation Experience — About Nicolás Mastromarino",
@@ -20,17 +20,16 @@
     "about": "About",
     "blog": "Blog",
     "contact": "Contact",
-    "bookCall": "Book a call",
     "getInTouch": "Get in touch",
     "menu": "Open menu",
     "skip": "Skip to content",
     "primary": "Main"
   },
   "home": {
-    "eyebrow": "CRM & Automation Consultant",
-    "h1": "Your tools should talk to each other. I make sure they do.",
-    "sub": "Ten years in marketing ops, systems, and automation. I connect the CRM, invoicing, and reporting tools your business already runs on into one system that just works, GoHighLevel-led, platform-agnostic.",
-    "ctaPrimary": "Book a call",
+    "eyebrow": "CRM & automation for home-service businesses",
+    "h1": "Stop retyping every job. I connect your CRM, dispatch and billing.",
+    "sub": "I'm a CRM and automation consultant for HVAC, roofing, plumbing and electrical, landscaping, solar and locksmith companies, and I build the websites that feed them, in GoHighLevel or custom code. So calls get answered, jobs move from lead to invoice, and past customers hear from you on time.",
+    "worksWith": "Works with",
     "industriesCta": "Find your industry",
     "industriesTrades": "HVAC, roofing, plumbing, landscaping",
     "ctaSecondary": "See how it works",
@@ -84,7 +83,8 @@
     "processTitle": "From tangled tools to one system",
     "finalTitle": "Let's fix your systems.",
     "finalSub": "Tell me what's broken or what you're trying to build. No pricing games, just a straight answer on scope and whether I'm the right fit.",
-    "finalCta": "Get in touch"
+    "finalCta": "Get in touch",
+    "industriesTitle": "Trades I build for"
   },
   "services": {
     "heroTitle": "Two tracks. No pricing games.",
@@ -129,6 +129,10 @@
       {
         "title": "Lead assignment & sales enablement",
         "desc": "Clean, deduplicated contact records and lead-routing rules so the right rep sees the right lead the moment it comes in."
+      },
+      {
+        "title": "Websites that feed your CRM",
+        "desc": "A site built in the GoHighLevel builder or custom-coded, with forms and calls wired straight into the CRM, so every visit that turns into a lead lands where your team already works."
       }
     ],
     "processLabel": "How it works",
@@ -194,8 +198,7 @@
       }
     ],
     "toolsTitle": "Platforms & tools",
-    "ctaTitle": "Want the details?",
-    "cta": "Book a call"
+    "ctaTitle": "Want the details?"
   },
   "caseStudies": {
     "heroTitle": "Representative work, sanitized",
@@ -269,16 +272,14 @@
   },
   "contact": {
     "heroTitle": "Let's talk about what's broken",
-    "heroSub": "Book a call directly, or send a message below with what you're working on. I read every one myself.",
-    "bookingTitle": "Book a call",
-    "bookingDesc": "Pick a time that works for you and we'll talk through what your CRM or automation setup actually needs.",
-    "bookingCta": "Open calendar",
-    "bookingUnset": "Booking link coming soon. Use the form below in the meantime.",
+    "heroSub": "Send a message with what you're working on, or email me directly. I read every one myself.",
     "starters": {
       "hvac": "Hi, I run an HVAC business and I would like to talk about my systems.",
       "roofing": "Hi, I run a roofing business and I would like to talk about my systems.",
       "plumbing": "Hi, I run a plumbing or electrical business and I would like to talk about my systems.",
-      "outdoor": "Hi, I run a landscaping or cleaning business and I would like to talk about my systems."
+      "outdoor": "Hi, I run a landscaping or cleaning business and I would like to talk about my systems.",
+      "solar": "Hi, I run a solar installation business and I would like to talk about my systems.",
+      "locksmith": "Hi, I run a locksmith business and I would like to talk about my systems."
     },
     "formTitle": "Send a message",
     "formName": "Name",
@@ -300,6 +301,7 @@
   "footer": {
     "tagline": "CRM implementation, management, and marketing automation.",
     "rights": "All rights reserved.",
-    "madeWith": "Based in Argentina, working globally."
+    "madeWith": "Based in Argentina, working globally.",
+    "industries": "Industries"
   }
 }

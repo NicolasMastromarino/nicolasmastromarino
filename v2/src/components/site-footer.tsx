@@ -1,10 +1,12 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { INDUSTRIES } from "@/components/city/industries";
 import { NavLink } from "@/components/nav-link";
 import { Reveal } from "@/components/motion-primitives";
 
 export async function SiteFooter() {
   const t = await getTranslations();
   const year = new Date().getFullYear();
+  const locale = ((await getLocale()) === "es" ? "es" : "en") as "en" | "es";
 
   const links = [
     { href: "/services", label: t("nav.services") },
@@ -28,7 +30,16 @@ export async function SiteFooter() {
           </a>
         </Reveal>
 
-        <div className="mt-14 flex flex-wrap items-center justify-between gap-4 text-[13px] text-ink-faint">
+        <nav aria-label={t("footer.industries")} className="mt-14 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px]">
+          <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">{t("footer.industries")}</span>
+          {INDUSTRIES.map((i) => (
+            <NavLink key={i.id} href={`/industries/${i.id}`} className="link-draw pb-0.5 text-ink-soft no-underline hover:text-ink">
+              {i[locale].name}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-[13px] text-ink-faint">
           <span>
             © {year} Nicolás Mastromarino. {t("footer.rights")}
           </span>

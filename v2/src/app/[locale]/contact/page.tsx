@@ -30,7 +30,6 @@ export default async function ContactPage({
   setRequestLocale(locale);
   const t = await getTranslations("contact");
   const tNav = await getTranslations("nav");
-  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL;
 
   return (
     <PageShell>
@@ -64,22 +63,9 @@ export default async function ContactPage({
               className="pointer-events-none absolute -left-24 -top-24 h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,rgba(255,91,61,0.22),transparent_65%)] blur-2xl"
             />
             <div className="relative">
-              <span className="eyebrow">{t("bookingTitle")}</span>
-              <p className="mt-4 text-[0.97rem] leading-relaxed text-ink-soft">{t("bookingDesc")}</p>
-              {bookingUrl ? (
-                <a
-                  href={bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="press mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-3 text-[14px] font-semibold text-accent-ink no-underline hover:bg-accent-hover"
-                >
-                  {t("bookingCta")}
-                </a>
-              ) : (
-                <p className="mt-6 text-[0.9rem] text-ink-faint">{t("bookingUnset")}</p>
-              )}
+              <span className="eyebrow">{t("otherTitle")}</span>
 
-              <div className="mt-8 flex flex-col items-start gap-3 border-t border-line pt-8">
+              <div className="mt-5 flex flex-col items-start gap-3">
                 <a
                   href="mailto:nico@nicolasmastromarino.com"
                   className="link-draw pb-0.5 text-[0.98rem] text-ink no-underline"

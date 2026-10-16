@@ -16,7 +16,6 @@ const UI = {
     flow: "How one job flows",
     tools: "Connected tools",
     outcome: "What it adds up to",
-    book: "Book a call",
     contact: "Get in touch",
     next: "Next industry",
     close: "Close",
@@ -33,7 +32,6 @@ const UI = {
     flow: "Cómo fluye un trabajo",
     tools: "Herramientas conectadas",
     outcome: "En resumen",
-    book: "Agendar una llamada",
     contact: "Escribime",
     next: "Siguiente industria",
     close: "Cerrar",
@@ -263,7 +261,7 @@ export function IndustryPanel({
               href={{ pathname: "/contact", query: { industry: ind.id } }}
               className="press inline-flex flex-1 items-center justify-center rounded-full bg-accent px-5 py-3 text-[14px] font-semibold text-accent-ink no-underline hover:bg-accent-hover"
             >
-              {process.env.NEXT_PUBLIC_BOOKING_URL ? ui.book : ui.contact}
+              {ui.contact}
             </Link>
             {next && (
               <button

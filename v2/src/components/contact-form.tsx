@@ -34,7 +34,7 @@ export function ContactForm() {
     if (!id || !INDUSTRIES.some((i) => i.id === id)) return;
     // reads the address bar, which only exists in the browser, so it cannot be the initial state
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMessage((current) => current || t(`starters.${id as "hvac" | "roofing" | "plumbing" | "outdoor"}`));
+    setMessage((current) => current || t(`starters.${id as "hvac" | "roofing" | "plumbing" | "outdoor" | "solar" | "locksmith"}`));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

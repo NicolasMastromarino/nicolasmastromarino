@@ -56,6 +56,13 @@ const UI = {
   },
 } as const;
 
+/** cuts a description at a word boundary so it is not truncated mid-word in the results */
+function clip(text: string, max: number) {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  return cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:]$/, "") + ".";
+}
+
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) => INDUSTRIES.map((i) => ({ locale, slug: i.id })));
 }
@@ -67,11 +74,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const l = (locale === "es" ? "es" : "en") as Locale;
   const copy = ind[l];
   const ui = UI[l];
+  // a title past 60 characters is cut in the results: use the full brand when it fits, a short one when it does not
+  const base = ui.title(copy.name);
+  const title = [`${base} | Nicolás Mastromarino`, `${base} | N. Mastromarino`, base].find((t) => t.length <= 60) ?? base;
   return pageMetadata({
     locale,
     path: `/industries/${slug}`,
-    title: `${ui.title(copy.name)} | Nicolás Mastromarino`,
-    description: `${copy.who}: ${copy.tagline} ${copy.outcome}`.slice(0, 170),
+    title,
+    description: clip(`${copy.who}. ${copy.tagline}`, 158),
   });
 }
 
@@ -136,7 +146,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ local
       />
 
       <section className="rail px-5 py-16 sm:px-8 sm:py-20">
-        <span className="eyebrow">{ui.familiar}</span>
+        <h2 className="eyebrow">{ui.familiar}</h2>
         <ul className="mt-6 grid gap-3">
           {copy.pains.map((p) => (
             <li key={p} className="glass flex gap-3.5 rounded-2xl p-4 text-[1rem] leading-snug text-ink-soft">
@@ -148,7 +158,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ local
       </section>
 
       <section className="rail px-5 py-10 sm:px-8">
-        <span className="eyebrow">{ui.builds}</span>
+        <h2 className="eyebrow">{ui.builds}</h2>
         <ol className="mt-6 grid gap-3">
           {copy.builds.map((b, i) => (
             <li key={b.title} className="glass flex gap-4 rounded-2xl p-5">
@@ -168,7 +178,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ local
       </section>
 
       <section className="rail px-5 py-10 sm:px-8">
-        <span className="eyebrow">{ui.flow}</span>
+        <h2 className="eyebrow">{ui.flow}</h2>
         <ol className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-3">
           {copy.flow.map((step, i) => (
             <li key={step} className="flex items-center gap-2">
@@ -186,7 +196,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ local
       </section>
 
       <section className="rail px-5 py-10 sm:px-8">
-        <span className="eyebrow">{ui.tools}</span>
+        <h2 className="eyebrow">{ui.tools}</h2>
         <ul className="mt-5 flex flex-wrap gap-2">
           {copy.tools.map((t) => (
             <li key={t} className="rounded-md bg-white/[0.06] px-3 py-1.5 font-mono text-[12.5px] text-ink-soft">
@@ -203,7 +213,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ local
       </section>
 
       <section className="rail px-5 pb-6 pt-10 sm:px-8">
-        <span className="eyebrow">{ui.others}</span>
+        <h2 className="eyebrow">{ui.others}</h2>
         <ul className="mt-5 flex flex-wrap gap-2">
           {others.map((o) => (
             <li key={o.id}>

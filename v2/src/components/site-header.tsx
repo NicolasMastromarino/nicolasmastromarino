@@ -11,12 +11,10 @@ export async function SiteHeader() {
     { href: "/contact", label: t("contact") },
   ];
 
-  const hasBooking = Boolean(process.env.NEXT_PUBLIC_BOOKING_URL);
-
   return (
     <HeaderNav
       links={links}
-      bookCallLabel={hasBooking ? t("bookCall") : t("getInTouch")}
+      contactLabel={t("getInTouch")}
       menuLabel={t("menu")}
       navLabel={t("primary")}
     />

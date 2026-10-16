@@ -1,12 +1,12 @@
 {
   "meta": {
     "siteTitle": "Consultor de CRM y Automatización — Nicolás Mastromarino",
-    "siteDescription": "Implementación, gestión y automatización de CRM para empresas de servicios a domicilio, agencias y coaches. Especializado en GoHighLevel, adaptable a cualquier plataforma.",
+    "siteDescription": "CRM y automatización para empresas de servicios a domicilio (HVAC, techos, plomería, paisajismo, solar, cerrajería) con GoHighLevel, Zapier y sitios a medida.",
     "servicesTitle": "Servicios de CRM y Automatización — Nicolás Mastromarino",
     "servicesDescription": "Configuración de CRM en GoHighLevel, migración y automatización con Zapier para servicios a domicilio, agencias y coaches. Sin vueltas con precios.",
     "aboutTitle": "Experiencia en CRM y Automatización — Nicolás Mastromarino",
     "aboutDescription": "Diez años en operaciones de marketing y automatización. Experiencia práctica operando sistemas de CRM en negocios reales, no solo implementándolos.",
-    "caseStudiesTitle": "Casos de Éxito de CRM y Automatización — Nicolás Mastromarino",
+    "caseStudiesTitle": "Casos de CRM y Automatización — Nicolás Mastromarino",
     "caseStudiesDescription": "Ejemplos reales y anonimizados de configuración de CRM, sistemas de tickets y automatización con Zapier para empresas de servicios y agencias.",
     "blogTitle": "Blog de CRM y Automatización — Nicolás Mastromarino",
     "blogDescription": "Artículos prácticos sobre GoHighLevel, flujos de Zapier y cómo mantener un CRM que no se desarma a los seis meses de lanzado.",
@@ -20,17 +20,16 @@
     "about": "Sobre mí",
     "blog": "Blog",
     "contact": "Contacto",
-    "bookCall": "Agendar llamada",
     "getInTouch": "Escribime",
     "menu": "Abrir menú",
     "skip": "Saltar al contenido",
     "primary": "Principal"
   },
   "home": {
-    "eyebrow": "Consultor de CRM y Automatización",
-    "h1": "Tus herramientas deberían hablarse entre sí. Yo me aseguro de que lo hagan.",
-    "sub": "Diez años en operaciones de marketing, sistemas y automatización. Conecto el CRM, la facturación y los reportes que tu negocio ya usa en un solo sistema que funciona, especializado en GoHighLevel, adaptable a cualquier plataforma.",
-    "ctaPrimary": "Agendar llamada",
+    "eyebrow": "CRM y automatización para servicios a domicilio",
+    "h1": "Dejá de cargar cada trabajo a mano. Conecto tu CRM, el despacho y la facturación.",
+    "sub": "Soy consultor de CRM y automatización para empresas de HVAC, techos, plomería y electricidad, paisajismo, solar y cerrajería, y también armo los sitios web que las alimentan, en GoHighLevel o con código a medida. Para que las llamadas se respondan, los trabajos pasen de lead a factura y los clientes anteriores sepan de vos a tiempo.",
+    "worksWith": "Trabajo con",
     "industriesCta": "Encontrá tu rubro",
     "industriesTrades": "HVAC, techos, plomería, paisajismo",
     "ctaSecondary": "Ver cómo funciona",
@@ -84,7 +83,8 @@
     "processTitle": "De herramientas sueltas a un solo sistema",
     "finalTitle": "Arreglemos tus sistemas.",
     "finalSub": "Contame qué está roto o qué querés construir. Sin vueltas con precios, solo una respuesta directa sobre el alcance y si soy la persona indicada.",
-    "finalCta": "Escribime"
+    "finalCta": "Escribime",
+    "industriesTitle": "Rubros para los que armo"
   },
   "services": {
     "heroTitle": "Dos líneas de trabajo. Sin vueltas con precios.",
@@ -129,6 +129,10 @@
       {
         "title": "Asignación de leads y habilitación de ventas",
         "desc": "Registros de contacto limpios y sin duplicados, con reglas de enrutamiento para que el vendedor correcto vea el lead correcto apenas entra."
+      },
+      {
+        "title": "Sitios web conectados a tu CRM",
+        "desc": "Un sitio hecho en el builder de GoHighLevel o programado a medida, con formularios y llamadas conectados directo al CRM, para que cada visita que se vuelve contacto llegue adonde tu equipo ya trabaja."
       }
     ],
     "processLabel": "Cómo funciona",
@@ -194,8 +198,7 @@
       }
     ],
     "toolsTitle": "Plataformas y herramientas",
-    "ctaTitle": "¿Querés los detalles?",
-    "cta": "Agendar llamada"
+    "ctaTitle": "¿Querés los detalles?"
   },
   "caseStudies": {
     "heroTitle": "Trabajo representativo, anonimizado",
@@ -269,16 +272,14 @@
   },
   "contact": {
     "heroTitle": "Hablemos de qué está roto",
-    "heroSub": "Agendá una llamada directamente, o mandame un mensaje abajo contando en qué estás trabajando. Leo todos personalmente.",
-    "bookingTitle": "Agendar llamada",
-    "bookingDesc": "Elegí un horario que te quede cómodo y hablamos de qué necesita realmente tu CRM o tu automatización.",
-    "bookingCta": "Abrir calendario",
-    "bookingUnset": "El link para agendar llega pronto. Mientras tanto, usá el formulario de abajo.",
+    "heroSub": "Mandame un mensaje contando en qué estás trabajando, o escribime directo por correo. Leo todos personalmente.",
     "starters": {
       "hvac": "Hola, tengo una empresa de HVAC y me gustaría hablar sobre mis sistemas.",
       "roofing": "Hola, tengo una empresa de techos y me gustaría hablar sobre mis sistemas.",
       "plumbing": "Hola, tengo una empresa de plomería o electricidad y me gustaría hablar sobre mis sistemas.",
-      "outdoor": "Hola, tengo una empresa de paisajismo o limpieza y me gustaría hablar sobre mis sistemas."
+      "outdoor": "Hola, tengo una empresa de paisajismo o limpieza y me gustaría hablar sobre mis sistemas.",
+      "solar": "Hola, tengo una empresa de instalación solar y me gustaría hablar sobre mis sistemas.",
+      "locksmith": "Hola, tengo una cerrajería y me gustaría hablar sobre mis sistemas."
     },
     "formTitle": "Enviar un mensaje",
     "formName": "Nombre",
@@ -300,6 +301,7 @@
   "footer": {
     "tagline": "Implementación, gestión y automatización de CRM.",
     "rights": "Todos los derechos reservados.",
-    "madeWith": "Con base en Argentina, trabajando globalmente."
+    "madeWith": "Con base en Argentina, trabajando globalmente.",
+    "industries": "Industrias"
   }
 }

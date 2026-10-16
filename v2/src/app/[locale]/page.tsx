@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CtaLink } from "@/components/cta-link";
+import { INDUSTRIES } from "@/components/city/industries";
 import { IndustriesPrompt } from "@/components/industries-prompt";
 import { StatRow } from "@/components/stat-row";
-import { ToolsMarquee } from "@/components/tools-marquee";
 import { SpotLink, SpotCard } from "@/components/spotlight";
 import { NavLink } from "@/components/nav-link";
 import { PageShell } from "@/components/page-shell";
@@ -36,7 +36,6 @@ export default async function HomePage({
   const t = await getTranslations("home");
   const tNav = await getTranslations("nav");
   const tServices = await getTranslations("services");
-  const hasBooking = Boolean(process.env.NEXT_PUBLIC_BOOKING_URL);
 
   const stats = t.raw("stats") as { value: string; label: string }[];
   const proofItems = t.raw("proofItems") as { title: string; desc: string }[];
@@ -61,7 +60,7 @@ export default async function HomePage({
               accentFrom={accentFrom}
               immediate
               delay={0.1}
-              className="mt-5 text-[2.5rem] leading-[1] sm:text-[3.6rem]"
+              className="mt-5 text-[2.3rem] leading-[1.02] sm:text-[3.2rem]"
             />
             <Reveal delay={0.5} immediate>
               <p className="mt-6 max-w-[52ch] text-[1.08rem] leading-relaxed text-ink-soft">
@@ -71,7 +70,7 @@ export default async function HomePage({
             <Reveal delay={0.62} immediate>
               <div className="mt-8 flex flex-wrap items-center gap-3.5">
                 <CtaLink href="/contact">
-                  {hasBooking ? tNav("bookCall") : tNav("getInTouch")}
+                  {tNav("getInTouch")}
                 </CtaLink>
                 <CtaLink href="/services" variant="ghost">
                   {t("ctaSecondary")}
@@ -83,14 +82,23 @@ export default async function HomePage({
                 <IndustriesPrompt />
               </div>
             </Reveal>
+            {/* one quiet static line instead of the flying chips: the tools are the proof, not the decoration */}
+            <Reveal delay={0.86} immediate>
+              <p className="mt-6 flex flex-wrap items-center gap-x-3.5 gap-y-1 font-mono text-[11.5px] uppercase tracking-[0.1em] text-ink-faint">
+                <span>{t("worksWith")}:</span>
+                {["GoHighLevel", "Zapier", "Kickserv", "Airtable", "Stripe"].map((tool) => (
+                  <span key={tool} className="text-ink-soft">
+                    {tool}
+                  </span>
+                ))}
+              </p>
+            </Reveal>
             <StatRow stats={stats} />
 
           </div>
 
         </div>
       </section>
-
-      <ToolsMarquee />
 
       {/* Two tracks */}
       <section className="rail px-5 py-20 sm:px-8 sm:py-28">
@@ -148,6 +156,20 @@ export default async function HomePage({
       </section>
 
       {/* Proof */}
+      <section className="rail px-5 pb-6 pt-4 sm:px-8">
+        <h2 className="eyebrow">{t("industriesTitle")}</h2>
+        <ul className="mt-5 flex flex-wrap gap-2">
+          {INDUSTRIES.map((i) => (
+            <li key={i.id}>
+              <NavLink href={`/industries/${i.id}`} className="press inline-flex items-center gap-2 rounded-full border border-line-strong bg-white/[0.04] px-4 py-2 text-[13.5px] font-semibold text-ink no-underline hover:bg-white/[0.09]">
+                <span className="h-2 w-2 rounded-full" style={{ background: i.color }} aria-hidden="true" />
+                {i[locale === "es" ? "es" : "en"].name}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="py-10 sm:py-16">
         <div className="rail glass rounded-[var(--radius-lg)] px-6 py-12 sm:px-9">
           <RevealWords as="h2" text={t("proofTitle")} className="max-w-xl text-[2rem] sm:text-[3rem]" />

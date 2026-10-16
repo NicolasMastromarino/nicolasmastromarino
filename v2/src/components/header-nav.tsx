@@ -11,12 +11,12 @@ type NavLinkItem = { href: string; label: string };
 
 export function HeaderNav({
   links,
-  bookCallLabel,
+  contactLabel,
   menuLabel,
   navLabel,
 }: {
   links: NavLinkItem[];
-  bookCallLabel: string;
+  contactLabel: string;
   menuLabel: string;
   navLabel: string;
 }) {
@@ -122,7 +122,7 @@ export function HeaderNav({
             href="/contact"
             className="press hidden rounded-full bg-accent px-5 py-2.5 text-[14px] font-semibold text-accent-ink no-underline hover:bg-accent-hover sm:inline-flex"
           >
-            {bookCallLabel}
+            {contactLabel}
           </NavLink>
           <button
             type="button"
@@ -193,7 +193,7 @@ export function HeaderNav({
                   href="/contact"
                   className="press block rounded-full bg-accent px-5 py-3.5 text-center text-[15px] font-semibold text-accent-ink no-underline"
                 >
-                  {bookCallLabel}
+                  {contactLabel}
                 </NavLink>
               </motion.div>
             </nav>

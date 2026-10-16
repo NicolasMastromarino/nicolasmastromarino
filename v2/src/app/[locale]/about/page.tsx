@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ToolsMarquee } from "@/components/tools-marquee";
 import { AboutPhoto } from "@/components/about-photo";
 import { PageShell } from "@/components/page-shell";
 import { FinalCta } from "@/components/final-cta";
@@ -33,7 +32,6 @@ export default async function AboutPage({
   setRequestLocale(locale);
   const t = await getTranslations("about");
   const tNav = await getTranslations("nav");
-  const hasBooking = Boolean(process.env.NEXT_PUBLIC_BOOKING_URL);
 
   const facts = t.raw("facts") as { title: string; dates: string; desc: string }[];
   const bodies = [
@@ -110,16 +108,11 @@ export default async function AboutPage({
         </div>
       </section>
 
-      <section className="rail px-5 pt-16 sm:px-8 sm:pt-24">
-        <RevealWords as="h2" text={t("toolsTitle")} className="mb-8 text-[1.9rem] sm:text-[2.6rem]" />
-      </section>
-      <div className="pb-6">
-        <ToolsMarquee />
-      </div>
+      <div className="pb-6" />
 
       <FinalCta
         title={t("ctaTitle")}
-        cta={hasBooking ? t("cta") : tNav("getInTouch")}
+        cta={tNav("getInTouch")}
       />
     </PageShell>
   );

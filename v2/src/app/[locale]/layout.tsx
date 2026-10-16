@@ -9,7 +9,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Ambient } from "@/components/ambient";
 import { Analytics } from "@/components/analytics";
 import { MotionProvider } from "@/components/motion-provider";
-import { PersonSchema } from "@/components/json-ld";
+import { PersonSchema, SiteSchema } from "@/components/json-ld";
 import { BASE_PATH, withBase } from "@/lib/base-path";
 import "../globals.css";
 
@@ -55,6 +55,8 @@ export async function generateMetadata({
       ],
       apple: [{ url: withBase("/apple-touch-icon.png"), sizes: "180x180", type: "image/png" }],
     },
+    // the code Search Console gives for the "HTML tag" way of verifying the site (set it as NEXT_PUBLIC_GSC_VERIFICATION)
+    ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } } : {}),
     ...(BASE_PATH ? { robots: { index: false, follow: false } } : {}),
   };
 }
@@ -81,6 +83,7 @@ export default async function LocaleLayout({
     >
       <head>
         <PersonSchema />
+        <SiteSchema />
       </head>
       <body className="flex min-h-full flex-col text-ink">
         {/* the preview path is not measured; on the real site analytics waits for the first interaction */}
