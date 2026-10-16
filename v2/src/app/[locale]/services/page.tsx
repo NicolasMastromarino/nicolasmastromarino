@@ -96,7 +96,7 @@ export default async function ServicesPage({
           { name: tNav("services"), path: "/services" },
         ]}
       />
-      <section className="rail px-5 pb-4 pt-12 sm:px-8 sm:pt-20 lg:min-h-[62vh]">
+      <section className="rail px-5 pb-4 pt-12 sm:px-8 sm:pt-14 lg:min-h-[40vh]">
         <Reveal y={10} immediate>
           <span className="eyebrow">{tNav("services")}</span>
         </Reveal>

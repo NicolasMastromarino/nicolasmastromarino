@@ -93,6 +93,8 @@ export function CityCanvas() {
   const chooserRef = useRef(false);
   const previewTimer = useRef<number | undefined>(undefined);
   const lastTrigger = useRef<HTMLElement | null>(null);
+  const pushedRef = useRef(false); // the card added a history entry, so Back can close it
+  const skipPop = useRef(false);
 
   const setIndustryUrl = (id: IndustryId | null) => {
     const u = new URL(window.location.href);
@@ -100,7 +102,13 @@ export function CityCanvas() {
     else u.searchParams.delete("industry");
     window.history.replaceState(window.history.state, "", u);
   };
-  const openIndustry = (id: IndustryId) => {
+  const pushCardEntry = () => {
+    if (pushedRef.current) return;
+    pushedRef.current = true;
+    window.history.pushState({ ...(window.history.state ?? {}), cityCard: 1 }, "", window.location.href);
+  };
+  const openIndustry = (id: IndustryId, opts?: { push?: boolean }) => {
+    if (opts?.push !== false) pushCardEntry();
     window.clearTimeout(previewTimer.current);
     chooserRef.current = false;
     setChooser(false);
@@ -111,7 +119,7 @@ export function CityCanvas() {
     document.documentElement.dataset.industry = "1";
     setIndustryUrl(id);
   };
-  const closeIndustry = () => {
+  const closePanels = (fromPop: boolean) => {
     window.clearTimeout(previewTimer.current);
     if (!industryRef.current && !chooserRef.current) return;
     industryRef.current = null;
@@ -123,8 +131,18 @@ export function CityCanvas() {
     if (back) window.requestAnimationFrame(() => back.isConnected && back.focus({ preventScroll: true }));
     engineRef.current?.setFocus(null);
     delete document.documentElement.dataset.industry;
-    setIndustryUrl(null);
+    if (fromPop) {
+      pushedRef.current = false;
+    } else if (pushedRef.current) {
+      pushedRef.current = false;
+      skipPop.current = true;
+      window.history.back();
+    } else {
+      setIndustryUrl(null);
+    }
   };
+  const closeIndustry = () => closePanels(false);
+  const closePanelsRef = useRef(closePanels);
   const openIndustryRef = useRef(openIndustry);
 
   // the chooser: four trades before any card opens
@@ -133,6 +151,7 @@ export function CityCanvas() {
     if (!industryRef.current && !chooserRef.current && document.activeElement instanceof HTMLElement && document.activeElement !== document.body) {
       lastTrigger.current = document.activeElement;
     }
+    pushCardEntry();
     chooserRef.current = true;
     setChooser(true);
     setShowHint(false);
@@ -143,7 +162,21 @@ export function CityCanvas() {
   useEffect(() => {
     openIndustryRef.current = openIndustry;
     openChooserRef.current = openChooser;
+    closePanelsRef.current = closePanels;
   });
+
+  // the Back button closes an open card rather than leaving the page
+  useEffect(() => {
+    const onPop = () => {
+      if (skipPop.current) {
+        skipPop.current = false;
+        return;
+      }
+      if (industryRef.current || chooserRef.current) closePanelsRef.current(true);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
   // pointing at a trade shows its building; leaving the list lets the camera come back
   const previewIndustry = (id: IndustryId | null) => {
     window.clearTimeout(previewTimer.current);
@@ -176,7 +209,7 @@ export function CityCanvas() {
   useEffect(() => {
     if (!ready) return;
     const q = new URLSearchParams(window.location.search).get("industry");
-    if (q && INDUSTRIES.some((i) => i.id === q) && routeRef.current === "home") openIndustryRef.current(q as IndustryId);
+    if (q && INDUSTRIES.some((i) => i.id === q) && routeRef.current === "home") openIndustryRef.current(q as IndustryId, { push: false });
   }, [ready]);
 
   // while a card is open the faded page behind it cannot take focus
@@ -226,6 +259,7 @@ export function CityCanvas() {
     routeRef.current = r;
     if (industryRef.current || chooserRef.current) {
       window.clearTimeout(previewTimer.current);
+      pushedRef.current = false;
       industryRef.current = null;
       chooserRef.current = false;
       setIndustry(null);

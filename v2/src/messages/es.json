@@ -22,7 +22,9 @@
     "contact": "Contacto",
     "bookCall": "Agendar llamada",
     "getInTouch": "Escribime",
-    "menu": "Abrir menú"
+    "menu": "Abrir menú",
+    "skip": "Saltar al contenido",
+    "primary": "Principal"
   },
   "home": {
     "eyebrow": "Consultor de CRM y Automatización",

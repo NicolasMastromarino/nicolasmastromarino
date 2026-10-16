@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { NavLink } from "@/components/nav-link";
@@ -13,14 +13,18 @@ export function HeaderNav({
   links,
   bookCallLabel,
   menuLabel,
+  navLabel,
 }: {
   links: NavLinkItem[];
   bookCallLabel: string;
   menuLabel: string;
+  navLabel: string;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -39,9 +43,31 @@ export function HeaderNav({
   }, [open]);
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        burgerRef.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !menuRef.current) return;
+      const items = [burgerRef.current, ...menuRef.current.querySelectorAll<HTMLElement>("a[href]")].filter(Boolean) as HTMLElement[];
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // opening with the keyboard lands on the first link
+    const id = window.setTimeout(() => menuRef.current?.querySelector<HTMLElement>("a[href]")?.focus(), 60);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.clearTimeout(id);
+    };
   }, [open]);
 
   return (
@@ -53,7 +79,7 @@ export function HeaderNav({
         className={`relative mx-auto flex max-w-5xl items-center justify-between gap-3.5 rounded-full border py-2 pl-5 pr-2 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300 ease-out-strong ${
           scrolled || open
             ? "border-line-strong bg-surface/92 shadow-[var(--shadow)]"
-            : "border-transparent bg-transparent"
+            : "border-line bg-[rgba(8,10,18,0.78)]"
         }`}
       >
         <Link
@@ -63,7 +89,7 @@ export function HeaderNav({
           Nicolás<span className="text-accent">.</span>M
         </Link>
 
-        <nav className="hidden items-center lg:flex">
+        <nav aria-label={navLabel} className="hidden items-center lg:flex">
           <LayoutGroup id="nav">
             {links.map((link) => {
               const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
@@ -71,8 +97,9 @@ export function HeaderNav({
                 <NavLink
                   key={link.href}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={`relative rounded-full px-3.5 py-2 whitespace-nowrap text-[14px] font-medium no-underline transition-colors duration-200 ${
-                    active ? "text-ink" : "text-ink-soft hover:text-ink"
+                    active ? "text-ink" : "text-[var(--ink-nav)] hover:text-ink"
                   }`}
                 >
                   {active && (
@@ -101,6 +128,8 @@ export function HeaderNav({
             type="button"
             aria-label={menuLabel}
             aria-expanded={open}
+            aria-controls="mobile-menu"
+            ref={burgerRef}
             onClick={() => setOpen((v) => !v)}
             className="press relative flex h-10 w-10 flex-none flex-col items-center justify-center gap-[5px] rounded-full border border-line-strong lg:hidden"
           >
@@ -121,13 +150,15 @@ export function HeaderNav({
         {open && (
           <motion.div
             key="menu"
+            id="mobile-menu"
+            ref={menuRef}
             initial={{ opacity: 0, clipPath: "inset(0 0 100% 0 round 28px)" }}
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0 round 28px)" }}
             exit={{ opacity: 0, clipPath: "inset(0 0 100% 0 round 28px)" }}
             transition={{ duration: 0.38, ease: EASE_OUT }}
             className="mx-auto mt-2 max-w-5xl overflow-hidden rounded-[28px] border border-line-strong bg-surface p-3 shadow-[var(--shadow)] backdrop-blur-xl lg:hidden"
           >
-            <nav className="flex flex-col">
+            <nav aria-label={navLabel} className="flex flex-col">
               {links.map((link, i) => {
                 const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
                 return (
@@ -139,6 +170,7 @@ export function HeaderNav({
                   >
                     <NavLink
                       href={link.href}
+                      aria-current={active ? "page" : undefined}
                       className={`flex items-center justify-between rounded-2xl px-4 py-3.5 font-display text-[1.5rem] font-extrabold no-underline ${
                         active ? "bg-white/[0.06] text-ink" : "text-ink-soft"
                       }`}

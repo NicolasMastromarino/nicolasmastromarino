@@ -2276,7 +2276,7 @@ export class CityEngine {
     if (this.dayHold > 0) this.dayHold -= dt;
     const hold = this.dayHold > 0;
     const dTarget = hold || this.dayOn ? 1 : 0;
-    this.dayK += (dTarget - this.dayK) * (1 - Math.exp(-dt * (this.opening ? 0.75 : 2.6)));
+    this.dayK += (dTarget - this.dayK) * (1 - Math.exp(-dt * (this.opening ? 1.1 : 2.6)));
     if (Math.abs(dTarget - this.dayK) < 0.003) {
       this.dayK = dTarget;
       if (!hold) this.opening = false;
@@ -2430,6 +2430,17 @@ export class CityEngine {
   /* Camera rigs (true isometric: fixed elevation, azimuth + zoom + pan) */
   /* ------------------------------------------------------------------ */
 
+  /**
+   * Sideways framing for the text column: put the middle of the city in the middle of the space the copy leaves free
+   * (the column geometry is the same as .rail in globals.css), so no landmark sits behind a headline at any width.
+   */
+  private railShift(side: "left" | "right") {
+    const W = Math.max(1, window.innerWidth);
+    const gutter = Math.max(32, (W - 1024) / 2);
+    if (side === "left") return Math.min(0.34, (gutter + 620 + 40) / (2 * W));
+    return Math.max(-0.34, (W - (gutter + 580 + 40)) / (2 * W) - 0.5);
+  }
+
   private rig(t: number, s: number) {
     const target = new THREE.Vector3();
     let zoom = 80;
@@ -2459,7 +2470,7 @@ export class CityEngine {
         target.lerp(new THREE.Vector3(-4, 3, 52), bk);
         zoom = zoom * (1 - bk) + 78 * bk;
         az += angDiff(az, Math.PI / 4 + 0.5) * bk;
-        shift = 0.2;
+        shift = this.railShift("left");
         break;
       }
       case "services": {
@@ -2480,7 +2491,7 @@ export class CityEngine {
           zoom = 150;
           az = Math.PI / 4;
         }
-        shift = 0.2;
+        shift = this.railShift("left");
         break;
       }
       case "case-studies": {
@@ -2496,26 +2507,28 @@ export class CityEngine {
           zoom = 120;
           az = (5 * Math.PI) / 4;
         }
-        shift = 0.2;
+        shift = this.railShift("left");
         break;
       }
       case "about": {
         target.set(0, 3, 24);
         zoom = 150;
-        az = tt * 0.06 + s * 1.4 + 0.8;
+        az = Math.PI / 4 + 0.55 + Math.sin(tt * 0.1) * 0.08 + s * 1.4;
+        shift = this.railShift("left");
         break;
       }
       case "blog": {
         target.set(4, 4, 40 - s * 78);
         zoom = 60;
         az = Math.PI / 4 + Math.sin(tt * 0.15) * 0.08;
+        shift = this.railShift("left");
         break;
       }
       case "contact": {
         target.set(ANT_C.x, 12, ANT_C.z);
         zoom = 64;
         az = Math.PI / 4 + tt * 0.07;
-        shift = -0.2;
+        shift = this.railShift("right");
         break;
       }
     }
@@ -2523,7 +2536,8 @@ export class CityEngine {
   }
 
   private frame() {
-    const dt = Math.min(this.clock.getDelta(), 0.1);
+    const rawDt = this.clock.getDelta();
+    const dt = Math.min(rawDt, 0.1);
     this.time += this.o.reduced ? dt * 0.35 : dt;
     this.time1.value = this.time;
     this.introTime += dt;
@@ -2649,7 +2663,7 @@ export class CityEngine {
     const lk = Math.min(2.6, Math.max(0.9, h / 64));
     this.labels.forEach(({ sp, w: lw }) => sp.scale.set(lw * lk, lw * lk * (140 / 640), 1));
 
-    this.updateAtmosphere(dt);
+    this.updateAtmosphere(Math.min(rawDt, 1));
     this.animated.forEach((fn) => fn(this.time, dt));
 
     this.frameNo++;

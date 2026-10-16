@@ -22,7 +22,9 @@
     "contact": "Contact",
     "bookCall": "Book a call",
     "getInTouch": "Get in touch",
-    "menu": "Open menu"
+    "menu": "Open menu",
+    "skip": "Skip to content",
+    "primary": "Main"
   },
   "home": {
     "eyebrow": "CRM & Automation Consultant",

@@ -10,8 +10,9 @@
   --surface: #0e1017;
   --surface-2: #151823;
   --ink: #f4f2ea;
-  --ink-soft: #aeb2c0;
-  --ink-faint: #808596;
+  --ink-soft: #c3c7d4;
+  --ink-faint: #9399aa;
+  --ink-nav: #dcdfe8;
   --accent: #ff5b3d;
   --accent-hover: #ff7154;
   --accent-text: #ff8a73;
@@ -22,6 +23,10 @@
   --line-strong: rgba(244, 242, 234, 0.22);
   --shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.8);
   --radius-lg: 28px;
+  /* where the content column sits on wide screens (see .rail), so the veil can cover exactly that */
+  --rail-gutter: max(2rem, calc((100vw - 64rem) / 2));
+  --plate-left: calc(var(--rail-gutter) + 620px + 2.5rem);
+  --plate-right: calc(var(--rail-gutter) + 580px + 2.5rem);
   --radius-md: 18px;
   --radius-sm: 10px;
 
@@ -200,11 +205,12 @@ p {
   align-items: center;
   gap: 0.6rem;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-2);
+  color: color-mix(in srgb, var(--accent-2) 60%, #ffffff);
+  text-shadow: 0 1px 14px rgba(7, 8, 12, 0.9);
 }
 .eyebrow::before {
   content: "";
@@ -498,8 +504,7 @@ a.spot:active {
 }
 
 .city-veil {
-  background:
-    linear-gradient(90deg, rgba(10, 11, 24, 0.7) 0%, rgba(10, 11, 24, 0.32) 38%, rgba(10, 11, 24, 0) 62%);
+  background: linear-gradient(90deg, rgba(8, 9, 18, 0.78) 0, rgba(8, 9, 18, 0.78) var(--plate-left), rgba(8, 9, 18, 0) calc(var(--plate-left) + 18vw));
 }
 @media (max-width: 1023px) {
   .city-veil {
@@ -536,7 +541,7 @@ a.spot:active {
 }
 
 [data-day] .city-veil {
-  opacity: 0.8;
+  opacity: 0.95;
 }
 
 /* Content floats above the scene; only real content catches the pointer so
@@ -570,12 +575,16 @@ h2 {
     margin-left: max(2rem, calc((100vw - 64rem) / 2));
     margin-right: auto;
     max-width: 620px;
+  }
+  .rail:not(.glass) {
     padding-inline: 0 !important;
   }
   .rail-right {
     margin-right: max(2rem, calc((100vw - 64rem) / 2));
     margin-left: auto;
     max-width: 580px;
+  }
+  .rail-right:not(.glass) {
     padding-inline: 0 !important;
   }
 }
@@ -583,13 +592,14 @@ h2 {
 @media (min-width: 1024px) {
   [data-city-route="contact"] .city-veil {
     background:
-      linear-gradient(270deg, rgba(7, 8, 12, 0.72) 0%, rgba(7, 8, 12, 0.35) 38%, rgba(7, 8, 12, 0) 62%),
+      linear-gradient(270deg, rgba(8, 9, 18, 0.78) 0, rgba(8, 9, 18, 0.78) var(--plate-right), rgba(8, 9, 18, 0) calc(var(--plate-right) + 18vw)),
       radial-gradient(ellipse at 50% 120%, rgba(7, 8, 12, 0.7), transparent 60%);
   }
   [data-city-route="about"] .city-veil,
   [data-city-route="blog"] .city-veil {
-    background: radial-gradient(ellipse at 50% 120%, rgba(7, 8, 12, 0.6), transparent 60%),
-      linear-gradient(90deg, rgba(7, 8, 12, 0.55) 0%, rgba(7, 8, 12, 0.2) 45%, rgba(7, 8, 12, 0) 65%);
+    background:
+      linear-gradient(90deg, rgba(8, 9, 18, 0.78) 0, rgba(8, 9, 18, 0.78) var(--plate-left), rgba(8, 9, 18, 0) calc(var(--plate-left) + 18vw)),
+      radial-gradient(ellipse at 50% 120%, rgba(7, 8, 12, 0.6), transparent 60%);
   }
 }
 
@@ -653,4 +663,26 @@ footer {
 }
 .chip-row::-webkit-scrollbar {
   display: none;
+}
+
+/* keyboard: a way past the header and the city controls */
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 0.75rem;
+  z-index: 100;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transform: translateY(-220%);
+}
+.skip-link:focus-visible {
+  transform: none;
+}
+main:focus {
+  outline: none;
 }

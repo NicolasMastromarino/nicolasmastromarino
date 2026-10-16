@@ -71,6 +71,7 @@ export default async function LocaleLayout({
     notFound();
   }
   setRequestLocale(locale);
+  const tNav = await getTranslations({ locale, namespace: "nav" });
 
   return (
     <html
@@ -94,10 +95,16 @@ export default async function LocaleLayout({
         </Script>
         <NextIntlClientProvider>
           <MotionProvider>
-            <Ambient />
+            <a href="#main" className="skip-link">
+              {tNav("skip")}
+            </a>
             <SiteHeader />
-            <main className="flex-1 pt-24">{children}</main>
+            <main id="main" tabIndex={-1} className="flex-1 pt-24">
+              {children}
+            </main>
             <SiteFooter />
+            {/* the city and its controls come last in the tab order: the page first, then the toys */}
+            <Ambient />
           </MotionProvider>
         </NextIntlClientProvider>
       </body>

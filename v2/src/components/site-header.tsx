@@ -19,6 +19,7 @@ export async function SiteHeader() {
       links={links}
       bookCallLabel={hasBooking ? t("bookCall") : t("getInTouch")}
       menuLabel={t("menu")}
+      navLabel={t("primary")}
     />
   );
 }
