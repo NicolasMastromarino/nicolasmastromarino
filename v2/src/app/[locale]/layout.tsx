@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -8,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Ambient } from "@/components/ambient";
+import { Analytics } from "@/components/analytics";
 import { MotionProvider } from "@/components/motion-provider";
 import { PersonSchema } from "@/components/json-ld";
 import { BASE_PATH, withBase } from "@/lib/base-path";
@@ -83,16 +83,8 @@ export default async function LocaleLayout({
         <PersonSchema />
       </head>
       <body className="flex min-h-full flex-col text-ink">
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-GM5KEPCE27"
-          strategy="afterInteractive"
-        />
-        <Script id="ga-gtag" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-GM5KEPCE27');`}
-        </Script>
+        {/* the preview path is not measured; on the real site analytics waits for the first interaction */}
+        {!BASE_PATH && <Analytics />}
         <NextIntlClientProvider>
           <MotionProvider>
             <a href="#main" className="skip-link">

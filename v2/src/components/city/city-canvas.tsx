@@ -23,6 +23,7 @@ const COPY = {
     industryHint: "See what I build for {name}",
     industriesBtn: "Industries",
     loading: "Booting the city",
+    loadCity: "Load the 3D city",
     explore: "Explore the city",
     exploreShort: "Explore",
     exit: "Back to the site",
@@ -47,6 +48,7 @@ const COPY = {
     industryHint: "Mirá lo que armo para {name}",
     industriesBtn: "Industrias",
     loading: "Encendiendo la ciudad",
+    loadCity: "Cargar la ciudad 3D",
     explore: "Explorar la ciudad",
     exploreShort: "Explorar",
     exit: "Volver al sitio",
@@ -79,6 +81,9 @@ export function CityCanvas() {
   const routeRef = useRef<CityRoute>(routeFor(pathname));
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
+  // weak devices see the page first and decide whether to spend the battery on the 3D city
+  const [deferred, setDeferred] = useState(false);
+  const loadGate = useRef<(() => void) | null>(null);
   const [hover, setHover] = useState<{ info: HoverInfo; x: number; y: number } | null>(null);
   const [showHint, setShowHint] = useState(false);
   const hintSeen = useRef(false);
@@ -292,6 +297,46 @@ export function CityCanvas() {
 
     (async () => {
       try {
+        const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean; effectiveType?: string } };
+        const weak =
+          (nav.hardwareConcurrency ?? 8) <= 4 ||
+          (nav.deviceMemory ?? 8) <= 2 ||
+          nav.connection?.saveData === true ||
+          ["slow-2g", "2g"].includes(nav.connection?.effectiveType ?? "");
+        if (weak) {
+          setDeferred(true);
+          await new Promise<void>((resolve) => (loadGate.current = resolve));
+          if (disposed) return;
+          setDeferred(false);
+        } else {
+          // the text paints first: the scene (and the 230 KB it needs) starts once the page has loaded, its largest element is on
+          // screen and the browser is idle, so it never competes with what the visitor came to read
+          await new Promise<void>((resolve) => {
+            let done = false;
+            const go = () => {
+              if (done) return;
+              done = true;
+              const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => void }).requestIdleCallback;
+              if (ric) ric(() => resolve(), { timeout: 2000 });
+              else window.setTimeout(resolve, 300);
+            };
+            const painted = () => {
+              try {
+                const o = new PerformanceObserver(() => {
+                  o.disconnect();
+                  window.setTimeout(go, 400);
+                });
+                o.observe({ type: "largest-contentful-paint", buffered: true });
+              } catch {
+                window.setTimeout(go, 800);
+              }
+            };
+            window.setTimeout(go, 5000); // never wait forever for a browser that does not report it
+            if (document.readyState === "complete") painted();
+            else window.addEventListener("load", painted, { once: true });
+          });
+          if (disposed) return;
+        }
         const [{ CityEngine }] = await Promise.all([import("./city-engine"), document.fonts.ready]);
         if (disposed) return;
         const family =
@@ -382,9 +427,9 @@ export function CityCanvas() {
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className={`fixed inset-0 -z-10 block h-full w-full transition-opacity duration-[1400ms] ease-out ${failed ? "hidden" : ready ? "opacity-100" : "opacity-0"}`}
+        className={`fixed inset-0 -z-10 block h-full w-full transition-opacity duration-[1400ms] ease-out ${failed || deferred ? "hidden" : ready ? "opacity-100" : "opacity-0"}`}
       />
-      {failed && (
+      {(failed || deferred) && (
         <div
           aria-hidden="true"
           className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_0%,rgba(255,91,61,0.25),transparent_55%),radial-gradient(ellipse_at_90%_20%,rgba(131,147,255,0.22),transparent_55%)]"
@@ -393,6 +438,16 @@ export function CityCanvas() {
 
       {/* readability veil over the 3D scene */}
       <div aria-hidden="true" className="city-veil pointer-events-none fixed inset-0 -z-10" />
+
+      {deferred && (
+        <button
+          type="button"
+          onClick={() => loadGate.current?.()}
+          className="press fixed bottom-5 left-1/2 z-[66] -translate-x-1/2 rounded-full border border-line-strong bg-surface/90 px-5 py-3 text-[13.5px] font-semibold text-ink backdrop-blur-md hover:bg-surface"
+        >
+          {copy.loadCity}
+        </button>
+      )}
 
       {ready && !failed && (
         <motion.div
