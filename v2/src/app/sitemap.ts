@@ -2,9 +2,10 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { getPosts } from "@/lib/posts";
 import { BASE_PATH } from "@/lib/base-path";
+import { INDUSTRIES } from "@/components/city/industries";
 
 // "/blog" joins this list again once there is a first post
-const PAGES = ["", "/services", "/about", "/case-studies", "/contact"];
+const PAGES = ["", "/services", "/about", "/case-studies", "/contact", ...INDUSTRIES.map((i) => `/industries/${i.id}`)];
 
 // Fixed per-page launch/last-major-edit dates. Static marketing pages don't
 // track their own change history, so this stays stable across builds
@@ -18,6 +19,7 @@ const LAST_MODIFIED: Record<string, string> = {
   "/blog": "2026-09-29",
   "/contact": "2026-09-29",
 };
+INDUSTRIES.forEach((i) => (LAST_MODIFIED[`/industries/${i.id}`] = "2026-10-16"));
 
 function localePath(locale: string, page: string) {
   const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
