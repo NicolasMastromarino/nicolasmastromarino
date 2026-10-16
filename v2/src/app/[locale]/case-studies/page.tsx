@@ -50,7 +50,7 @@ export default async function CaseStudiesPage({
           { name: tNav("caseStudies"), path: "/case-studies" },
         ]}
       />
-      <section className="mx-auto max-w-5xl px-5 pb-4 pt-12 sm:px-8 sm:pt-20 lg:min-h-[70vh]">
+      <section className="mx-auto max-w-5xl px-5 pb-4 pt-12 sm:px-8 sm:pt-20 lg:min-h-[44vh]">
         <Reveal y={10} immediate>
           <span className="eyebrow">{tNav("caseStudies")}</span>
         </Reveal>
@@ -67,7 +67,7 @@ export default async function CaseStudiesPage({
         </Reveal>
       </section>
 
-      <section className="mx-auto max-w-4xl px-5 py-14 sm:px-8 sm:py-20 lg:ml-[max(2rem,calc((100vw-64rem)/2))] lg:mr-auto lg:max-w-[640px] lg:px-0">
+      <section className="mx-auto max-w-4xl px-5 pb-14 pt-6 sm:px-8 sm:pb-20 sm:pt-8 lg:ml-[max(2rem,calc((100vw-64rem)/2))] lg:mr-auto lg:max-w-[640px] lg:px-0">
         <CaseStudyStack
           items={items}
           pdfById={PDF_BY_ID}

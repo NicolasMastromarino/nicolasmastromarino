@@ -13,7 +13,9 @@ export function FinalCta({
   href?: string;
 }) {
   return (
-    <section className="mx-auto max-w-5xl px-5 pb-10 pt-6 sm:px-8">
+    // below lg the page is centred; from lg up it sits on the same left edge as every other section (the rail), so the card
+    // lines up with the headings above it instead of being inset by its own padding
+    <section className="mx-auto max-w-5xl px-5 pb-10 pt-6 sm:px-8 lg:mx-[var(--rail-gutter)] lg:max-w-none lg:px-0">
       <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-line-strong bg-surface px-7 py-14 sm:px-14 sm:py-20">
         <div
           aria-hidden="true"

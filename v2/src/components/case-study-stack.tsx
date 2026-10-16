@@ -42,15 +42,20 @@ function StackCard({
   return (
     <div
       id={`case-${index}`}
-      className="[@media(min-height:780px)]:lg:sticky"
-      style={{ top: `calc(6rem + ${index * 18}px)` }}
+      className={`[@media(min-height:780px)]:lg:sticky ${index === 0 ? "fade-rise" : ""}`}
+      style={{ top: `calc(6rem + ${index * 18}px)`, ...(index === 0 ? { animationDelay: "0.45s" } : null) }}
     >
       <motion.article
         style={{ scale, transformOrigin: "50% 0%" }}
-        initial={{ y: 40, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true, margin: "0px 0px -8% 0px" }}
-        transition={{ duration: 0.7, ease: EASE_OUT }}
+        // the first card is already on screen when the page opens, so it plays on first paint (CSS) instead of waiting for a scroll
+        {...(index === 0
+          ? {}
+          : {
+              initial: { y: 40, opacity: 0 },
+              whileInView: { y: 0, opacity: 1 },
+              viewport: { once: true, margin: "0px 0px -8% 0px" },
+              transition: { duration: 0.7, ease: EASE_OUT },
+            })}
         className="relative overflow-hidden rounded-[var(--radius-lg)] border border-line-strong bg-surface p-7 shadow-[var(--shadow)] sm:p-9"
       >
         <motion.div
