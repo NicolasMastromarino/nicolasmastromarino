@@ -119,6 +119,21 @@ export function IndustryPanel({
   const ind = industryId ? industryById(industryId) : undefined;
   const copy = ind ? ind[locale] ?? ind.en : undefined;
 
+  // on a phone the sheet opens as a peek so the building stays in view; it can be pulled up to read everything
+  const [expandedFor, setExpandedFor] = useState<IndustryId | null>(null);
+  const expanded = expandedFor !== null && expandedFor === industryId;
+  const setExpanded = (v: boolean | ((x: boolean) => boolean)) => {
+    const on = typeof v === "function" ? v(expanded) : v;
+    setExpandedFor(on ? industryId : null);
+  };
+  useEffect(() => {
+    if (desktop || !industryId) return;
+    document.documentElement.dataset.sheet = expanded ? "full" : "peek";
+    return () => {
+      delete document.documentElement.dataset.sheet;
+    };
+  }, [desktop, industryId, expanded]);
+
   // a new industry starts at the top of the card
   useEffect(() => {
     scroller.current?.scrollTo({ top: 0 });
@@ -145,15 +160,20 @@ export function IndustryPanel({
           dragConstraints={{ top: 0, bottom: 0 }}
           dragElastic={{ top: 0, bottom: 0.5 }}
           onDragEnd={(_, info) => {
-            if (info.offset.y > 90 || info.velocity.y > 500) onClose();
+            if (info.offset.y < -40 || info.velocity.y < -400) setExpanded(true);
+            else if (info.offset.y > 90 || info.velocity.y > 500) {
+              if (expanded) setExpanded(false);
+              else onClose();
+            }
           }}
-          className="glass fixed inset-x-0 bottom-0 z-[70] flex max-h-[66vh] flex-col rounded-t-[26px] lg:inset-x-auto lg:bottom-5 lg:right-5 lg:top-[88px] lg:max-h-none lg:w-[min(440px,38vw)] lg:rounded-[26px]"
+          className={`glass fixed inset-x-0 bottom-0 z-[70] flex flex-col rounded-t-[26px] transition-[height] duration-300 ease-out ${expanded ? "h-[76svh]" : "h-[42svh]"} lg:inset-x-auto lg:bottom-5 lg:right-5 lg:top-[88px] lg:h-auto lg:max-h-none lg:w-[min(440px,38vw)] lg:rounded-[26px] lg:transition-none`}
           style={{ ["--ind" as string]: ind.color }}
         >
           {/* grab handle on phones, so the sheet can be pulled down */}
           <div
             className="flex shrink-0 cursor-grab touch-none justify-center pb-1 pt-2.5 lg:hidden"
             onPointerDown={(e) => drag.start(e)}
+            onClick={() => setExpanded((v) => !v)}
             aria-hidden="true"
           >
             <span className="h-1 w-10 rounded-full bg-line-strong" />

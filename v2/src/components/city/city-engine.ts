@@ -2717,7 +2717,8 @@ export class CityEngine {
       const fm = this.landmarks.get(this.focusId);
       if (fm) {
         target.set(fm.group.position.x, 4, fm.group.position.z);
-        return { target, zoom: 34, az: Math.PI / 4 + 0.3, shift: -0.17, shiftM: 0 };
+        // on a phone the building gets the strip above the sheet, so it is framed closer
+        return { target, zoom: this.o.mobile ? 24 : 34, az: Math.PI / 4 + 0.3, shift: -0.17, shiftM: 0 };
       }
     }
     if (this.exploring) return { target: this.free.target, zoom: this.free.zoom, az: this.free.az, shift: 0, shiftM: 0 };
@@ -2733,9 +2734,11 @@ export class CityEngine {
         const bk = beach * beach * (3 - 2 * beach);
         target.lerp(new THREE.Vector3(-4, 3, 52), bk);
         zoom = zoom * (1 - bk) + 78 * bk;
+        // a phone's tall screen already multiplies the zoom, which left the whole city a few pixels wide: come in closer
+        if (this.o.mobile) zoom *= 0.5;
         az += angDiff(az, Math.PI / 4 + 0.5) * bk;
         shift = this.railShift("left");
-        shiftM = -0.09;
+        shiftM = -0.3;
         break;
       }
       case "services": {
@@ -2878,7 +2881,8 @@ export class CityEngine {
     const w = this.o.canvas.clientWidth;
     const hh = this.o.canvas.clientHeight;
     // phones: lift the scene into the top half so the copy can sit below it
-    const lift = this.focusId && !isDesktop ? 0.24 * hh : !isDesktop && this.route === "home" && !this.exploring ? 0.2 * scrollFade * hh : 0;
+    const sheet = document.documentElement.dataset.sheet;
+    const lift = this.focusId && !isDesktop ? (sheet === "full" ? 0.3 : sheet === "peek" ? 0.17 : 0.24) * hh : !isDesktop && this.route === "home" && !this.exploring ? 0.2 * scrollFade * hh : 0;
     if (Math.abs(this.shift) > 0.0005 || lift > 0.5) cam.setViewOffset(w, hh, -this.shift * w, lift, w, hh);
     else cam.clearViewOffset();
 
