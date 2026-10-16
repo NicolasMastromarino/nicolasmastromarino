@@ -125,6 +125,10 @@ const ZOOM_MIN = 30;
 const ZOOM_MAX = 106; // how far the camera pulls back on the page routes, in world units of view height
 /** how far free roam may pull back */
 const ZOOM_MAX_FREE = 106;
+/** the stored free-roam zoom may go further than ZOOM_MAX_FREE; the real limit is set in frame() from the screen's shape */
+const ZOOM_FREE_STORE = 200;
+/** how wide a view free roam may pull back to, in world units: enough to take in the whole city on any screen */
+const FREE_VIEW_WIDTH = 190;
 const angDiff = (a: number, b: number) => Math.atan2(Math.sin(b - a), Math.cos(b - a));
 
 export class CityEngine {
@@ -2332,7 +2336,7 @@ export class CityEngine {
         const [a, b] = [...this.pointers.values()];
         const dist = Math.hypot(a.x - b.x, a.y - b.y);
         const ang = Math.atan2(b.y - a.y, b.x - a.x);
-        this.free.zoom = Math.min(ZOOM_MAX_FREE, Math.max(ZOOM_MIN, this.free.zoom * (this.pinch.dist / Math.max(1, dist))));
+        this.free.zoom = Math.min(ZOOM_FREE_STORE, Math.max(ZOOM_MIN, this.free.zoom * (this.pinch.dist / Math.max(1, dist))));
         this.free.az -= ang - this.pinch.ang;
         this.pinch = { dist, ang };
       }
@@ -2398,7 +2402,7 @@ export class CityEngine {
   private onWheel(e: WheelEvent) {
     if (!this.exploring || !this.overOpenScene(e.target)) return;
     e.preventDefault();
-    this.free.zoom = Math.min(ZOOM_MAX_FREE, Math.max(ZOOM_MIN, this.free.zoom * Math.exp(e.deltaY * 0.0012)));
+    this.free.zoom = Math.min(ZOOM_FREE_STORE, Math.max(ZOOM_MIN, this.free.zoom * Math.exp(e.deltaY * 0.0012)));
   }
 
   private pan(dx: number, dy: number) {
@@ -2446,6 +2450,7 @@ export class CityEngine {
     let zoom = 80;
     let az = Math.PI / 4;
     let shift = 0;
+    let shiftM = 0; // the same idea on a phone, where the city sits in the top half
     const cue = cityBus.cue;
     const tt = this.o.reduced ? 0 : t;
 
@@ -2453,10 +2458,10 @@ export class CityEngine {
       const fm = this.landmarks.get(this.focusId);
       if (fm) {
         target.set(fm.group.position.x, 4, fm.group.position.z);
-        return { target, zoom: 34, az: Math.PI / 4 + 0.3, shift: -0.17 };
+        return { target, zoom: 34, az: Math.PI / 4 + 0.3, shift: -0.17, shiftM: 0 };
       }
     }
-    if (this.exploring) return { target: this.free.target, zoom: this.free.zoom, az: this.free.az, shift: 0 };
+    if (this.exploring) return { target: this.free.target, zoom: this.free.zoom, az: this.free.az, shift: 0, shiftM: 0 };
 
     switch (this.route) {
       case "home": {
@@ -2471,6 +2476,7 @@ export class CityEngine {
         zoom = zoom * (1 - bk) + 78 * bk;
         az += angDiff(az, Math.PI / 4 + 0.5) * bk;
         shift = this.railShift("left");
+        shiftM = -0.09;
         break;
       }
       case "services": {
@@ -2532,7 +2538,7 @@ export class CityEngine {
         break;
       }
     }
-    return { target, zoom, az, shift };
+    return { target, zoom, az, shift, shiftM };
   }
 
   private frame() {
@@ -2560,13 +2566,17 @@ export class CityEngine {
       if (k.has("q")) this.free.az += dt * 1.1;
       if (k.has("e")) this.free.az -= dt * 1.1;
       if (k.has("+") || k.has("=")) this.free.zoom = Math.max(ZOOM_MIN, this.free.zoom * Math.exp(-dt * 1.2));
-      if (k.has("-") || k.has("_")) this.free.zoom = Math.min(ZOOM_MAX_FREE, this.free.zoom * Math.exp(dt * 1.2));
+      if (k.has("-") || k.has("_")) this.free.zoom = Math.min(ZOOM_FREE_STORE, this.free.zoom * Math.exp(dt * 1.2));
     }
     const rig = this.rig(this.time, this.scrollS);
-    let zoom = Math.min(rig.zoom, this.exploring ? ZOOM_MAX_FREE : ZOOM_MAX);
+    let zoom = Math.min(rig.zoom, this.exploring ? ZOOM_FREE_STORE : ZOOM_MAX);
     // portrait screens: show more of the scene
     const aspectNow = this.o.canvas.clientWidth / Math.max(1, this.o.canvas.clientHeight);
-    if (aspectNow < 1.1) zoom *= 1 + (1.1 / aspectNow - 1) * 0.8;
+    const portrait = aspectNow < 1.1 ? 1 + (1.1 / aspectNow - 1) * 0.8 : 1;
+    zoom *= portrait;
+    // free roam may pull back until the view is wide enough for the whole city: on a phone that is much further than
+    // the opening view, which used to be the farthest it could go
+    if (this.exploring) zoom = Math.min(zoom, Math.max(ZOOM_MAX_FREE * portrait, FREE_VIEW_WIDTH / Math.max(0.2, aspectNow)));
 
     // cinematic damping: slow settle on first load, then responsive
     const k = this.o.reduced ? 12 : this.introTime < 3 ? 0.9 + this.introTime * 0.3 : 2.2;
@@ -2604,7 +2614,7 @@ export class CityEngine {
     const isDesktop = window.innerWidth >= 1024;
     const scrollFade = 1 - smooth(0.0, 0.7, window.scrollY / Math.max(1, window.innerHeight));
     const keep = this.route === "case-studies" || this.route === "services";
-    const wantShift = isDesktop ? rig.shift * (keep ? 1 : scrollFade) : 0;
+    const wantShift = isDesktop ? rig.shift * (keep ? 1 : scrollFade) : rig.shiftM * scrollFade;
     this.shift += (wantShift - this.shift) * (1 - Math.exp(-dt * 3));
     const w = this.o.canvas.clientWidth;
     const hh = this.o.canvas.clientHeight;

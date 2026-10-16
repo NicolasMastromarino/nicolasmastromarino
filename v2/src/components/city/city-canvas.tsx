@@ -32,6 +32,7 @@ const COPY = {
     toDay: "Switch to day",
     toNight: "Switch to night",
     controls: "Drag to move · Scroll or pinch to zoom · Q / E to rotate · Click a building to enter · Esc to exit",
+    controlsTouch: "Drag to move · Pinch to zoom · Tap a building to enter",
   },
   es: {
     hub: "UN SISTEMA",
@@ -55,6 +56,7 @@ const COPY = {
     toDay: "Pasar a día",
     toNight: "Pasar a noche",
     controls: "Arrastrá para moverte · Rueda o pellizco para zoom · Q / E para rotar · Click en un edificio para entrar · Esc para salir",
+    controlsTouch: "Arrastrá para moverte · Pellizcá para hacer zoom · Tocá un edificio para entrar",
   },
 } as const;
 
@@ -89,6 +91,10 @@ export function CityCanvas() {
   const weatherRef = useRef({ rain: false, day: false });
   const [industry, setIndustry] = useState<IndustryId | null>(null);
   const industryRef = useRef<IndustryId | null>(null);
+  const [touch, setTouch] = useState(false);
+  // the input type only exists in the browser, so it cannot be the initial state
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setTouch(window.matchMedia("(pointer: coarse)").matches), []);
   const [chooser, setChooser] = useState(false);
   const chooserRef = useRef(false);
   const previewTimer = useRef<number | undefined>(undefined);
@@ -464,9 +470,9 @@ export function CityCanvas() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-            className="pointer-events-none fixed left-1/2 top-20 z-[66] max-w-[92vw] -translate-x-1/2 rounded-full border border-line-strong bg-surface/85 px-5 py-2.5 text-center font-mono text-[11.5px] tracking-wide text-ink-soft backdrop-blur-md"
+            className="pointer-events-none fixed left-1/2 top-20 z-[66] max-w-[92vw] -translate-x-1/2 rounded-full border border-line-strong bg-surface/85 px-5 py-2.5 text-center font-mono text-[11.5px] tracking-wide text-ink-soft backdrop-blur-md max-sm:bottom-[5.75rem] max-sm:top-auto max-sm:rounded-2xl"
           >
-            {copy.controls}
+            {touch ? copy.controlsTouch : copy.controls}
           </motion.p>
         )}
       </AnimatePresence>
