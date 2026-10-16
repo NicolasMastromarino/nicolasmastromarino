@@ -218,6 +218,8 @@ export class CityEngine {
 
   constructor(opts: Opts) {
     this.o = opts;
+    // the opening fly-in starts from a view that already stays inside the drawn world (it used to start at 320, showing the ragged edge of the map)
+    this.viewH = opts.mobile ? 220 : 100;
     this.renderer = new THREE.WebGLRenderer({
       canvas: opts.canvas,
       antialias: opts.mobile, // desktop gets MSAA through the composer target

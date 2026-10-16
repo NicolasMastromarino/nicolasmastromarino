@@ -477,7 +477,13 @@ export function buildWorld(ctx: WorldCtx): World {
   for (let k = 0; k < plots; k++) {
     const p = findField(20, 3000, 1.2);
     if (!p) break;
-    const [x, z] = p;
+    let [x, z] = p;
+    // the ripe corn that ran along the solar farm sits against the cow pen instead: same field, same tractor, same random numbers
+    const moved = k === 1 && Math.hypot(x + 68, z - 131) < 8;
+    if (moved) {
+      x = -78;
+      z = 143.5;
+    }
     const hh = hmax(x, z, 10) + 0.1;
     const w = rr(20, 28);
     const d = rr(16, 22);
@@ -547,6 +553,7 @@ export function buildWorld(ctx: WorldCtx): World {
       const wi = w - 5;
       const di = d - 5;
       for (const [bx0, bz0] of [[x + w / 2 + 8.5, z], [x - w / 2 - 8.5, z], [x, z + d / 2 + 8.5], [x, z - d / 2 - 8.5]] as [number, number][]) {
+        if (moved) break; // its barn is built by hand below
         if (blocked(bx0, bz0, 8) || landL(bx0, bz0) < 30 || terrainHeight(bx0, bz0) > 1.8 || !free(bx0, bz0, 8)) continue;
         spots.push([bx0, bz0, 8]);
         addRoad(bx0, bz0, 9);
@@ -3154,6 +3161,7 @@ export function buildWorld(ctx: WorldCtx): World {
       if ((a1 + b1) % 2 === 0) lampPost(x1 + 1.6, yy - 0.2, z1 + 1.6, 3.4);
     });
     const plotKind = new Map<string, string>();
+    const INDUSTRY_PLOT_BURN: Record<string, number> = { "32,88": 96 };
     cells.forEach(([cx, cz, d]) => {
       const ci = cx / 8;
       const cj = cz / 8;
@@ -3179,6 +3187,14 @@ export function buildWorld(ctx: WorldCtx): World {
       for (let tries = 0; tries < 6 && (kind === left || kind === up) && kind !== "houses"; tries++) kind = pick(kinds);
       if ((kind === "biz" || kind === "big") && onRoad(cx, cz - 0.6, 0.4)) kind = "houses";
       plotKind.set(ci + "," + cj, kind);
+      // an industry building stands on this plot: nothing else is built, but the plot draws the same random numbers it would have
+      // (measured on the original plot), so every plot after it comes out exactly as before
+      const burn = INDUSTRY_PLOT_BURN[cx + "," + cz];
+      if (burn !== undefined) {
+        for (let k = 0; k < burn; k++) r();
+        addRoad(cx, cz, 5.6);
+        return;
+      }
       if (kind === "biz") {
         const variant = Math.floor(r() * 3);
         if (variant === 0) {
@@ -4208,6 +4224,24 @@ export function buildWorld(ctx: WorldCtx): World {
   }
   [...signsW, ...boardsW].forEach((b) => b.build(scene));
   cornB.build(scene);
+  // the moved cornfield's farmyard, built last so that nothing drawn before it depends on it: a barn on the far side of the corn with two
+  // silos, a trodden yard, hay rolls between barn and field, and lamps
+  {
+    const bx = -80;
+    const bz = 160;
+    const yb = Math.max(0.1, hmax(bx, bz, 4));
+    addRoad(bx, bz, 16);
+    B.box.add(bx, yb - 0.04, bz, 24, 0.1, 16, C("#7a6a4c"));
+    barnBuilding(bx, bz, 2);
+    for (const [sx, sz, sr, sh] of [[-71, 162.4, 2.8, 5.8], [-71, 158.4, 2.2, 4.6]] as const) {
+      B.cyl.add(sx, yb, sz, sr, sh, sr, C("#b8b0a0"));
+      for (let k = 0; k < Math.floor(sh / 1.3); k++) B.cyl.add(sx, yb + 0.5 + k * 1.3, sz, sr + 0.15, 0.12, sr + 0.15, C("#8e93a6"));
+      B.ico.add(sx, yb + sh - 0.7, sz, sr, 1.3, sr, C("#8a8fa0"));
+    }
+    B.box.add(-72.3, yb, 160.4, 0.18, 5.4, 0.1, C("#2c3040"));
+    for (const [hx, hz] of [[-69.2, 155.6], [-67.8, 156.4], [-69.0, 157.4], [-88.2, 157.2], [-89.6, 156.2]]) B.cyl.add(hx, yb + 0.6, hz, 1.2, 1.2, 1.2, C("#c1a840"), 0, [0, 0, 0], Math.PI / 2);
+    for (const [lx, lz] of [[-87, 153], [-73, 153]]) lampPost(lx, yb, lz, 3.2);
+  }
   Object.values(B).forEach((b) => b.build(scene));
   return out;
 }

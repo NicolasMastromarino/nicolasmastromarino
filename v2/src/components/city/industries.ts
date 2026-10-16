@@ -287,10 +287,10 @@ export const INDUSTRIES: Industry[] = [
   },
   {
     id: "locksmith",
-    x: -32, // the block just north of the plumbers
-    z: 48,
+    x: 32, // a plot of the southern suburb, by the coast road
+    z: 88,
     site: "block",
-    ground: 0.03,
+    ground: 0.04,
     color: "#c58aff",
     en: {
       name: "Locksmith",
