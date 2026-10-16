@@ -3676,7 +3676,7 @@ export function buildWorld(ctx: WorldCtx): World {
       ship.rotation.z = Math.sin(t * 0.5 + rz) * 0.02;
     });
   };
-  oilRig(240, -92, 1.15, true); // one rig, far out beyond the bridge's last tower, well clear of the shipping lane under the bridge
+  oilRig(52, -140, 1.15, true); // one rig, out in the open sea north of the beach where the visitor can see it from the opening view
 
   // a cruise ship working the channel under the bridge: out of the south, under the deck, away to the north
   {
