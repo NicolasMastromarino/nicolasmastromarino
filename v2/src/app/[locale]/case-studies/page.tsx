@@ -11,8 +11,6 @@ import { withBase } from "@/lib/base-path";
 const PDF_BY_ID: Record<string, string> = {
   "dispatch-integration": withBase("/crm-automation-case-study-gohighlevel-zapier.pdf"),
   "agency-automation": withBase("/marketing-automation-case-study-agency.pdf"),
-  "bookkeeply-saas": withBase("/bookkeeply-case-study.pdf"),
-  "jbz-beats-store": withBase("/jbzbeats-case-study.pdf"),
 };
 
 export async function generateMetadata({

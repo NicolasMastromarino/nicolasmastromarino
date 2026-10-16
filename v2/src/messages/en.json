@@ -238,7 +238,7 @@
         "outcome": "New client accounts could be onboarded onto proven automation instead of custom work every time, and campaign performance became something the agency could show clients with real numbers."
       },
       {
-        "id": "bookkeeply-saas",
+        "id": "saas-product",
         "ticket": "PROJECT 05",
         "title": "Replacing a bookkeeping spreadsheet with a real product",
         "context": "A service-business bookkeeping workbook had outgrown Excel: twelve monthly tabs kept in sync by hand, manual transfer macros, and tax estimates based on guesswork instead of real IRS math. This one is my own product, built and shipped end to end.",
@@ -246,7 +246,7 @@
         "outcome": "The twelve-tab spreadsheet became one system with real validation, and a later tax-accuracy pass caught a stale QBI threshold and a missing law change before either reached a user."
       },
       {
-        "id": "jbz-beats-store",
+        "id": "online-store",
         "ticket": "PROJECT 06",
         "title": "Turning a one-page beat store into one that runs itself",
         "context": "An independent music producer's WordPress site could showcase beats but had no structured way to sell them under different license tiers, no automated delivery, and almost no organic search traffic.",

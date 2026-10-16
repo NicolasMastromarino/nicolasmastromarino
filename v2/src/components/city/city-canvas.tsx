@@ -13,7 +13,7 @@ const COPY = {
   en: {
     hub: "ONE SYSTEM",
     tools: ["GoHighLevel", "Kickserv", "Airtable", "Stripe", "Sheets", "Zapier"],
-    cases: ["DISPATCH", "SUPPORT TICKETS", "REVENUE REPORTS", "AGENCY AUTOMATION", "BOOKKEEPLY", "JBZ BEATS"],
+    cases: ["DISPATCH", "SUPPORT TICKETS", "REVENUE REPORTS", "AGENCY AUTOMATION", "BOOKKEEPING APP", "BEAT STORE"],
     crm: "CRM",
     automation: "AUTOMATION",
     contact: "SAY HELLO",
@@ -38,7 +38,7 @@ const COPY = {
   es: {
     hub: "UN SISTEMA",
     tools: ["GoHighLevel", "Kickserv", "Airtable", "Stripe", "Sheets", "Zapier"],
-    cases: ["DESPACHO", "TICKETS DE SOPORTE", "REPORTES DE INGRESOS", "AUTOMATIZACIÓN DE AGENCIA", "BOOKKEEPLY", "JBZ BEATS"],
+    cases: ["DESPACHO", "TICKETS DE SOPORTE", "REPORTES DE INGRESOS", "AUTOMATIZACIÓN DE AGENCIA", "APP DE CONTABILIDAD", "TIENDA DE BEATS"],
     crm: "CRM",
     automation: "AUTOMATIZACIÓN",
     contact: "ESCRIBIME",

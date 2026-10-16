@@ -3,8 +3,8 @@ type Variant =
   | "support-ticket-system"
   | "revenue-reporting"
   | "agency-automation"
-  | "bookkeeply-saas"
-  | "jbz-beats-store";
+  | "saas-product"
+  | "online-store";
 
 function Node({ x, y, w, label, accent }: { x: number; y: number; w: number; label: string; accent?: boolean }) {
   return (
@@ -104,7 +104,7 @@ function AgencyAutomation() {
   );
 }
 
-function BookkeeplySaas() {
+function SaasProduct() {
   return (
     <svg viewBox="0 0 420 110" role="presentation" aria-hidden="true" className="block h-auto w-full">
       <Node x={4} y={40} w={90} label="ADD ENTRY" />
@@ -120,7 +120,7 @@ function BookkeeplySaas() {
   );
 }
 
-function JbzBeatsStore() {
+function OnlineStore() {
   return (
     <svg viewBox="0 0 420 110" role="presentation" aria-hidden="true" className="block h-auto w-full">
       <Node x={4} y={40} w={90} label="CATALOG" />
@@ -141,8 +141,8 @@ const VARIANTS: Record<Variant, () => React.JSX.Element> = {
   "support-ticket-system": SupportTicketSystem,
   "revenue-reporting": RevenueReporting,
   "agency-automation": AgencyAutomation,
-  "bookkeeply-saas": BookkeeplySaas,
-  "jbz-beats-store": JbzBeatsStore,
+  "saas-product": SaasProduct,
+  "online-store": OnlineStore,
 };
 
 export function CaseStudyDiagram({ variant }: { variant: string }) {
