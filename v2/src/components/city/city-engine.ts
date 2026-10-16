@@ -3135,9 +3135,10 @@ export class CityEngine {
       const f = focus as Landmark | null;
       if (f) {
         const gp = f.group.position;
-        pl.position.lerp(new THREE.Vector3(gp.x + (i ? 6 : -6), gp.y + 8, gp.z + 6), 0.12);
+        // well off the walls: lamps this close to a glass tower blew its face out to white
+        pl.position.lerp(new THREE.Vector3(gp.x + (i ? 11 : -11), gp.y + 12, gp.z + 11), 0.12);
       }
-      pl.intensity += ((f ? 190 * fw : 0) - pl.intensity) * 0.12;
+      pl.intensity += ((f ? 70 * fw : 0) - pl.intensity) * 0.12;
     });
 
     const lk = Math.min(2.6, Math.max(0.9, h / 64));
