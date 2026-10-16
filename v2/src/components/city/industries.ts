@@ -2,7 +2,7 @@
  * The industries the city has a building for. Everything here is about what gets built for them,
  * written to be read in about twenty seconds: no invented numbers, no promises that cannot be checked.
  */
-export type IndustryId = "hvac" | "roofing" | "plumbing" | "outdoor";
+export type IndustryId = "hvac" | "roofing" | "plumbing" | "outdoor" | "solar" | "locksmith";
 export type IconName = "phone" | "route" | "calendar" | "star" | "refresh" | "receipt" | "bell" | "layers" | "bolt" | "drop";
 
 export type IndustryCopy = {
@@ -27,6 +27,8 @@ export type Industry = {
   z: number;
   /** "block": fills one 6 x 6 downtown block. "open": a levelled pad out of town, with its own plaza */
   site: "block" | "open";
+  /** side of an open site's pad, in metres (14 when left out) */
+  size?: number;
   /** height of the ground the building stands on (measured on the built scene) */
   ground: number;
   /** the point on the nearest road that the site's access lane runs to (open sites only) */
@@ -138,11 +140,10 @@ export const INDUSTRIES: Industry[] = [
   },
   {
     id: "plumbing",
-    x: -62, // south of the city, beside the southern avenue: it used to share a downtown block with a tower that hid it
-    z: 110,
-    site: "open",
-    ground: 0.35,
-    lane: { x: -44, z: 110 }, // east to the southern avenue
+    x: -32, // a block of the southern quarter, between the CRM tower and the houses
+    z: 56,
+    site: "block",
+    ground: 0.03,
     color: "#a9b6ff",
     en: {
       name: "Plumbing & electrical",
@@ -234,12 +235,110 @@ export const INDUSTRIES: Industry[] = [
       outcome: "Ingresos mensuales predecibles, cuadrillas que conocen el plan y clientes que se sienten atendidos.",
     },
   },
+  {
+    id: "solar",
+    x: -62, // south of the city, beside the southern avenue: a farm needs room
+    z: 110,
+    site: "open",
+    size: 24,
+    ground: 0.35,
+    lane: { x: -44, z: 110 }, // east to the southern avenue
+    color: "#ffd84a",
+    en: {
+      name: "Solar installers",
+      who: "Solar and energy installers",
+      tagline: "A solar sale takes months. No lead should go cold along the way.",
+      pains: [
+        "Leads from ads and referrals wait days for a call back, and the quote goes to whoever answered first.",
+        "Surveys, permits, inspection and installation are tracked in different places.",
+        "Proposals go quiet for weeks and nobody follows up.",
+        "Happy customers are rarely asked for a referral.",
+      ],
+      builds: [
+        { icon: "bell", title: "Fast first reply and basic qualification", text: "Every new lead gets an answer in minutes, and a few questions that sort serious buyers from browsers." },
+        { icon: "calendar", title: "Site survey booking", text: "The customer picks a slot, and the surveyor's calendar and the project record stay in sync." },
+        { icon: "layers", title: "Project status from permit to switch-on", text: "One pipeline shows where each job stands, and the customer hears about each stage without a phone call." },
+        { icon: "star", title: "Referrals asked at the right moment", text: "A short request once the system is live, when the customer is happiest." },
+      ],
+      flow: ["Lead", "Qualification", "Survey", "Proposal", "Contract", "Permit", "Install", "Referral"],
+      tools: ["GoHighLevel", "Zapier", "Airtable", "Stripe", "Google Sheets"],
+      outcome: "Fewer proposals lost to silence, a pipeline everyone can read, and referrals that are asked for instead of hoped for.",
+    },
+    es: {
+      name: "Instaladores solares",
+      who: "Instaladores de energía solar",
+      tagline: "Una venta solar lleva meses. Ningún contacto debería enfriarse en el camino.",
+      pains: [
+        "Los contactos de anuncios y recomendaciones esperan días una respuesta, y el presupuesto se lo lleva quien contestó primero.",
+        "Las visitas técnicas, los permisos, la inspección y la instalación se siguen en lugares distintos.",
+        "Las propuestas quedan en silencio durante semanas y nadie hace seguimiento.",
+        "A los clientes contentos casi nunca se les pide una recomendación.",
+      ],
+      builds: [
+        { icon: "bell", title: "Primera respuesta rápida y calificación básica", text: "Cada contacto nuevo recibe respuesta en minutos y unas preguntas que separan a quien va en serio de quien solo mira." },
+        { icon: "calendar", title: "Reserva de la visita técnica", text: "El cliente elige un horario y el calendario del técnico y la ficha del proyecto quedan sincronizados." },
+        { icon: "layers", title: "Estado del proyecto del permiso a la puesta en marcha", text: "Un solo tablero muestra en qué punto está cada obra, y el cliente se entera de cada etapa sin llamar." },
+        { icon: "star", title: "Recomendaciones pedidas en el momento justo", text: "Un pedido corto cuando el sistema ya funciona, que es cuando el cliente está más contento." },
+      ],
+      flow: ["Contacto", "Calificación", "Visita técnica", "Propuesta", "Contrato", "Permiso", "Instalación", "Recomendación"],
+      tools: ["GoHighLevel", "Zapier", "Airtable", "Stripe", "Google Sheets"],
+      outcome: "Menos propuestas perdidas por el silencio, un tablero que todos pueden leer y recomendaciones que se piden en lugar de esperarlas.",
+    },
+  },
+  {
+    id: "locksmith",
+    x: -32, // the block just north of the plumbers
+    z: 48,
+    site: "block",
+    ground: 0.03,
+    color: "#c58aff",
+    en: {
+      name: "Locksmith",
+      who: "Locksmiths and 24/7 lockout services",
+      tagline: "A lockout does not wait for business hours. The first answer wins the job.",
+      pains: [
+        "After-hours calls and texts go unanswered, and the customer dials the next number.",
+        "Details taken over the phone are retyped into the job sheet and the invoice.",
+        "Customers are never told when the technician is on the way.",
+        "A one-off job ends there: no thank-you, no review request.",
+      ],
+      builds: [
+        { icon: "phone", title: "Every call and text answered, day or night", text: "A missed call gets an instant text back that collects the address and the problem." },
+        { icon: "route", title: "Dispatch with live status", text: "The nearest technician gets the job, and the customer receives an on-the-way message." },
+        { icon: "receipt", title: "Invoice and payment at close", text: "The invoice leaves the moment the job closes, with a link to pay." },
+        { icon: "star", title: "Review request after each job", text: "A short message once the door is open, when the customer is most grateful." },
+      ],
+      flow: ["Call", "Triage", "Dispatch", "On the way", "Job done", "Invoice", "Review"],
+      tools: ["GoHighLevel", "Zapier", "Kickserv", "Stripe", "Google Sheets"],
+      outcome: "After-hours calls answered, customers who know when help is coming, and a steady stream of reviews.",
+    },
+    es: {
+      name: "Cerrajería",
+      who: "Cerrajeros y servicios de apertura 24/7",
+      tagline: "Una puerta cerrada no espera al horario comercial. Quien responde primero se queda con el trabajo.",
+      pains: [
+        "Las llamadas y mensajes fuera de horario quedan sin respuesta, y el cliente marca el siguiente número.",
+        "Los datos que se toman por teléfono se vuelven a escribir en la orden de trabajo y en la factura.",
+        "Al cliente nunca se le avisa cuándo viene el técnico.",
+        "Un trabajo suelto termina ahí: sin agradecimiento y sin pedido de reseña.",
+      ],
+      builds: [
+        { icon: "phone", title: "Cada llamada y mensaje atendido, de día o de noche", text: "Una llamada perdida recibe al instante un texto que pide la dirección y el problema." },
+        { icon: "route", title: "Despacho con estado en vivo", text: "El técnico más cercano recibe el trabajo y el cliente un aviso de que va en camino." },
+        { icon: "receipt", title: "Factura y cobro al cerrar", text: "La factura sale en el momento en que se cierra el trabajo, con un enlace para pagar." },
+        { icon: "star", title: "Pedido de reseña después de cada trabajo", text: "Un mensaje corto cuando la puerta ya está abierta, que es cuando el cliente está más agradecido." },
+      ],
+      flow: ["Llamada", "Clasificación", "Despacho", "En camino", "Trabajo hecho", "Factura", "Reseña"],
+      tools: ["GoHighLevel", "Zapier", "Kickserv", "Stripe", "Google Sheets"],
+      outcome: "Llamadas fuera de horario atendidas, clientes que saben cuándo llega la ayuda y un flujo constante de reseñas.",
+    },
+  },
 ];
 
 /** the access lane of an open site: its centre and size (w along x, d along z), from the plaza edge to the road */
 export function laneOf(ind: Industry): { x: number; z: number; w: number; d: number } | null {
   if (!ind.lane) return null;
-  const half = 7; // half the plaza
+  const half = (ind.size ?? 14) / 2; // half the plaza
   const reach = 2.4; // it ends inside the road's edge, so no gap shows
   const dx = ind.lane.x - ind.x;
   const dz = ind.lane.z - ind.z;

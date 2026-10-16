@@ -118,6 +118,7 @@ const LM_SAGE = hex("#7fa28a");
 const LM_SAND = hex("#c9ad7e");
 const LM_ICE = hex("#8fa7bd");
 const LM_PLUM = hex("#8d73a0");
+const LM_SUN = hex("#c9b26a");
 
 const ELEV = Math.atan(1 / Math.SQRT2); // true isometric elevation (~35.26deg)
 const DIST = 280;
@@ -1157,6 +1158,42 @@ export class CityEngine {
       g.beginPath();
       g.ellipse(0.45 * k, 3.0 * k, 0.4 * k, 0.9 * k, 0.1, 0, 7);
       g.fill();
+    } else if (kind === "solar") {
+      // crushed stone between the rows, concrete footings in a grid, and a service aisle down the middle
+      g.fillStyle = "#6f6a5c";
+      g.fillRect(0, 0, S, S);
+      grain(2600, "rgba(255,255,255,0.12)", "rgba(0,0,0,0.2)");
+      for (let u = 1.5; u < size; u += 3) {
+        for (let v = 1.5; v < size; v += 4.2) {
+          g.fillStyle = "rgba(190,186,170,0.55)";
+          g.fillRect(u * k - 2, v * k - 2, 4, 4);
+        }
+      }
+      g.fillStyle = "rgba(40,38,34,0.45)";
+      g.fillRect(0, (size / 2 - 1) * k, S, 2 * k);
+      g.strokeStyle = "rgba(255,216,74,0.75)";
+      g.lineWidth = 2;
+      g.strokeRect(0.6 * k, 0.6 * k, (size - 1.2) * k, (size - 1.2) * k);
+    } else if (kind === "locksmith") {
+      // dark pavement with a painted key and a yellow kerb line
+      g.fillStyle = "#3d4057";
+      g.fillRect(0, 0, S, S);
+      grain(500, "rgba(255,255,255,0.08)", "rgba(0,0,0,0.16)");
+      for (let u = 0; u <= size; u += 1.45) {
+        line(u * k, 0, u * k, S, 1, "rgba(20,24,40,0.5)");
+        line(0, u * k, S, u * k, 1, "rgba(20,24,40,0.5)");
+      }
+      g.strokeStyle = "rgba(197,138,255,0.85)";
+      g.lineWidth = 2.4;
+      g.beginPath();
+      g.arc(1.2 * k, 4.5 * k, 0.5 * k, 0, 7);
+      g.stroke();
+      line(1.7 * k, 4.5 * k, 3.6 * k, 4.5 * k, 2.4, "rgba(197,138,255,0.85)");
+      line(3.0 * k, 4.5 * k, 3.0 * k, 5.0 * k, 2.4, "rgba(197,138,255,0.85)");
+      line(3.5 * k, 4.5 * k, 3.5 * k, 5.1 * k, 2.4, "rgba(197,138,255,0.85)");
+      g.strokeStyle = "rgba(240,212,106,0.7)";
+      g.lineWidth = 2;
+      g.strokeRect(0.3 * k, 0.3 * k, (size - 0.6) * k, (size - 0.6) * k);
     } else {
       g.fillStyle = "#3f7a46";
       g.fillRect(0, 0, S, S);
@@ -1234,7 +1271,7 @@ export class CityEngine {
 
   /** one building per industry, each placed on a real site and each reading as a different trade */
   private buildIndustries() {
-    const tints = { hvac: LM_ICE, roofing: LM_CORAL, plumbing: LM_PERI, outdoor: LM_SAGE } as const;
+    const tints = { hvac: LM_ICE, roofing: LM_CORAL, plumbing: LM_PERI, outdoor: LM_SAGE, solar: LM_SUN, locksmith: LM_PLUM } as const;
     INDUSTRIES.forEach((ind, n) => {
       const tint = tints[ind.id];
       const accent = hex(ind.color);
@@ -1245,7 +1282,7 @@ export class CityEngine {
       // out of town the pad is levelled terrain; downtown the block sits on the street grid at ground level
       lm.baseY = ind.ground;
       g.position.set(ind.x, ind.ground, ind.z);
-      const size = block ? 5.8 : 14;
+      const size = block ? 5.8 : ind.size ?? 14;
       const T = block ? 0.2 : 0.3;
       const Y = T;
       const slab = this.detail(g, hex("#59607a"), size, T, size, 0, 0, 0);
@@ -1378,7 +1415,7 @@ export class CityEngine {
         this.bar(g, hex("#7fd4ff"), 0.1, 0.9, 0.9, -2.18, Y + 7.2, -0.5, 0.785, 0, 0).material = new THREE.MeshBasicMaterial({ color: hex("#7fd4ff").multiplyScalar(2.6) });
         this.glow(g, hex("#ff9a5a"), 4.2, 0.1, 0.06, -0.2, Y + 0.6, 2.24, 0, 0.8);
         labelY = 14;
-      } else {
+      } else if (ind.id === "outdoor") {
         // a low building with a green roof, a greenhouse, planters, hedges, a mower, rising bubbles and a sprinkler
         this.lmBox(lm, tint, 2, 8.4, 3.6, 4.6, -1.6, Y, -1.2);
         this.detail(g, hex("#5f8f4a"), 8.8, 0.45, 5.0, -1.6, Y + 3.6, -1.2);
@@ -1444,8 +1481,12 @@ export class CityEngine {
         this.detail(g, hex("#e8e6e0"), 2.6, 1.4, 1.4, 1.2, Y, 5.3);
         this.detail(g, hex("#4f9a5a"), 2.65, 0.3, 1.45, 1.2, Y + 0.5, 5.3);
         labelY = 10;
+      } else if (ind.id === "solar") {
+        labelY = this.buildSolarFarm(lm, tint, accent, Y, size);
+      } else {
+        labelY = this.buildLocksmith(lm, tint, accent, Y);
       }
-      this.industryDetail(g, ind.id, accent, Y);
+      this.industryDetail(g, ind.id, accent, Y, block, lm, size);
       this.industryFinish(g, ind.id, accent, size, T, block, Y);
       const lab = this.label(name, accent, block ? 6.4 : 7.6);
       lab.position.set(0, labelY + 3.4, 0);
@@ -1476,53 +1517,215 @@ export class CityEngine {
     return m;
   }
 
+  /** the solar farm: rows of trackers that follow the sun, batteries, a control house and a mast with a glowing sun on top */
+  private buildSolarFarm(lm: Landmark, tint: THREE.Color, accent: THREE.Color, Y: number, size: number) {
+    const g = lm.group;
+    const half = size / 2;
+    const cv = document.createElement("canvas");
+    cv.width = cv.height = 64;
+    const cx = cv.getContext("2d")!;
+    cx.fillStyle = "#17305f";
+    cx.fillRect(0, 0, 64, 64);
+    cx.strokeStyle = "rgba(150,190,255,0.6)";
+    cx.lineWidth = 1.5;
+    for (let u = 0; u <= 64; u += 16) {
+      cx.beginPath();
+      cx.moveTo(u, 0);
+      cx.lineTo(u, 64);
+      cx.moveTo(0, u);
+      cx.lineTo(64, u);
+      cx.stroke();
+    }
+    const tex = new THREE.CanvasTexture(cv);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const panelMat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.28, metalness: 0.7, emissive: new THREE.Color(0x0b1a3a), emissiveIntensity: 0.7 });
+    const rows: THREE.Group[] = [];
+    const panelRows: [number, number, number][] = [];
+    for (const rx of [-9, -6, -3, 0, 3]) {
+      panelRows.push([rx, -4.2, 3]);
+      panelRows.push([rx, 7.6, 2]);
+    }
+    panelRows.forEach(([rx, rz, segs], n) => {
+      const row = new THREE.Group();
+      row.position.set(rx, Y + 1.15, rz);
+      const len = 4.3;
+      for (let k = 0; k < segs; k++) {
+        const zc = (k - (segs - 1) / 2) * (len + 0.15);
+        const panel = new THREE.Mesh(this.unitBox, panelMat);
+        panel.scale.set(1.9, 0.07, len);
+        panel.position.set(0, 0, zc);
+        panel.castShadow = true;
+        panel.receiveShadow = true;
+        panel.userData.lm = lm;
+        row.add(panel);
+        this.pickables.push(panel);
+        this.post(g, hex("#8e93a6"), 0.07, 1.15, rx, Y, rz + zc, 6);
+      }
+      row.rotation.z = Math.sin(n) * 0.3;
+      g.add(row);
+      rows.push(row);
+    });
+    // the trackers lean east to west as the day goes by (a slow loop here)
+    this.animated.push((t) => rows.forEach((r, n) => (r.rotation.z = Math.sin(t * 0.18 + n * 0.0) * 0.55)));
+
+    // the control house, with panels on its own roof, and the mast that carries the sun
+    this.lmBox(lm, tint, 2, 4.4, 3.2, 3.4, 7.2, Y, -8.0);
+    this.detail(g, hex("#8e93a6"), 4.8, 0.2, 3.8, 7.2, Y + 3.2, -8.0);
+    for (const dx of [-1.0, 1.0]) {
+      const roofPanel = new THREE.Mesh(this.unitBox, panelMat);
+      roofPanel.scale.set(1.6, 0.06, 2.4);
+      roofPanel.position.set(7.2 + dx, Y + 3.7, -8.0);
+      roofPanel.rotation.x = -0.35;
+      g.add(roofPanel);
+    }
+    this.glow(g, accent, 4.0, 0.08, 0.08, 7.2, Y + 2.6, -6.28, 0, 1.0);
+    this.detail(g, hex("#c9ced9"), 1.1, 2.0, 0.1, 6.0, Y, -6.28);
+    const mast = this.lmCyl(lm, hex("#d9dde8"), 0, 0.12, 0.28, 9, 10.2, Y, -8.4, 8);
+    mast.castShadow = false;
+    const sun = this.glow(g, hex("#ffd84a"), 1.5, 1.5, 1.5, 10.2, Y + 9.8, -8.4, 0.6, 2.0);
+    this.animated.push((t) => sun.scale.setScalar(1 + Math.sin(t * 1.4) * 0.08));
+    for (let k = 0; k < 8; k++) {
+      const ray = this.glow(g, hex("#ffd84a"), 0.12, 0.12, 1.1, 10.2 + Math.cos((k / 8) * Math.PI * 2) * 1.4, Y + 9.8 + Math.sin((k / 8) * Math.PI * 2) * 1.4, -8.4, 0, 1.4);
+      ray.rotation.y = 0.6;
+      ray.rotation.x = (k / 8) * Math.PI * 2;
+    }
+
+    // battery containers with a status light each
+    for (const bz of [3.6, 6.0, 8.4]) {
+      this.detail(g, hex("#8d93a3"), 3.8, 1.8, 1.7, 8.2, Y, bz);
+      this.glow(g, hex("#7fffb0"), 3.4, 0.1, 0.05, 8.2, Y + 1.45, bz - 0.88, 0, 1.2);
+      for (let v = 0; v < 5; v++) this.detail(g, hex("#9aa0b0"), 0.08, 1.2, 0.04, 6.6 + v * 0.35, Y + 0.3, bz - 0.87);
+    }
+    // inverters, a transformer and a pole with the line that leaves the farm
+    for (let k = 0; k < 4; k++) {
+      this.detail(g, hex("#8e93a6"), 0.8, 1.3, 0.6, 5.2 + k * 1.1, Y, -3.2);
+      this.glow(g, hex("#7fd4ff"), 0.1, 0.1, 0.05, 5.2 + k * 1.1, Y + 1.0, -3.52, 0, 1.3);
+    }
+    this.detail(g, hex("#7a8094"), 1.6, 1.5, 1.4, 10.2, Y, -3.2);
+    this.post(g, hex("#5a4538"), 0.12, 6.4, 10.8, Y, 0.2, 8);
+    this.detail(g, hex("#5a4538"), 2.4, 0.14, 0.14, 10.8, Y + 5.9, 0.2);
+    for (const sx of [-1.0, 0, 1.0]) this.glow(g, hex("#cfd6ff"), 0.13, 0.18, 0.13, 10.8 + sx, Y + 6.1, 0.2, 0, 1.2);
+    this.run(g, hex("#1c1f2e"), [10.8, Y + 6.0, 0.2], [10.2, Y + 1.5, -3.2]);
+    this.run(g, hex("#1c1f2e"), [10.8, Y + 6.0, 0.2], [half + 6, Y + 6.2, 0.2]);
+
+    // a fence all round, with the gate open on the lane side, and sheep keeping the grass down under the panels
+    const fence = hex("#9aa4b8");
+    for (let u = -half + 0.6; u <= half - 0.6; u += 3) {
+      this.post(g, fence, 0.05, 1.2, u, Y, -half + 0.6, 5);
+      this.post(g, fence, 0.05, 1.2, u, Y, half - 0.6, 5);
+      this.post(g, fence, 0.05, 1.2, -half + 0.6, Y, u, 5);
+      if (Math.abs(u) > 2.2) this.post(g, fence, 0.05, 1.2, half - 0.6, Y, u, 5);
+    }
+    for (const yy of [0.5, 1.05]) {
+      this.detail(g, fence, size - 1.2, 0.05, 0.05, 0, Y + yy, -half + 0.6);
+      this.detail(g, fence, size - 1.2, 0.05, 0.05, 0, Y + yy, half - 0.6);
+      this.detail(g, fence, 0.05, 0.05, size - 1.2, -half + 0.6, Y + yy, 0);
+      this.detail(g, fence, 0.05, 0.05, half - 2.8, half - 0.6, Y + yy, -(half - 2.8) / 2 - 2.2);
+      this.detail(g, fence, 0.05, 0.05, half - 2.8, half - 0.6, Y + yy, (half - 2.8) / 2 + 2.2);
+    }
+    const sheep: { b: THREE.Group; x0: number; z0: number; ph: number }[] = [];
+    for (let k = 0; k < 4; k++) {
+      const b = new THREE.Group();
+      const body = new THREE.Mesh(new THREE.IcosahedronGeometry(0.4, 0), new THREE.MeshStandardMaterial({ color: hex("#e8e6e0"), roughness: 1, flatShading: true }));
+      body.scale.set(1.1, 0.8, 1.5);
+      body.position.y = 0.45;
+      const head = new THREE.Mesh(this.unitBox, new THREE.MeshStandardMaterial({ color: hex("#2a2630"), roughness: 0.9 }));
+      head.scale.set(0.28, 0.3, 0.34);
+      head.position.set(0, 0.55, 0.72);
+      b.add(body, head);
+      g.add(b);
+      sheep.push({ b, x0: -7.5 + k * 3.1, z0: 2 + (k % 2) * 2.6, ph: k * 1.7 });
+    }
+    this.animated.push((t) =>
+      sheep.forEach(({ b, x0, z0, ph }) => {
+        const u = Math.sin(t * 0.15 + ph);
+        b.position.set(x0 + Math.sin(t * 0.07 + ph) * 0.8, Y, z0 + u * 3.0);
+        b.rotation.y = Math.cos(t * 0.15 + ph) > 0 ? 0 : Math.PI;
+      }),
+    );
+    return 12.6;
+  }
+
+  /** the locksmith: a narrow shop under a big slowly turning key, a padlock on the front, a keypad door and a van */
+  private buildLocksmith(lm: Landmark, tint: THREE.Color, accent: THREE.Color, Y: number) {
+    const g = lm.group;
+    this.lmBox(lm, tint, 3, 3.6, 5.4, 3.2, -0.2, Y, -0.8);
+    this.lmBox(lm, LM_SAND, 2, 4.4, 2.0, 1.0, -0.2, Y, 1.5);
+    this.detail(g, hex("#8e93a6"), 4.0, 0.24, 3.6, -0.2, Y + 5.4, -0.8);
+    // the door: a keypad, a lit frame and a pull handle
+    this.detail(g, hex("#1c1f2e"), 1.0, 1.6, 0.1, 0.7, Y, 2.04);
+    this.glow(g, accent, 1.2, 0.07, 0.05, 0.7, Y + 1.65, 2.08, 0, 1.3);
+    this.glow(g, accent, 0.07, 1.6, 0.05, 0.12, Y + 0.8, 2.08, 0, 1.3);
+    this.glow(g, accent, 0.07, 1.6, 0.05, 1.28, Y + 0.8, 2.08, 0, 1.3);
+    this.detail(g, hex("#2c3040"), 0.28, 0.4, 0.06, -0.9, Y + 0.8, 2.04);
+    for (let k = 0; k < 6; k++) this.glow(g, hex("#bfe0ff"), 0.05, 0.05, 0.03, -1.0 + (k % 3) * 0.1, Y + 0.95 - Math.floor(k / 3) * 0.12, 2.08, 0, 1.4);
+    // a padlock on the front wall: a glowing body and a shackle
+    const lockMat = new THREE.MeshBasicMaterial({ color: accent.clone().multiplyScalar(2.4) });
+    const body = new THREE.Mesh(this.unitBox, lockMat);
+    body.scale.set(0.9, 0.7, 0.14);
+    body.position.set(-1.0, Y + 4.0, 1.12);
+    g.add(body);
+    const shackle = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.07, 6, 12, Math.PI), lockMat);
+    shackle.position.set(-1.0, Y + 4.35, 1.12);
+    g.add(shackle);
+    // the key on the roof: a ring, a shaft and two teeth, turning slowly so it always shows
+    const keyMat = new THREE.MeshBasicMaterial({ color: hex("#ffcf6a").multiplyScalar(2.6) });
+    const key = new THREE.Group();
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.13, 8, 20), keyMat);
+    ring.position.y = 1.9;
+    const shaft = new THREE.Mesh(this.unitBox, keyMat);
+    shaft.scale.set(0.2, 2.2, 0.2);
+    shaft.position.y = 0.4;
+    key.add(ring, shaft);
+    for (const [ty, tw] of [[-0.35, 0.55], [-0.85, 0.4]] as const) {
+      const tooth = new THREE.Mesh(this.unitBox, keyMat);
+      tooth.scale.set(tw, 0.22, 0.2);
+      tooth.position.set(tw / 2, ty, 0);
+      key.add(tooth);
+    }
+    key.position.set(-0.2, Y + 5.5 + 1.8, -0.8);
+    g.add(key);
+    this.animated.push((t) => (key.rotation.y = t * 0.8));
+    // a small van on the street side with a lit sign
+    this.detail(g, hex("#e8e6e0"), 2.0, 1.2, 1.1, -1.5, Y, 2.35);
+    this.detail(g, hex("#7a4fb0"), 2.04, 0.25, 1.14, -1.5, Y + 0.4, 2.35);
+    this.detail(g, hex("#9ec8ff"), 0.6, 0.5, 1.05, -0.8, Y + 0.6, 2.35);
+    this.glow(g, accent, 0.9, 0.1, 0.06, -1.7, Y + 1.25, 2.42, 0, 1.3);
+    // a key cutting kiosk on the pavement and a rack of keys on the east wall
+    this.detail(g, hex("#2c3040"), 0.7, 1.1, 0.5, 2.3, Y, -0.2);
+    this.glow(g, hex("#ffcf6a"), 0.5, 0.2, 0.05, 2.3, Y + 0.8, 0.07, 0, 1.3);
+    for (let k = 0; k < 5; k++) this.glow(g, hex("#ffcf6a"), 0.08, 0.34, 0.06, 1.45, Y + 2.2 + (k % 2) * 0.1, -1.6 + k * 0.28, 0, 1.2);
+    return 13;
+  }
+
   /** the extra things each trade keeps on its site: what you would notice walking round the fence */
-  private industryDetail(g: THREE.Group, id: string, accent: THREE.Color, Y: number) {
+  private industryDetail(g: THREE.Group, id: string, accent: THREE.Color, Y: number, block: boolean, lm: Landmark, size: number) {
+    void lm;
+    void size;
+    void block;
     const copper = hex("#c9804a");
     if (id === "plumbing") {
-      // a pipe rack: lengths of copper, white and blue pipe on a frame
-      for (const px of [-6.1, -3.3]) this.post(g, hex("#6b7088"), 0.06, 1.5, px, Y, -4.6, 6);
-      for (const [py, pz, col] of [[0.45, -4.9, copper], [0.45, -4.3, hex("#e8ebf2")], [0.95, -4.6, hex("#5b9ad8")]] as const) this.pipe(g, col, -4.7, Y + py, pz, 3.4, 0.22);
-      // fittings and a length of pipe on the ground
-      for (const [fx, fz] of [[-5.9, -2.6], [-5.2, -2.2], [-5.6, -1.6]]) this.detail(g, copper, 0.5, 0.35, 0.5, fx, Y, fz, 0.4);
-      this.pipe(g, hex("#5b9ad8"), -5.5, Y + 0.12, -0.2, 2.2, 0.12, false);
-      // an open trench with the new run laid in it, fenced with orange barriers
-      this.detail(g, hex("#12141d"), 4.4, 0.1, 1.2, -4.0, Y, 3.6);
-      this.pipe(g, copper, -4.0, Y + 0.18, 3.6, 4.2, 0.13);
-      for (const [bx, bz] of [[-6.4, 2.6], [-1.6, 2.6], [-6.4, 4.6], [-1.6, 4.6]]) {
-        this.post(g, hex("#2c3040"), 0.04, 0.9, bx, Y, bz, 5);
-        this.glow(g, hex("#ff7a3a"), 0.24, 0.16, 0.24, bx, Y + 0.95, bz, 0, 1.4);
+      // one block is small: a pipe stack, a cable drum, a hydrant, cones and a flickering switchgear cabinet round the tower
+      this.pipe(g, copper, -1.4, Y + 0.25, 2.17, 1.7, 0.14);
+      this.pipe(g, hex("#e8ebf2"), -1.4, Y + 0.25, 2.53, 1.7, 0.14);
+      this.pipe(g, hex("#5b9ad8"), -1.4, Y + 0.55, 2.35, 1.7, 0.14);
+      this.post(g, hex("#8a6a44"), 0.46, 0.5, -2.4, Y, 0.7, 12);
+      this.post(g, copper, 0.38, 0.26, -2.4, Y + 0.5, 0.7, 12);
+      this.post(g, hex("#c83c3c"), 0.2, 0.7, 2.45, Y, 1.7, 8);
+      this.post(g, hex("#c83c3c"), 0.27, 0.1, 2.45, Y + 0.7, 1.7, 8);
+      this.post(g, hex("#3a3f52"), 0.3, 0.03, 1.2, Y, 2.5, 12);
+      for (const cx of [-0.7, 0.1]) {
+        const cone = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.5, 8), new THREE.MeshStandardMaterial({ color: hex("#ff7a3a"), roughness: 0.7 }));
+        cone.position.set(cx, Y + 0.25, 2.55);
+        g.add(cone);
       }
-      this.bar(g, hex("#ff7a3a"), 4.8, 0.06, 0.06, -4.0, Y + 0.8, 2.6);
-      this.bar(g, hex("#ff7a3a"), 4.8, 0.06, 0.06, -4.0, Y + 0.8, 4.6);
-      // a hydrant, a manhole, and cable drums
-      this.post(g, hex("#c83c3c"), 0.26, 0.9, 6.0, Y, 5.8, 10);
-      this.post(g, hex("#c83c3c"), 0.34, 0.12, 6.0, Y + 0.9, 5.8, 10);
-      this.post(g, hex("#3a3f52"), 0.7, 0.04, 3.2, Y, 2.8, 14);
-      for (const dz of [-1.4, 0.2]) {
-        this.post(g, hex("#8a6a44"), 0.8, 0.6, 5.6, Y, dz, 14);
-        this.post(g, copper, 0.66, 0.3, 5.6, Y + 0.6, dz, 14);
-      }
-      // the electrical side: a switchgear cabinet with a flickering spark, a pole with a transformer and a line to the roof mast
-      this.detail(g, hex("#8e93a6"), 1.4, 2.0, 0.9, 5.6, Y, 2.6);
-      this.glow(g, hex("#7fffb0"), 0.14, 0.14, 0.05, 5.1, Y + 1.7, 3.1, 0, 1.4);
-      const spark = this.glow(g, hex("#bfe0ff"), 0.3, 0.3, 0.3, 4.6, Y + 1.0, 3.2, 0, 2.2);
+      this.detail(g, hex("#8e93a6"), 0.9, 1.5, 0.5, -2.2, Y, -2.55);
+      this.glow(g, hex("#7fffb0"), 0.12, 0.12, 0.05, -2.45, Y + 1.25, -2.28, 0, 1.4);
+      const spark = this.glow(g, hex("#bfe0ff"), 0.26, 0.26, 0.26, -1.6, Y + 0.9, -2.5, 0, 2.2);
       this.animated.push((t) => {
         spark.visible = Math.sin(t * 19) + Math.sin(t * 7.3) > 1.1;
       });
-      this.post(g, hex("#5a4538"), 0.12, 6.4, 5.7, Y, -4.8, 8);
-      this.detail(g, hex("#5a4538"), 2.6, 0.14, 0.14, 5.7, Y + 5.9, -4.8);
-      this.post(g, hex("#7a8094"), 0.42, 1.1, 5.7, Y + 4.2, -4.8, 12);
-      for (const sx of [-1.1, 0, 1.1]) this.glow(g, hex("#cfd6ff"), 0.14, 0.2, 0.14, 5.7 + sx, Y + 6.1, -4.8, 0, 1.2);
-      const dark = hex("#1c1f2e");
-      this.run(g, dark, [5.7, Y + 6.0, -4.8], [2.35, Y + 8.4, -2.35]);
-      this.run(g, dark, [4.6, Y + 6.0, -4.8], [2.35, Y + 7.3, -2.35]);
-      // the service truck, with a ladder rack
-      this.detail(g, hex("#e6b422"), 2.8, 1.5, 1.4, 1.2, Y, 5.4);
-      this.detail(g, hex("#9ec8ff"), 0.8, 0.6, 1.3, 2.3, Y + 0.7, 5.4);
-      this.detail(g, hex("#2c3040"), 2.6, 0.08, 0.08, 1.1, Y + 1.7, 5.0);
-      this.detail(g, hex("#2c3040"), 2.6, 0.08, 0.08, 1.1, Y + 1.7, 5.8);
-      this.detail(g, copper, 2.85, 0.2, 1.45, 1.2, Y + 0.5, 5.4);
+      this.run(g, hex("#1c1f2e"), [2.35, Y + 8.4, -2.35], [-2.2, Y + 1.5, -2.55]);
     } else if (id === "hvac") {
       // fans that really turn, cool light along the roof edge, louvres and a loading door
       const blades: THREE.Group[] = [];
@@ -1559,7 +1762,7 @@ export class CityEngine {
         rope.scale.y = top - bundle.position.y;
         rope.position.y = bundle.position.y + rope.scale.y / 2;
       });
-    } else {
+    } else if (id === "outdoor") {
       // a pergola with string lights, stepping stones, a young tree and a bird bath
       for (const [px, pz] of [[-6.0, 5.6], [-6.0, 3.0], [-3.4, 5.6], [-3.4, 3.0]]) this.post(g, hex("#6b4a36"), 0.08, 2.6, px, Y, pz, 6);
       for (let k = 0; k < 5; k++) this.detail(g, hex("#6b4a36"), 2.9, 0.08, 0.12, -4.7, Y + 2.6, 2.9 + k * 0.7);
@@ -1592,7 +1795,7 @@ export class CityEngine {
       this.poolTex = new THREE.CanvasTexture(c);
     }
     const poolMat = new THREE.MeshBasicMaterial({ map: this.poolTex, color: accent, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false });
-    const pool = new THREE.Mesh(new THREE.PlaneGeometry(size * 1.9, size * 1.9), poolMat);
+    const pool = new THREE.Mesh(new THREE.PlaneGeometry(Math.min(size * 1.9, 30), Math.min(size * 1.9, 30)), poolMat);
     pool.rotation.x = -Math.PI / 2;
     pool.position.y = T + 0.04;
     pool.renderOrder = 2;
@@ -1651,7 +1854,7 @@ export class CityEngine {
         drops.push(d);
       }
       this.animated.push((t) => drops.forEach((d, k) => (d.position.set(-2.4, Y + 10.2 - ((t * 0.7 + k / 7) % 1) * 9.8, -0.5 + (k % 2) * 0.25))));
-    } else {
+    } else if (id === "outdoor") {
       // fireflies drifting over the yard
       const flies: THREE.Mesh[] = [];
       for (let k = 0; k < 9; k++) flies.push(this.glow(g, hex("#e8ff9a"), 0.14, 0.14, 0.14, 0, Y + 1.5, 0, 0, 1.6));
@@ -2728,6 +2931,8 @@ export class CityEngine {
         // open on the same view as the case studies: the case row on the far edge, zoomed all the way out
         target.set(0, 4, CASE_Z + 6 + s * 30);
         zoom = 120 - s * 20;
+        // on a wide screen the fully zoomed-out view showed the ragged edge of the map: keep the view no wider than the world is drawn
+        if (!this.o.mobile) zoom = Math.min(zoom, 150 / Math.max(1, this.o.canvas.clientWidth / Math.max(1, this.o.canvas.clientHeight)));
         az = (5 * Math.PI) / 4 + Math.sin(tt * 0.12) * 0.07;
         // the end of the page swings round to the beach, the pier and the sea
         const beach = Math.max(0, (s - 0.55) / 0.45);

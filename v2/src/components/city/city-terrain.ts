@@ -49,7 +49,7 @@ const FLATS = [
   { x0: -199, x1: -100, z0: 62, z1: 74, fall: 10, h: 0.35 }, // and so does the southern avenue
   { x0: -127, x1: -109, z0: 83, z1: 101, fall: 8, h: 0.35 }, // the landscaping yard in the meadow beside the western farm
   { x0: -122, x1: -106, z0: -68, z1: -52, fall: 7, h: 0.4 }, // the roofers' yard in the northwestern fields
-  { x0: -72, x1: -52, z0: 100, z1: 120, fall: 5, h: 0.35 }, // the plumbers' yard
+  { x0: -76, x1: -48, z0: 96, z1: 124, fall: 5, h: 0.35 }, // the solar farm
 ];
 
 export function terrainHeight(x: number, z: number): number {

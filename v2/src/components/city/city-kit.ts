@@ -1325,6 +1325,9 @@ export function buildCity(time: Uniform, mobile: boolean): City {
   const POND = new Set(["-4,-3", "3,4"]);
   const FORCE_GLASS: Record<string, "crystal" | "round"> = { "-2,-2": "crystal", "-1,3": "round" };
   const SITES: Record<string, "church" | "gas" | "build" | "hospital" | "hotel" | "school" | "workshop" | "industry"> = { "-6,-4": "church", "-7,4": "gas", "-2,2": "build", "4,-1": "build", "3,6": "hospital", "1,-4": "hotel", "-6,0": "school", "6,3": "workshop" };
+  // how many random numbers the block would have used if it were an ordinary one: an industry block draws the same amount, so
+  // the rest of the city comes out exactly as it was (every later block starts from the same point of the sequence)
+  const INDUSTRY_BURN: Record<string, number> = { "-4,7": 72, "-4,6": 33 };
   // an industry building that stands downtown takes exactly one block, which the engine fills with its landmark
   INDUSTRIES.forEach((ind) => {
     if (ind.site === "block") SITES[`${ind.x / PITCH},${ind.z / PITCH}`] = "industry";
@@ -1378,6 +1381,7 @@ export function buildCity(time: Uniform, mobile: boolean): City {
           workshop(cx, cz);
         } else if (kind === "industry") {
           plan.blocks.push({ cx, cz, type: "mid" });
+          for (let k = 0; k < (INDUSTRY_BURN[key] ?? 0); k++) r();
         } else {
           plan.blocks.push({ cx, cz, type: "mid" });
           construction(cx, cz);

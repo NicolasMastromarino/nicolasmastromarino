@@ -140,7 +140,7 @@ export function buildWorld(ctx: WorldCtx): World {
   // the industry sites out of town keep their plaza clear of grass, shrubs and trees
   INDUSTRIES.forEach((ind) => {
     if (ind.site !== "open") return;
-    addRoad(ind.x, ind.z, 10.6);
+    addRoad(ind.x, ind.z, ind.size ? ind.size * 0.75 : 10.6);
     const lane = laneOf(ind);
     if (!lane) return;
     const alongZ = lane.d >= lane.w;
