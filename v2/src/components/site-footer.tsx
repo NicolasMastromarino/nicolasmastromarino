@@ -10,7 +10,6 @@ export async function SiteFooter() {
     { href: "/services", label: t("nav.services") },
     { href: "/case-studies", label: t("nav.caseStudies") },
     { href: "/about", label: t("nav.about") },
-    { href: "/blog", label: t("nav.blog") },
     { href: "/contact", label: t("nav.contact") },
   ];
 

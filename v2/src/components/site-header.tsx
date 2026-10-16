@@ -8,7 +8,6 @@ export async function SiteHeader() {
     { href: "/services", label: t("services") },
     { href: "/case-studies", label: t("caseStudies") },
     { href: "/about", label: t("about") },
-    { href: "/blog", label: t("blog") },
     { href: "/contact", label: t("contact") },
   ];
 

@@ -3,7 +3,8 @@ import { routing } from "@/i18n/routing";
 import { getPosts } from "@/lib/posts";
 import { BASE_PATH } from "@/lib/base-path";
 
-const PAGES = ["", "/services", "/about", "/case-studies", "/blog", "/contact"];
+// "/blog" joins this list again once there is a first post
+const PAGES = ["", "/services", "/about", "/case-studies", "/contact"];
 
 // Fixed per-page launch/last-major-edit dates. Static marketing pages don't
 // track their own change history, so this stays stable across builds
@@ -36,6 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
     const posts = await getPosts(locale);
+    if (posts.length) entries.push({ url: `${base}${localePath(locale, "/blog")}`, lastModified: LAST_MODIFIED["/blog"] });
     for (const post of posts) {
       entries.push({
         url: `${base}${localePath(locale, `/blog/${post.slug}`)}`,
